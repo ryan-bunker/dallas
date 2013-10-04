@@ -1,0 +1,26 @@
+var structmultiboot_1_1_info =
+[
+    [ "aout_symbols", "structmultiboot_1_1_info.html#ac8dd8b981e9912e7783ffee00f7175b3", null ],
+    [ "apm_table", "structmultiboot_1_1_info.html#a2a6edbb0533d030ab4dfd49147709cf0", null ],
+    [ "boot_device", "structmultiboot_1_1_info.html#a5e8d0bbafa9ef8b1fae0c9aca9943bf1", null ],
+    [ "boot_loader_name", "structmultiboot_1_1_info.html#a18f2529d248183f729e92164f891394d", null ],
+    [ "command_line", "structmultiboot_1_1_info.html#a9b4efa0c018bbb47312c962aebada6c4", null ],
+    [ "config_table", "structmultiboot_1_1_info.html#ad935e93ff8d0872917395039b86c22ba", null ],
+    [ "drives_address", "structmultiboot_1_1_info.html#a1a29bc2429a4f7248e646807689dffb8", null ],
+    [ "drives_length", "structmultiboot_1_1_info.html#ae9bdf2dde03ab346a555e13762de0c41", null ],
+    [ "elf_section", "structmultiboot_1_1_info.html#a6bbf2e6502bcc2daec24f18ebf3f646d", null ],
+    [ "flags", "structmultiboot_1_1_info.html#af860930661475ce883e699cc65cbd8e1", null ],
+    [ "memory_lower", "structmultiboot_1_1_info.html#accd2bcab9fdb88aaab5b692fc11a73cc", null ],
+    [ "memory_upper", "structmultiboot_1_1_info.html#ae7156d1e92a0e6279c09ac2ab071c03b", null ],
+    [ "mmap_address", "structmultiboot_1_1_info.html#a5c999117fbac729ca7c4104986ed0710", null ],
+    [ "mmap_length", "structmultiboot_1_1_info.html#a9082f3bc3e9e759ebe8d7f63dbebdb44", null ],
+    [ "modules_address", "structmultiboot_1_1_info.html#ad927f2a91673545141300a1c7e510259", null ],
+    [ "modules_count", "structmultiboot_1_1_info.html#a99b627a5aa7a4c4c06265aaf146e89ba", null ],
+    [ "u", "structmultiboot_1_1_info.html#aad8772eb90aa6f706a3547a5aba8f862", null ],
+    [ "vbe_control_info", "structmultiboot_1_1_info.html#a7c69816fb27c5224a0beee8d57a1fcb1", null ],
+    [ "vbe_interface_len", "structmultiboot_1_1_info.html#ae7d98b58aeecbb5b2f7582aea2878c2a", null ],
+    [ "vbe_interface_off", "structmultiboot_1_1_info.html#a9cc9ef3618cda10dd86f959169cc8529", null ],
+    [ "vbe_interface_seg", "structmultiboot_1_1_info.html#a860f4c25ea72842be00b441fd92708b4", null ],
+    [ "vbe_mode", "structmultiboot_1_1_info.html#a9883438293f5cc60c9b4d5ded658bb11", null ],
+    [ "vbe_mode_info", "structmultiboot_1_1_info.html#a00caecb4ca405b199b3ddeff8fa9aff7", null ]
+];
