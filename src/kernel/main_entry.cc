@@ -30,7 +30,11 @@
 
 namespace {
 
-// Our kernel's first function: kmain
+/**
+ * Main entry point into kernel from loader assembly.
+ * @param mbd The multiboot information structure.
+ * @param magic Must match kBootloaderMagic to verify that mbd is valid.
+ */
 extern "C" void kmain(multiboot::Info *mbd, uint32_t magic) {
   if (magic != multiboot::kBootloaderMagic) {
     // Something went not according to specs. Print an error
