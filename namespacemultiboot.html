@@ -120,11 +120,15 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmultiboot_1_1_elf_section_header_table.html">ElfSectionHeaderTable</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmultiboot_1_1_info.html">Info</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmultiboot_1_1_module_info.html">ModuleInfo</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmultiboot_1_1_memory_map_entry.html">MemoryMapEntry</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmultiboot_1_1_module_list.html">ModuleList</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmultiboot_1_1_drive_info.html">DriveInfo</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmultiboot_1_1_a_p_m_table.html">APMTable</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmultiboot_1_1_info.html">Info</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
@@ -132,38 +136,42 @@ Enumerations</h2></td></tr>
 <tr class="memitem:af732c75f49e03eeacd572864832537b4"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemultiboot.html#af732c75f49e03eeacd572864832537b4">HeaderMagic</a> : uint32_t { <b>kMagic</b> = 0x1BADB002
  }</td></tr>
 <tr class="separator:af732c75f49e03eeacd572864832537b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae848564c5026f5ed91e1d6837a03f77c"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemultiboot.html#ae848564c5026f5ed91e1d6837a03f77c">HeaderFlags</a> : uint32_t { <b>kPageAlign</b> = 1 &lt;&lt; 0, 
+<tr class="memitem:ae848564c5026f5ed91e1d6837a03f77c"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemultiboot.html#ae848564c5026f5ed91e1d6837a03f77c">HeaderFlags</a> : uint32_t { <a class="el" href="namespacemultiboot.html#ae848564c5026f5ed91e1d6837a03f77cafa1d71ea69950b44c2b826d4cba1cd2f">kPageAlign</a> = 1 &lt;&lt; 0, 
 <a class="el" href="namespacemultiboot.html#ae848564c5026f5ed91e1d6837a03f77ca869aadf6883a435d7c2f3bcf252cb5c4">kMemoryInfo</a> = 1 &lt;&lt; 1, 
 <a class="el" href="namespacemultiboot.html#ae848564c5026f5ed91e1d6837a03f77caa2552049bc680dde52261235d0cea2e0">kVideoMode</a> = 1 &lt;&lt; 2, 
 <a class="el" href="namespacemultiboot.html#ae848564c5026f5ed91e1d6837a03f77ca32540196f2b373619c4b00721a1cec13">kAoutKludge</a> = 1 &lt;&lt; 16
  }</td></tr>
 <tr class="separator:ae848564c5026f5ed91e1d6837a03f77c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac9452d833b8dc8acea04f52b3d5b313f"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>VideoMode</b> : uint32_t { <b>kLinearGraphics</b> = 0, 
-<b>kEGATextMode</b> = 1
+<tr class="memitem:ac9452d833b8dc8acea04f52b3d5b313f"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemultiboot.html#ac9452d833b8dc8acea04f52b3d5b313f">VideoMode</a> : uint32_t { <a class="el" href="namespacemultiboot.html#ac9452d833b8dc8acea04f52b3d5b313fa892ef96aa7c1bcb7e53a863d76e17e72">kLinearGraphics</a> = 0, 
+<a class="el" href="namespacemultiboot.html#ac9452d833b8dc8acea04f52b3d5b313fa8be9f1b6d916351026512b2210576230">kEGATextMode</a> = 1
  }</td></tr>
 <tr class="separator:ac9452d833b8dc8acea04f52b3d5b313f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aee8d4b8029a43b26722ff8cdd0e54fee"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54fee">InfoFlags</a> : uint32_t { <br/>
-&#160;&#160;<b>kInfoMemory</b> = 0x00000001, 
+&#160;&#160;<a class="el" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feead4bbd8e453b8ac0f323fdab4d0fd1569">kInfoMemory</a> = 0x00000001, 
 <a class="el" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feea632a0f8203801a1cbaaa857c58ab67b4">kInfoBootDevice</a> = 0x00000002, 
-<b>kInfoCommandLine</b> = 0x00000004, 
-<b>kInfoModules</b> = 0x00000008, 
+<a class="el" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feea6b2d6f96941b695ba0daf1ae75ef92e5">kInfoCommandLine</a> = 0x00000004, 
+<a class="el" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feea7caaea5ca0bc278eea1a53d841ae9f92">kInfoModules</a> = 0x00000008, 
 <br/>
-&#160;&#160;<b>kInfoAoutSymbols</b> = 0x00000010, 
-<b>kInfoElfSectionHeader</b> = 0x00000020, 
-<b>kInfoMemoryMap</b> = 0x00000040, 
-<b>kInfoDriveInfo</b> = 0x00000080, 
+&#160;&#160;<a class="el" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feea4bedb550590a452dd68c758e744f7a35">kInfoAoutSymbols</a> = 0x00000010, 
+<a class="el" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feeaf4f35500c067215861768a44cdd55eb3">kInfoElfSectionHeader</a> = 0x00000020, 
+<a class="el" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feea46939a255a01e22de28dbd13fb0508ef">kInfoMemoryMap</a> = 0x00000040, 
+<a class="el" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feea82a8c387b9975207187a42d834ebd11a">kInfoDriveInfo</a> = 0x00000080, 
 <br/>
-&#160;&#160;<b>kInfoConfigTable</b> = 0x00000100, 
-<b>kInfoBootLoaderName</b> = 0x00000200, 
-<b>kInfoAPMTable</b> = 0x00000400, 
-<b>kInfoVideoInfo</b> = 0x00000800
+&#160;&#160;<a class="el" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feea9ec3ec193fc84ea92dabc50bc8565ff2">kInfoConfigTable</a> = 0x00000100, 
+<a class="el" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feeab368781144509e52fc593b86c806a7f1">kInfoBootLoaderName</a> = 0x00000200, 
+<a class="el" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feea952bca1624950c70845d4aa4d1eeec26">kInfoAPMTable</a> = 0x00000400, 
+<a class="el" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feea12e7e032acd3ec4a81ee01ec7956649f">kInfoVideoInfo</a> = 0x00000800
 <br/>
  }</td></tr>
 <tr class="separator:aee8d4b8029a43b26722ff8cdd0e54fee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1c0fe2f5486863a708d3481247932c53"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>MemoryMapType</b> : uint32_t { <b>kMemoryAvailable</b> = 1, 
-<b>kMemoryReserved</b>
+<tr class="memitem:a1c0fe2f5486863a708d3481247932c53"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemultiboot.html#a1c0fe2f5486863a708d3481247932c53">MemoryMapType</a> : uint32_t { <a class="el" href="namespacemultiboot.html#a1c0fe2f5486863a708d3481247932c53a8121cf6e378370571861acd96079e37d">kMemoryAvailable</a> = 1, 
+<a class="el" href="namespacemultiboot.html#a1c0fe2f5486863a708d3481247932c53a2efb52db5ecf78b34dddc8635708d4d8">kMemoryReserved</a>
  }</td></tr>
 <tr class="separator:a1c0fe2f5486863a708d3481247932c53"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abefbbaa505587bdd19816b45a5e0b9f6"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemultiboot.html#abefbbaa505587bdd19816b45a5e0b9f6">DriveMode</a> : uint8_t { <a class="el" href="namespacemultiboot.html#abefbbaa505587bdd19816b45a5e0b9f6a2acea8ad4c1dd4bbfd4b7147559d7260">kCHS</a> = 0, 
+<a class="el" href="namespacemultiboot.html#abefbbaa505587bdd19816b45a5e0b9f6a32c635c864eb8638f13007f71240393b">kLBA</a> = 1
+ }</td></tr>
+<tr class="separator:abefbbaa505587bdd19816b45a5e0b9f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -183,13 +191,36 @@ Variables</h2></td></tr>
 <tr class="separator:a41a675e3bb5ecd593c485fd1547f5700"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6421655e2722fd6165d20237a4b4765f"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemultiboot.html#a6421655e2722fd6165d20237a4b4765f">kInfoAlign</a> = 0x00000004</td></tr>
 <tr class="separator:a6421655e2722fd6165d20237a4b4765f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aff825cf2539133dbb05e7291f322e06f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aff825cf2539133dbb05e7291f322e06f"></a>
-struct <a class="el" href="structmultiboot_1_1_module_list.html">multiboot::ModuleList</a>&#160;</td><td class="memItemRight" valign="bottom"><b>__attribute__</b></td></tr>
-<tr class="separator:aff825cf2539133dbb05e7291f322e06f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e27205774f3222b3da6701eac87a1af"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4e27205774f3222b3da6701eac87a1af"></a>
+enum <a class="el" href="namespacemultiboot.html#abefbbaa505587bdd19816b45a5e0b9f6">multiboot::DriveMode</a>&#160;</td><td class="memItemRight" valign="bottom"><b>__attribute__</b></td></tr>
+<tr class="separator:a4e27205774f3222b3da6701eac87a1af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Contains types and constants related to the Multiboot specification. </p>
 </div><h2 class="groupheader">Enumeration Type Documentation</h2>
+<a class="anchor" id="abefbbaa505587bdd19816b45a5e0b9f6"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespacemultiboot.html#abefbbaa505587bdd19816b45a5e0b9f6">multiboot::DriveMode</a> : uint8_t</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Represents the types of drive access modes used by the boot loader. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="abefbbaa505587bdd19816b45a5e0b9f6a2acea8ad4c1dd4bbfd4b7147559d7260"></a>kCHS</em>&nbsp;</td><td class="fielddoc">
+<p>CHS mode (traditional cylinder/head/sector addressing mode). </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="abefbbaa505587bdd19816b45a5e0b9f6a32c635c864eb8638f13007f71240393b"></a>kLBA</em>&nbsp;</td><td class="fielddoc">
+<p>LBA mode (Logical Block Addressing mode). </p>
+</td></tr>
+</table>
+
+<p>Definition at line <a class="el" href="multiboot_8h_source.html#l00367">367</a> of file <a class="el" href="multiboot_8h_source.html">multiboot.h</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="ae848564c5026f5ed91e1d6837a03f77c"></a>
 <div class="memitem">
 <div class="memproto">
@@ -201,14 +232,17 @@ struct <a class="el" href="structmultiboot_1_1_module_list.html">multiboot::Modu
 </div><div class="memdoc">
 <p>Flags set in the flags member of the multiboot header. </p>
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="ae848564c5026f5ed91e1d6837a03f77ca869aadf6883a435d7c2f3bcf252cb5c4"></a>kMemoryInfo</em>&nbsp;</td><td class="fielddoc">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="ae848564c5026f5ed91e1d6837a03f77cafa1d71ea69950b44c2b826d4cba1cd2f"></a>kPageAlign</em>&nbsp;</td><td class="fielddoc">
 <p>Align boot modules on i386 page (4KB) boundaries. </p>
 </td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="ae848564c5026f5ed91e1d6837a03f77caa2552049bc680dde52261235d0cea2e0"></a>kVideoMode</em>&nbsp;</td><td class="fielddoc">
+<tr><td class="fieldname"><em><a class="anchor" id="ae848564c5026f5ed91e1d6837a03f77ca869aadf6883a435d7c2f3bcf252cb5c4"></a>kMemoryInfo</em>&nbsp;</td><td class="fielddoc">
 <p>Must pass memory information to OS. </p>
 </td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="ae848564c5026f5ed91e1d6837a03f77ca32540196f2b373619c4b00721a1cec13"></a>kAoutKludge</em>&nbsp;</td><td class="fielddoc">
+<tr><td class="fieldname"><em><a class="anchor" id="ae848564c5026f5ed91e1d6837a03f77caa2552049bc680dde52261235d0cea2e0"></a>kVideoMode</em>&nbsp;</td><td class="fielddoc">
 <p>Must pass video information to OS. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="ae848564c5026f5ed91e1d6837a03f77ca32540196f2b373619c4b00721a1cec13"></a>kAoutKludge</em>&nbsp;</td><td class="fielddoc">
+<p>This flag indicates the use of the address fields in the header. </p>
 </td></tr>
 </table>
 
@@ -225,7 +259,7 @@ struct <a class="el" href="structmultiboot_1_1_module_list.html">multiboot::Modu
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Header::flags must contain kMagic this to be valid. </p>
+<p><a class="el" href="structmultiboot_1_1_header.html#a18c6ecedc2f5f93856c5e43c7822b1d0">Header::flags</a> must contain kMagic this to be valid. </p>
 
 <p>Definition at line <a class="el" href="multiboot_8h_source.html#l00044">44</a> of file <a class="el" href="multiboot_8h_source.html">multiboot.h</a>.</p>
 
@@ -242,12 +276,91 @@ struct <a class="el" href="structmultiboot_1_1_module_list.html">multiboot::Modu
 </div><div class="memdoc">
 <p>Flags to be set in the 'flags' member of the multiboot info structure. </p>
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="aee8d4b8029a43b26722ff8cdd0e54feea632a0f8203801a1cbaaa857c58ab67b4"></a>kInfoBootDevice</em>&nbsp;</td><td class="fielddoc">
-<p>The info structure contains lower/upper memory information </p>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="aee8d4b8029a43b26722ff8cdd0e54feead4bbd8e453b8ac0f323fdab4d0fd1569"></a>kInfoMemory</em>&nbsp;</td><td class="fielddoc">
+<p><a class="el" href="structmultiboot_1_1_info.html">Info</a> contains lower/upper memory information. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="aee8d4b8029a43b26722ff8cdd0e54feea632a0f8203801a1cbaaa857c58ab67b4"></a>kInfoBootDevice</em>&nbsp;</td><td class="fielddoc">
+<p><a class="el" href="structmultiboot_1_1_info.html">Info</a> contains boot device. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="aee8d4b8029a43b26722ff8cdd0e54feea6b2d6f96941b695ba0daf1ae75ef92e5"></a>kInfoCommandLine</em>&nbsp;</td><td class="fielddoc">
+<p><a class="el" href="structmultiboot_1_1_info.html">Info</a> contains command line. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="aee8d4b8029a43b26722ff8cdd0e54feea7caaea5ca0bc278eea1a53d841ae9f92"></a>kInfoModules</em>&nbsp;</td><td class="fielddoc">
+<p><a class="el" href="structmultiboot_1_1_info.html">Info</a> contains module information. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="aee8d4b8029a43b26722ff8cdd0e54feea4bedb550590a452dd68c758e744f7a35"></a>kInfoAoutSymbols</em>&nbsp;</td><td class="fielddoc">
+<p><a class="el" href="structmultiboot_1_1_info.html">Info</a> contains a symbol table. Mutually exclusive with InfoFlags::kInfoElfSectionHeader. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="aee8d4b8029a43b26722ff8cdd0e54feeaf4f35500c067215861768a44cdd55eb3"></a>kInfoElfSectionHeader</em>&nbsp;</td><td class="fielddoc">
+<p><a class="el" href="structmultiboot_1_1_info.html">Info</a> contains an ELF section header table. Mutually exclusive with InfoFlags::kInfoAoutSymbols. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="aee8d4b8029a43b26722ff8cdd0e54feea46939a255a01e22de28dbd13fb0508ef"></a>kInfoMemoryMap</em>&nbsp;</td><td class="fielddoc">
+<p><a class="el" href="structmultiboot_1_1_info.html">Info</a> contains a full memory map. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="aee8d4b8029a43b26722ff8cdd0e54feea82a8c387b9975207187a42d834ebd11a"></a>kInfoDriveInfo</em>&nbsp;</td><td class="fielddoc">
+<p><a class="el" href="structmultiboot_1_1_info.html">Info</a> contains drive information </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="aee8d4b8029a43b26722ff8cdd0e54feea9ec3ec193fc84ea92dabc50bc8565ff2"></a>kInfoConfigTable</em>&nbsp;</td><td class="fielddoc">
+<p><a class="el" href="structmultiboot_1_1_info.html">Info</a> contains the configuration table. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="aee8d4b8029a43b26722ff8cdd0e54feeab368781144509e52fc593b86c806a7f1"></a>kInfoBootLoaderName</em>&nbsp;</td><td class="fielddoc">
+<p><a class="el" href="structmultiboot_1_1_info.html">Info</a> contains the boot loader name. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="aee8d4b8029a43b26722ff8cdd0e54feea952bca1624950c70845d4aa4d1eeec26"></a>kInfoAPMTable</em>&nbsp;</td><td class="fielddoc">
+<p><a class="el" href="structmultiboot_1_1_info.html">Info</a> contains an APM table. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="aee8d4b8029a43b26722ff8cdd0e54feea12e7e032acd3ec4a81ee01ec7956649f"></a>kInfoVideoInfo</em>&nbsp;</td><td class="fielddoc">
+<p><a class="el" href="structmultiboot_1_1_info.html">Info</a> contains video information. </p>
 </td></tr>
 </table>
 
-<p>Definition at line <a class="el" href="multiboot_8h_source.html#l00085">85</a> of file <a class="el" href="multiboot_8h_source.html">multiboot.h</a>.</p>
+<p>Definition at line <a class="el" href="multiboot_8h_source.html#l00108">108</a> of file <a class="el" href="multiboot_8h_source.html">multiboot.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1c0fe2f5486863a708d3481247932c53"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespacemultiboot.html#a1c0fe2f5486863a708d3481247932c53">multiboot::MemoryMapType</a> : uint32_t</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Indicates which type of memory region a particular <a class="el" href="structmultiboot_1_1_memory_map_entry.html">MemoryMapEntry</a> is. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="a1c0fe2f5486863a708d3481247932c53a8121cf6e378370571861acd96079e37d"></a>kMemoryAvailable</em>&nbsp;</td><td class="fielddoc">
+<p>The memory region represents available memory. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a1c0fe2f5486863a708d3481247932c53a2efb52db5ecf78b34dddc8635708d4d8"></a>kMemoryReserved</em>&nbsp;</td><td class="fielddoc">
+<p>The memory region represents reserved memory. Note that any non-1 value indicates reserved memory. </p>
+</td></tr>
+</table>
+
+<p>Definition at line <a class="el" href="multiboot_8h_source.html#l00329">329</a> of file <a class="el" href="multiboot_8h_source.html">multiboot.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac9452d833b8dc8acea04f52b3d5b313f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespacemultiboot.html#ac9452d833b8dc8acea04f52b3d5b313f">multiboot::VideoMode</a> : uint32_t</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Which video mode the boot loader should put the machine into before loading the kernel. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="ac9452d833b8dc8acea04f52b3d5b313fa892ef96aa7c1bcb7e53a863d76e17e72"></a>kLinearGraphics</em>&nbsp;</td><td class="fielddoc">
+<p>Linear graphics mode. <a class="el" href="structmultiboot_1_1_header.html#add8a6e8ae1ab6d283a440a91607f8625">Header::video_width</a> and <a class="el" href="structmultiboot_1_1_header.html#a79a3e9d6270eb808a3775e4c57fab9b9">Header::video_height</a> specify the dimensions of the screen in pixels. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="ac9452d833b8dc8acea04f52b3d5b313fa8be9f1b6d916351026512b2210576230"></a>kEGATextMode</em>&nbsp;</td><td class="fielddoc">
+<p>EGA-standard text mode. <a class="el" href="structmultiboot_1_1_header.html#add8a6e8ae1ab6d283a440a91607f8625">Header::video_width</a> and <a class="el" href="structmultiboot_1_1_header.html#a79a3e9d6270eb808a3775e4c57fab9b9">Header::video_height</a> specify the dimensions of the screen in characters. </p>
+</td></tr>
+</table>
+
+<p>Definition at line <a class="el" href="multiboot_8h_source.html#l00092">92</a> of file <a class="el" href="multiboot_8h_source.html">multiboot.h</a>.</p>
 
 </div>
 </div>
@@ -333,7 +446,7 @@ struct <a class="el" href="structmultiboot_1_1_module_list.html">multiboot::Modu
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacemultiboot.html">multiboot</a></li>
-    <li class="footer">Generated on Fri Oct 4 2013 02:59:02 for dallas by
+    <li class="footer">Generated on Sat Oct 5 2013 03:34:47 for dallas by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.3.1 </li>
   </ul>

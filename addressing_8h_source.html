@@ -69,6 +69,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
       <li><a href="files.html"><span>File&#160;List</span></a></li>
+      <li><a href="globals.html"><span>File&#160;Members</span></a></li>
     </ul>
   </div>
 </div><!-- top -->
@@ -128,11 +129,11 @@ $(document).ready(function(){initNavTree('addressing_8h_source.html','');});
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;  <span class="keywordflow">return</span> kPhysicalBase - kVirtualBase;</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;}</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
-<div class="line"><a name="l00069"></a><span class="lineno"><a class="code" href="namespaceaddressing.html#a577d7401d6fb7eb3906088e5846854bf">   69</a></span>&#160;<span class="keyword">inline</span> <a class="code" href="namespaceaddressing.html#ac07aff5854ff73f633a4611a49e99313">paddress</a> <a class="code" href="namespaceaddressing.html#a577d7401d6fb7eb3906088e5846854bf">VirtualToPhysical</a>(<a class="code" href="namespaceaddressing.html#a9da94232173e3bade6528cb161cad10b">vaddress</a> address) {</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">reinterpret_cast&lt;</span><a class="code" href="namespaceaddressing.html#ac07aff5854ff73f633a4611a49e99313">paddress</a><span class="keyword">&gt;</span>(address) + <a class="code" href="namespaceaddressing.html#ae1958790f494966c52a3ebecfbc72849">GetVirtualPhysicalOffset</a>();</div>
+<div class="line"><a name="l00069"></a><span class="lineno"><a class="code" href="namespaceaddressing.html#a577d7401d6fb7eb3906088e5846854bf">   69</a></span>&#160;<span class="keyword">inline</span> <a class="code" href="namespaceaddressing.html#ac07aff5854ff73f633a4611a49e99313">paddress</a> <a class="code" href="namespaceaddressing.html#a577d7401d6fb7eb3906088e5846854bf">VirtualToPhysical</a>(<a class="code" href="namespaceaddressing.html#a9da94232173e3bade6528cb161cad10b">vaddress</a> <a class="code" href="multiboot_8h.html#ab6b52376c1b9d81e6ea6f95a1225f832">address</a>) {</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">reinterpret_cast&lt;</span><a class="code" href="namespaceaddressing.html#ac07aff5854ff73f633a4611a49e99313">paddress</a><span class="keyword">&gt;</span>(<a class="code" href="multiboot_8h.html#ab6b52376c1b9d81e6ea6f95a1225f832">address</a>) + <a class="code" href="namespaceaddressing.html#ae1958790f494966c52a3ebecfbc72849">GetVirtualPhysicalOffset</a>();</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;}</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;</div>
-<div class="line"><a name="l00078"></a><span class="lineno"><a class="code" href="namespaceaddressing.html#a27d7ec53d92dbabf8b89fd0110fde14f">   78</a></span>&#160;<span class="keyword">inline</span> <a class="code" href="namespaceaddressing.html#a9da94232173e3bade6528cb161cad10b">vaddress</a> <a class="code" href="namespaceaddressing.html#a27d7ec53d92dbabf8b89fd0110fde14f">PhysicalToVirtual</a>(<a class="code" href="namespaceaddressing.html#ac07aff5854ff73f633a4611a49e99313">paddress</a> address) {</div>
+<div class="line"><a name="l00078"></a><span class="lineno"><a class="code" href="namespaceaddressing.html#a27d7ec53d92dbabf8b89fd0110fde14f">   78</a></span>&#160;<span class="keyword">inline</span> <a class="code" href="namespaceaddressing.html#a9da94232173e3bade6528cb161cad10b">vaddress</a> <a class="code" href="namespaceaddressing.html#a27d7ec53d92dbabf8b89fd0110fde14f">PhysicalToVirtual</a>(<a class="code" href="namespaceaddressing.html#ac07aff5854ff73f633a4611a49e99313">paddress</a> <a class="code" href="multiboot_8h.html#ab6b52376c1b9d81e6ea6f95a1225f832">address</a>) {</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">reinterpret_cast&lt;</span><a class="code" href="namespaceaddressing.html#a9da94232173e3bade6528cb161cad10b">vaddress</a><span class="keyword">&gt;</span>(address - <a class="code" href="namespaceaddressing.html#ae1958790f494966c52a3ebecfbc72849">GetVirtualPhysicalOffset</a>());</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;}</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;</div>
@@ -145,7 +146,7 @@ $(document).ready(function(){initNavTree('addressing_8h_source.html','');});
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_70d5e250c66d001b18da37689179cade.html">arch</a></li><li class="navelem"><a class="el" href="dir_171e757c09c12bf1bd57bbd89f68fc92.html">i586</a></li><li class="navelem"><a class="el" href="dir_aeb8eecb66447548eb9cd8aedeaf09ff.html">include</a></li><li class="navelem"><a class="el" href="dir_91cbba95c476f613a251b3ed0d279aa0.html">core</a></li><li class="navelem"><a class="el" href="addressing_8h.html">addressing.h</a></li>
-    <li class="footer">Generated on Fri Oct 4 2013 02:59:02 for dallas by
+    <li class="footer">Generated on Sat Oct 5 2013 03:34:47 for dallas by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.3.1 </li>
   </ul>

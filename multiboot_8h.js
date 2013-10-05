@@ -3,9 +3,15 @@ var multiboot_8h =
     [ "Header", "structmultiboot_1_1_header.html", "structmultiboot_1_1_header" ],
     [ "AoutSymbolTable", "structmultiboot_1_1_aout_symbol_table.html", "structmultiboot_1_1_aout_symbol_table" ],
     [ "ElfSectionHeaderTable", "structmultiboot_1_1_elf_section_header_table.html", "structmultiboot_1_1_elf_section_header_table" ],
-    [ "Info", "structmultiboot_1_1_info.html", "structmultiboot_1_1_info" ],
+    [ "ModuleInfo", "structmultiboot_1_1_module_info.html", "structmultiboot_1_1_module_info" ],
     [ "MemoryMapEntry", "structmultiboot_1_1_memory_map_entry.html", "structmultiboot_1_1_memory_map_entry" ],
-    [ "ModuleList", "structmultiboot_1_1_module_list.html", "structmultiboot_1_1_module_list" ],
+    [ "DriveInfo", "structmultiboot_1_1_drive_info.html", "structmultiboot_1_1_drive_info" ],
+    [ "APMTable", "structmultiboot_1_1_a_p_m_table.html", "structmultiboot_1_1_a_p_m_table" ],
+    [ "Info", "structmultiboot_1_1_info.html", "structmultiboot_1_1_info" ],
+    [ "DriveMode", "multiboot_8h.html#abefbbaa505587bdd19816b45a5e0b9f6", [
+      [ "kCHS", "multiboot_8h.html#abefbbaa505587bdd19816b45a5e0b9f6a2acea8ad4c1dd4bbfd4b7147559d7260", null ],
+      [ "kLBA", "multiboot_8h.html#abefbbaa505587bdd19816b45a5e0b9f6a32c635c864eb8638f13007f71240393b", null ]
+    ] ],
     [ "HeaderFlags", "multiboot_8h.html#ae848564c5026f5ed91e1d6837a03f77c", [
       [ "kPageAlign", "multiboot_8h.html#ae848564c5026f5ed91e1d6837a03f77cafa1d71ea69950b44c2b826d4cba1cd2f", null ],
       [ "kMemoryInfo", "multiboot_8h.html#ae848564c5026f5ed91e1d6837a03f77ca869aadf6883a435d7c2f3bcf252cb5c4", null ],
@@ -38,7 +44,7 @@ var multiboot_8h =
       [ "kEGATextMode", "multiboot_8h.html#ac9452d833b8dc8acea04f52b3d5b313fa8be9f1b6d916351026512b2210576230", null ]
     ] ],
     [ "__attribute__", "multiboot_8h.html#a78a5c4fca71bd9fb3a0d242c4a31ebd9", null ],
-    [ "__attribute__", "multiboot_8h.html#aff825cf2539133dbb05e7291f322e06f", null ],
+    [ "__attribute__", "multiboot_8h.html#a4e27205774f3222b3da6701eac87a1af", null ],
     [ "address", "multiboot_8h.html#ab6b52376c1b9d81e6ea6f95a1225f832", null ],
     [ "kBootloaderMagic", "multiboot_8h.html#ad15a2c6c45f8e887bc4f9c0397a66e8f", null ],
     [ "kInfoAlign", "multiboot_8h.html#a6421655e2722fd6165d20237a4b4765f", null ],

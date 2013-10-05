@@ -70,6 +70,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul class="tablist">
       <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
       <li><a href="classes.html"><span>Class&#160;Index</span></a></li>
+      <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
 </div><!-- top -->
@@ -109,11 +110,12 @@ $(document).ready(function(){initNavTree('structmultiboot_1_1_elf_section_header
 <div class="title">multiboot::ElfSectionHeaderTable Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="multiboot_8h_source.html">multiboot.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:af24ba121079db0092b10c5057cd1d94b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af24ba121079db0092b10c5057cd1d94b"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>num</b></td></tr>
+<tr class="memitem:af24ba121079db0092b10c5057cd1d94b"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmultiboot_1_1_elf_section_header_table.html#af24ba121079db0092b10c5057cd1d94b">num</a></td></tr>
 <tr class="separator:af24ba121079db0092b10c5057cd1d94b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8c410ac4916e719b0c00a4af8d899f28"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8c410ac4916e719b0c00a4af8d899f28"></a>
 uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b></td></tr>
@@ -126,9 +128,26 @@ uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>shndx</b></td></t
 <tr class="separator:a9cf487775d40dcc4d5c0cccc25ab3407"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p>Definition at line <a class="el" href="multiboot_8h_source.html#l00154">154</a> of file <a class="el" href="multiboot_8h_source.html">multiboot.h</a>.</p>
-</div><hr/>The documentation for this struct was generated from the following file:<ul>
+<div class="textblock"><p>Indicates where the section header table from an ELF kernel is, the size of each entry, number of entries, and the string table used as the index of names. They correspond to the ‘shdr_*’ entries (‘shdr_num’, etc.) in the Executable and Linkable Format (elf) specification in the program header. All sections are loaded, and the physical address fields of the elf section header then refer to where the sections are in memory (refer to the i386 elf documentation for details as to how to read the section header(s)). </p>
+
+<p>Definition at line <a class="el" href="multiboot_8h_source.html#l00287">287</a> of file <a class="el" href="multiboot_8h_source.html">multiboot.h</a>.</p>
+</div><h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="af24ba121079db0092b10c5057cd1d94b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t multiboot::ElfSectionHeaderTable::num</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Note that this field may be 0, indicating no symbols, even if the InfoFlags::kInfoElfSectionHeader flag of <a class="el" href="structmultiboot_1_1_info.html#af860930661475ce883e699cc65cbd8e1">Info::flags</a> is set. </p>
+
+<p>Definition at line <a class="el" href="multiboot_8h_source.html#l00292">292</a> of file <a class="el" href="multiboot_8h_source.html">multiboot.h</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following file:<ul>
 <li>src/include/boot/<a class="el" href="multiboot_8h_source.html">multiboot.h</a></li>
 </ul>
 </div><!-- contents -->
@@ -137,7 +156,7 @@ uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>shndx</b></td></t
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacemultiboot.html">multiboot</a></li><li class="navelem"><a class="el" href="structmultiboot_1_1_elf_section_header_table.html">ElfSectionHeaderTable</a></li>
-    <li class="footer">Generated on Fri Oct 4 2013 02:59:02 for dallas by
+    <li class="footer">Generated on Sat Oct 5 2013 03:34:47 for dallas by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.3.1 </li>
   </ul>

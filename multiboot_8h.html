@@ -69,6 +69,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
       <li><a href="files.html"><span>File&#160;List</span></a></li>
+      <li><a href="globals.html"><span>File&#160;Members</span></a></li>
     </ul>
   </div>
 </div><!-- top -->
@@ -123,11 +124,15 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmultiboot_1_1_elf_section_header_table.html">multiboot::ElfSectionHeaderTable</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmultiboot_1_1_info.html">multiboot::Info</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmultiboot_1_1_module_info.html">multiboot::ModuleInfo</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmultiboot_1_1_memory_map_entry.html">multiboot::MemoryMapEntry</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmultiboot_1_1_module_list.html">multiboot::ModuleList</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmultiboot_1_1_drive_info.html">multiboot::DriveInfo</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmultiboot_1_1_a_p_m_table.html">multiboot::APMTable</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmultiboot_1_1_info.html">multiboot::Info</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -140,38 +145,42 @@ Enumerations</h2></td></tr>
 <tr class="memitem:af732c75f49e03eeacd572864832537b4"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemultiboot.html#af732c75f49e03eeacd572864832537b4">multiboot::HeaderMagic</a> : uint32_t { <b>kMagic</b> = 0x1BADB002
  }</td></tr>
 <tr class="separator:af732c75f49e03eeacd572864832537b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae848564c5026f5ed91e1d6837a03f77c"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemultiboot.html#ae848564c5026f5ed91e1d6837a03f77c">multiboot::HeaderFlags</a> : uint32_t { <b>kPageAlign</b> = 1 &lt;&lt; 0, 
+<tr class="memitem:ae848564c5026f5ed91e1d6837a03f77c"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemultiboot.html#ae848564c5026f5ed91e1d6837a03f77c">multiboot::HeaderFlags</a> : uint32_t { <a class="el" href="namespacemultiboot.html#ae848564c5026f5ed91e1d6837a03f77cafa1d71ea69950b44c2b826d4cba1cd2f">multiboot::kPageAlign</a> = 1 &lt;&lt; 0, 
 <a class="el" href="namespacemultiboot.html#ae848564c5026f5ed91e1d6837a03f77ca869aadf6883a435d7c2f3bcf252cb5c4">multiboot::kMemoryInfo</a> = 1 &lt;&lt; 1, 
 <a class="el" href="namespacemultiboot.html#ae848564c5026f5ed91e1d6837a03f77caa2552049bc680dde52261235d0cea2e0">multiboot::kVideoMode</a> = 1 &lt;&lt; 2, 
 <a class="el" href="namespacemultiboot.html#ae848564c5026f5ed91e1d6837a03f77ca32540196f2b373619c4b00721a1cec13">multiboot::kAoutKludge</a> = 1 &lt;&lt; 16
  }</td></tr>
 <tr class="separator:ae848564c5026f5ed91e1d6837a03f77c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac9452d833b8dc8acea04f52b3d5b313f"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>VideoMode</b> : uint32_t { <b>kLinearGraphics</b> = 0, 
-<b>kEGATextMode</b> = 1
+<tr class="memitem:ac9452d833b8dc8acea04f52b3d5b313f"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemultiboot.html#ac9452d833b8dc8acea04f52b3d5b313f">multiboot::VideoMode</a> : uint32_t { <a class="el" href="namespacemultiboot.html#ac9452d833b8dc8acea04f52b3d5b313fa892ef96aa7c1bcb7e53a863d76e17e72">multiboot::kLinearGraphics</a> = 0, 
+<a class="el" href="namespacemultiboot.html#ac9452d833b8dc8acea04f52b3d5b313fa8be9f1b6d916351026512b2210576230">multiboot::kEGATextMode</a> = 1
  }</td></tr>
 <tr class="separator:ac9452d833b8dc8acea04f52b3d5b313f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aee8d4b8029a43b26722ff8cdd0e54fee"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54fee">multiboot::InfoFlags</a> : uint32_t { <br/>
-&#160;&#160;<b>kInfoMemory</b> = 0x00000001, 
+&#160;&#160;<a class="el" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feead4bbd8e453b8ac0f323fdab4d0fd1569">multiboot::kInfoMemory</a> = 0x00000001, 
 <a class="el" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feea632a0f8203801a1cbaaa857c58ab67b4">multiboot::kInfoBootDevice</a> = 0x00000002, 
-<b>kInfoCommandLine</b> = 0x00000004, 
-<b>kInfoModules</b> = 0x00000008, 
+<a class="el" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feea6b2d6f96941b695ba0daf1ae75ef92e5">multiboot::kInfoCommandLine</a> = 0x00000004, 
+<a class="el" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feea7caaea5ca0bc278eea1a53d841ae9f92">multiboot::kInfoModules</a> = 0x00000008, 
 <br/>
-&#160;&#160;<b>kInfoAoutSymbols</b> = 0x00000010, 
-<b>kInfoElfSectionHeader</b> = 0x00000020, 
-<b>kInfoMemoryMap</b> = 0x00000040, 
-<b>kInfoDriveInfo</b> = 0x00000080, 
+&#160;&#160;<a class="el" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feea4bedb550590a452dd68c758e744f7a35">multiboot::kInfoAoutSymbols</a> = 0x00000010, 
+<a class="el" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feeaf4f35500c067215861768a44cdd55eb3">multiboot::kInfoElfSectionHeader</a> = 0x00000020, 
+<a class="el" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feea46939a255a01e22de28dbd13fb0508ef">multiboot::kInfoMemoryMap</a> = 0x00000040, 
+<a class="el" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feea82a8c387b9975207187a42d834ebd11a">multiboot::kInfoDriveInfo</a> = 0x00000080, 
 <br/>
-&#160;&#160;<b>kInfoConfigTable</b> = 0x00000100, 
-<b>kInfoBootLoaderName</b> = 0x00000200, 
-<b>kInfoAPMTable</b> = 0x00000400, 
-<b>kInfoVideoInfo</b> = 0x00000800
+&#160;&#160;<a class="el" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feea9ec3ec193fc84ea92dabc50bc8565ff2">multiboot::kInfoConfigTable</a> = 0x00000100, 
+<a class="el" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feeab368781144509e52fc593b86c806a7f1">multiboot::kInfoBootLoaderName</a> = 0x00000200, 
+<a class="el" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feea952bca1624950c70845d4aa4d1eeec26">multiboot::kInfoAPMTable</a> = 0x00000400, 
+<a class="el" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feea12e7e032acd3ec4a81ee01ec7956649f">multiboot::kInfoVideoInfo</a> = 0x00000800
 <br/>
  }</td></tr>
 <tr class="separator:aee8d4b8029a43b26722ff8cdd0e54fee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1c0fe2f5486863a708d3481247932c53"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>MemoryMapType</b> : uint32_t { <b>kMemoryAvailable</b> = 1, 
-<b>kMemoryReserved</b>
+<tr class="memitem:a1c0fe2f5486863a708d3481247932c53"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemultiboot.html#a1c0fe2f5486863a708d3481247932c53">multiboot::MemoryMapType</a> : uint32_t { <a class="el" href="namespacemultiboot.html#a1c0fe2f5486863a708d3481247932c53a8121cf6e378370571861acd96079e37d">multiboot::kMemoryAvailable</a> = 1, 
+<a class="el" href="namespacemultiboot.html#a1c0fe2f5486863a708d3481247932c53a2efb52db5ecf78b34dddc8635708d4d8">multiboot::kMemoryReserved</a>
  }</td></tr>
 <tr class="separator:a1c0fe2f5486863a708d3481247932c53"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abefbbaa505587bdd19816b45a5e0b9f6"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemultiboot.html#abefbbaa505587bdd19816b45a5e0b9f6">multiboot::DriveMode</a> : uint8_t { <a class="el" href="namespacemultiboot.html#abefbbaa505587bdd19816b45a5e0b9f6a2acea8ad4c1dd4bbfd4b7147559d7260">multiboot::kCHS</a> = 0, 
+<a class="el" href="namespacemultiboot.html#abefbbaa505587bdd19816b45a5e0b9f6a32c635c864eb8638f13007f71240393b">multiboot::kLBA</a> = 1
+ }</td></tr>
+<tr class="separator:abefbbaa505587bdd19816b45a5e0b9f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -191,21 +200,17 @@ Variables</h2></td></tr>
 <tr class="separator:a41a675e3bb5ecd593c485fd1547f5700"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6421655e2722fd6165d20237a4b4765f"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemultiboot.html#a6421655e2722fd6165d20237a4b4765f">multiboot::kInfoAlign</a> = 0x00000004</td></tr>
 <tr class="separator:a6421655e2722fd6165d20237a4b4765f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab2c6b258f02add8fdf4cfc7c371dd772"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab2c6b258f02add8fdf4cfc7c371dd772"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b></td></tr>
+<tr class="memitem:ab2c6b258f02add8fdf4cfc7c371dd772"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="multiboot_8h.html#ab2c6b258f02add8fdf4cfc7c371dd772">size</a></td></tr>
 <tr class="separator:ab2c6b258f02add8fdf4cfc7c371dd772"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab6b52376c1b9d81e6ea6f95a1225f832"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab6b52376c1b9d81e6ea6f95a1225f832"></a>
-uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>address</b></td></tr>
+<tr class="memitem:ab6b52376c1b9d81e6ea6f95a1225f832"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="multiboot_8h.html#ab6b52376c1b9d81e6ea6f95a1225f832">address</a></td></tr>
 <tr class="separator:ab6b52376c1b9d81e6ea6f95a1225f832"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a190b76b1f3d5bd26920300e5f073739b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a190b76b1f3d5bd26920300e5f073739b"></a>
-uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>length</b></td></tr>
+<tr class="memitem:a190b76b1f3d5bd26920300e5f073739b"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="multiboot_8h.html#a190b76b1f3d5bd26920300e5f073739b">length</a></td></tr>
 <tr class="separator:a190b76b1f3d5bd26920300e5f073739b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5986bb47b8c64ef4541bc8d505f2260c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5986bb47b8c64ef4541bc8d505f2260c"></a>
-MemoryMapType&#160;</td><td class="memItemRight" valign="bottom"><b>type</b></td></tr>
+<tr class="memitem:a5986bb47b8c64ef4541bc8d505f2260c"><td class="memItemLeft" align="right" valign="top">MemoryMapType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="multiboot_8h.html#a5986bb47b8c64ef4541bc8d505f2260c">type</a></td></tr>
 <tr class="separator:a5986bb47b8c64ef4541bc8d505f2260c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aff825cf2539133dbb05e7291f322e06f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aff825cf2539133dbb05e7291f322e06f"></a>
-struct <a class="el" href="structmultiboot_1_1_module_list.html">multiboot::ModuleList</a>&#160;</td><td class="memItemRight" valign="bottom"><b>multiboot::__attribute__</b></td></tr>
-<tr class="separator:aff825cf2539133dbb05e7291f322e06f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e27205774f3222b3da6701eac87a1af"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4e27205774f3222b3da6701eac87a1af"></a>
+enum <a class="el" href="namespacemultiboot.html#abefbbaa505587bdd19816b45a5e0b9f6">multiboot::DriveMode</a>&#160;</td><td class="memItemRight" valign="bottom"><b>multiboot::__attribute__</b></td></tr>
+<tr class="separator:a4e27205774f3222b3da6701eac87a1af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h1><a class="anchor" id="LICENSE"></a>
@@ -219,13 +224,74 @@ DESCRIPTION</h1>
 <p>Values and data structures from the Multiboot specification. </p>
 
 <p>Definition in file <a class="el" href="multiboot_8h_source.html">multiboot.h</a>.</p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Variable Documentation</h2>
+<a class="anchor" id="ab6b52376c1b9d81e6ea6f95a1225f832"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t address</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The starting address of the region. </p>
+
+<p>Definition at line <a class="el" href="multiboot_8h_source.html#l00371">371</a> of file <a class="el" href="multiboot_8h_source.html">multiboot.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a190b76b1f3d5bd26920300e5f073739b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t length</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The size of the memory region in bytes. </p>
+
+<p>Definition at line <a class="el" href="multiboot_8h_source.html#l00375">375</a> of file <a class="el" href="multiboot_8h_source.html">multiboot.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab2c6b258f02add8fdf4cfc7c371dd772"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t size</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The size of the remaining structure in bytes, which can be greater than the minimum of 20 bytes </p>
+
+<p>Definition at line <a class="el" href="multiboot_8h_source.html#l00367">367</a> of file <a class="el" href="multiboot_8h_source.html">multiboot.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5986bb47b8c64ef4541bc8d505f2260c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">MemoryMapType type</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Type of address range represented. </p>
+
+<p>Definition at line <a class="el" href="multiboot_8h_source.html#l00379">379</a> of file <a class="el" href="multiboot_8h_source.html">multiboot.h</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_b0856f6b0d80ccb263b2f415c91f9e17.html">include</a></li><li class="navelem"><a class="el" href="dir_79d9426707a1b6fbd66e426043251267.html">boot</a></li><li class="navelem"><a class="el" href="multiboot_8h.html">multiboot.h</a></li>
-    <li class="footer">Generated on Fri Oct 4 2013 02:59:02 for dallas by
+    <li class="footer">Generated on Sat Oct 5 2013 03:34:47 for dallas by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.3.1 </li>
   </ul>

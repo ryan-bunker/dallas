@@ -70,6 +70,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul class="tablist">
       <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
       <li><a href="classes.html"><span>Class&#160;Index</span></a></li>
+      <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
 </div><!-- top -->
@@ -109,26 +110,86 @@ $(document).ready(function(){initNavTree('structmultiboot_1_1_aout_symbol_table.
 <div class="title">multiboot::AoutSymbolTable Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="multiboot_8h_source.html">multiboot.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a0effcb6142e30c677532f3a0e5dcd7dd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0effcb6142e30c677532f3a0e5dcd7dd"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>table_size</b></td></tr>
+<tr class="memitem:a0effcb6142e30c677532f3a0e5dcd7dd"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmultiboot_1_1_aout_symbol_table.html#a0effcb6142e30c677532f3a0e5dcd7dd">table_size</a></td></tr>
 <tr class="separator:a0effcb6142e30c677532f3a0e5dcd7dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4050141873391eac70dff51adf6baec2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4050141873391eac70dff51adf6baec2"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>string_size</b></td></tr>
+<tr class="memitem:a4050141873391eac70dff51adf6baec2"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmultiboot_1_1_aout_symbol_table.html#a4050141873391eac70dff51adf6baec2">string_size</a></td></tr>
 <tr class="separator:a4050141873391eac70dff51adf6baec2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6a701b91cdbfea8d099e7e10cad75406"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6a701b91cdbfea8d099e7e10cad75406"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>address</b></td></tr>
+<tr class="memitem:a6a701b91cdbfea8d099e7e10cad75406"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmultiboot_1_1_aout_symbol_table.html#a6a701b91cdbfea8d099e7e10cad75406">address</a></td></tr>
 <tr class="separator:a6a701b91cdbfea8d099e7e10cad75406"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a36345e309fa2fd91069a87c110e5c1eb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a36345e309fa2fd91069a87c110e5c1eb"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>reserved</b></td></tr>
+<tr class="memitem:a36345e309fa2fd91069a87c110e5c1eb"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmultiboot_1_1_aout_symbol_table.html#a36345e309fa2fd91069a87c110e5c1eb">reserved</a></td></tr>
 <tr class="separator:a36345e309fa2fd91069a87c110e5c1eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p>Definition at line <a class="el" href="multiboot_8h_source.html#l00146">146</a> of file <a class="el" href="multiboot_8h_source.html">multiboot.h</a>.</p>
-</div><hr/>The documentation for this struct was generated from the following file:<ul>
+<div class="textblock"><p>Indicates where the symbol table from an a.out kernel image can be found. </p>
+
+<p>Definition at line <a class="el" href="multiboot_8h_source.html#l00252">252</a> of file <a class="el" href="multiboot_8h_source.html">multiboot.h</a>.</p>
+</div><h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a6a701b91cdbfea8d099e7e10cad75406"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t multiboot::AoutSymbolTable::address</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The physical address of the size (4-byte unsigned long) of an array of a.out format nlist structures, followed immediately by the array itself, then the size (4-byte unsigned long) of a set of zero-terminated ASCII strings (plus sizeof(unsigned long) in this case), and finally the set of strings itself. </p>
+
+<p>Definition at line <a class="el" href="multiboot_8h_source.html#l00271">271</a> of file <a class="el" href="multiboot_8h_source.html">multiboot.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a36345e309fa2fd91069a87c110e5c1eb"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t multiboot::AoutSymbolTable::reserved</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Reserved by the specification (set to zero). </p>
+
+<p>Definition at line <a class="el" href="multiboot_8h_source.html#l00275">275</a> of file <a class="el" href="multiboot_8h_source.html">multiboot.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4050141873391eac70dff51adf6baec2"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t multiboot::AoutSymbolTable::string_size</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Equal to its size parameter (found at the beginning of the string section) of the following string table to which the symbol table refers. </p>
+
+<p>Definition at line <a class="el" href="multiboot_8h_source.html#l00263">263</a> of file <a class="el" href="multiboot_8h_source.html">multiboot.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0effcb6142e30c677532f3a0e5dcd7dd"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t multiboot::AoutSymbolTable::table_size</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Equal to its size parameter (found at the beginning of the symbol section). Note that this field may be 0, indicating no symbols, even if the InfoFlags::kInfoAoutSymbols flag of <a class="el" href="structmultiboot_1_1_info.html#af860930661475ce883e699cc65cbd8e1">Info::flags</a> is set. </p>
+
+<p>Definition at line <a class="el" href="multiboot_8h_source.html#l00258">258</a> of file <a class="el" href="multiboot_8h_source.html">multiboot.h</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following file:<ul>
 <li>src/include/boot/<a class="el" href="multiboot_8h_source.html">multiboot.h</a></li>
 </ul>
 </div><!-- contents -->
@@ -137,7 +198,7 @@ uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>reserved</b></td>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacemultiboot.html">multiboot</a></li><li class="navelem"><a class="el" href="structmultiboot_1_1_aout_symbol_table.html">AoutSymbolTable</a></li>
-    <li class="footer">Generated on Fri Oct 4 2013 02:59:02 for dallas by
+    <li class="footer">Generated on Sat Oct 5 2013 03:34:47 for dallas by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.3.1 </li>
   </ul>

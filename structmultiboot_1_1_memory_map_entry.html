@@ -70,6 +70,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul class="tablist">
       <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
       <li><a href="classes.html"><span>Class&#160;Index</span></a></li>
+      <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
 </div><!-- top -->
@@ -109,26 +110,86 @@ $(document).ready(function(){initNavTree('structmultiboot_1_1_memory_map_entry.h
 <div class="title">multiboot::MemoryMapEntry Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="multiboot_8h_source.html">multiboot.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a8994a6eaf71957dd4f79f0b0d7d84043"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8994a6eaf71957dd4f79f0b0d7d84043"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b></td></tr>
+<tr class="memitem:a8994a6eaf71957dd4f79f0b0d7d84043"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmultiboot_1_1_memory_map_entry.html#a8994a6eaf71957dd4f79f0b0d7d84043">size</a></td></tr>
 <tr class="separator:a8994a6eaf71957dd4f79f0b0d7d84043"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0b9764af6b51e582126effcb39566438"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0b9764af6b51e582126effcb39566438"></a>
-uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>address</b></td></tr>
+<tr class="memitem:a0b9764af6b51e582126effcb39566438"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmultiboot_1_1_memory_map_entry.html#a0b9764af6b51e582126effcb39566438">address</a></td></tr>
 <tr class="separator:a0b9764af6b51e582126effcb39566438"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a184e11bf6eba67cda2f10ecf7317975e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a184e11bf6eba67cda2f10ecf7317975e"></a>
-uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>length</b></td></tr>
+<tr class="memitem:a184e11bf6eba67cda2f10ecf7317975e"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmultiboot_1_1_memory_map_entry.html#a184e11bf6eba67cda2f10ecf7317975e">length</a></td></tr>
 <tr class="separator:a184e11bf6eba67cda2f10ecf7317975e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab9c9a661aa71f9fd08edbd1495094c84"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab9c9a661aa71f9fd08edbd1495094c84"></a>
-MemoryMapType&#160;</td><td class="memItemRight" valign="bottom"><b>type</b></td></tr>
+<tr class="memitem:ab9c9a661aa71f9fd08edbd1495094c84"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemultiboot.html#a1c0fe2f5486863a708d3481247932c53">MemoryMapType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmultiboot_1_1_memory_map_entry.html#ab9c9a661aa71f9fd08edbd1495094c84">type</a></td></tr>
 <tr class="separator:ab9c9a661aa71f9fd08edbd1495094c84"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p>Definition at line <a class="el" href="multiboot_8h_source.html#l00215">215</a> of file <a class="el" href="multiboot_8h_source.html">multiboot.h</a>.</p>
-</div><hr/>The documentation for this struct was generated from the following file:<ul>
+<div class="textblock"><p>Contains information about a region in memory. </p>
+
+<p>Definition at line <a class="el" href="multiboot_8h_source.html#l00344">344</a> of file <a class="el" href="multiboot_8h_source.html">multiboot.h</a>.</p>
+</div><h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a0b9764af6b51e582126effcb39566438"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t multiboot::MemoryMapEntry::address</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The starting address of the region. </p>
+
+<p>Definition at line <a class="el" href="multiboot_8h_source.html#l00353">353</a> of file <a class="el" href="multiboot_8h_source.html">multiboot.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a184e11bf6eba67cda2f10ecf7317975e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t multiboot::MemoryMapEntry::length</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The size of the memory region in bytes. </p>
+
+<p>Definition at line <a class="el" href="multiboot_8h_source.html#l00357">357</a> of file <a class="el" href="multiboot_8h_source.html">multiboot.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8994a6eaf71957dd4f79f0b0d7d84043"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t multiboot::MemoryMapEntry::size</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The size of the remaining structure in bytes, which can be greater than the minimum of 20 bytes </p>
+
+<p>Definition at line <a class="el" href="multiboot_8h_source.html#l00349">349</a> of file <a class="el" href="multiboot_8h_source.html">multiboot.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab9c9a661aa71f9fd08edbd1495094c84"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemultiboot.html#a1c0fe2f5486863a708d3481247932c53">MemoryMapType</a> multiboot::MemoryMapEntry::type</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Type of address range represented. </p>
+
+<p>Definition at line <a class="el" href="multiboot_8h_source.html#l00361">361</a> of file <a class="el" href="multiboot_8h_source.html">multiboot.h</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following file:<ul>
 <li>src/include/boot/<a class="el" href="multiboot_8h_source.html">multiboot.h</a></li>
 </ul>
 </div><!-- contents -->
@@ -137,7 +198,7 @@ MemoryMapType&#160;</td><td class="memItemRight" valign="bottom"><b>type</b></td
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacemultiboot.html">multiboot</a></li><li class="navelem"><a class="el" href="structmultiboot_1_1_memory_map_entry.html">MemoryMapEntry</a></li>
-    <li class="footer">Generated on Fri Oct 4 2013 02:59:02 for dallas by
+    <li class="footer">Generated on Sat Oct 5 2013 03:34:47 for dallas by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.3.1 </li>
   </ul>

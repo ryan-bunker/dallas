@@ -69,6 +69,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
       <li><a href="files.html"><span>File&#160;List</span></a></li>
+      <li><a href="globals.html"><span>File&#160;Members</span></a></li>
     </ul>
   </div>
 </div><!-- top -->
@@ -126,177 +127,166 @@ $(document).ready(function(){initNavTree('multiboot_8h_source.html','');});
 <div class="line"><a name="l00064"></a><span class="lineno"><a class="code" href="namespacemultiboot.html#a6421655e2722fd6165d20237a4b4765f">   64</a></span>&#160;<span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="namespacemultiboot.html#a6421655e2722fd6165d20237a4b4765f">kInfoAlign</a> = 0x00000004;</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;</div>
 <div class="line"><a name="l00069"></a><span class="lineno"><a class="code" href="namespacemultiboot.html#ae848564c5026f5ed91e1d6837a03f77c">   69</a></span>&#160;<span class="keyword">enum class</span> <a class="code" href="namespacemultiboot.html#ae848564c5026f5ed91e1d6837a03f77c">HeaderFlags</a> : uint32_t {</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;  kPageAlign = 1 &lt;&lt; 0,   </div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;  <a class="code" href="namespacemultiboot.html#ae848564c5026f5ed91e1d6837a03f77ca869aadf6883a435d7c2f3bcf252cb5c4" title="Align boot modules on i386 page (4KB) boundaries.">kMemoryInfo</a> = 1 &lt;&lt; 1,  </div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;  <a class="code" href="namespacemultiboot.html#ae848564c5026f5ed91e1d6837a03f77caa2552049bc680dde52261235d0cea2e0" title="Must pass memory information to OS.">kVideoMode</a> = 1 &lt;&lt; 2,   </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;  <a class="code" href="namespacemultiboot.html#ae848564c5026f5ed91e1d6837a03f77ca32540196f2b373619c4b00721a1cec13" title="Must pass video information to OS.">kAoutKludge</a> = 1 &lt;&lt; 16  </div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;};</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="keyword">enum class</span> VideoMode : uint32_t {</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;  kLinearGraphics = 0,</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;  kEGATextMode = 1</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;};</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;</div>
-<div class="line"><a name="l00085"></a><span class="lineno"><a class="code" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54fee">   85</a></span>&#160;<span class="keyword">enum class</span> <a class="code" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54fee">InfoFlags</a> : uint32_t {</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;  kInfoMemory = 0x00000001,   </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;  <a class="code" href="namespacemultiboot.html#ae848564c5026f5ed91e1d6837a03f77cafa1d71ea69950b44c2b826d4cba1cd2f">kPageAlign</a> = 1 &lt;&lt; 0,</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;  <a class="code" href="namespacemultiboot.html#ae848564c5026f5ed91e1d6837a03f77ca869aadf6883a435d7c2f3bcf252cb5c4">kMemoryInfo</a> = 1 &lt;&lt; 1,</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;  <a class="code" href="namespacemultiboot.html#ae848564c5026f5ed91e1d6837a03f77caa2552049bc680dde52261235d0cea2e0">kVideoMode</a> = 1 &lt;&lt; 2,</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;  <a class="code" href="namespacemultiboot.html#ae848564c5026f5ed91e1d6837a03f77ca32540196f2b373619c4b00721a1cec13">kAoutKludge</a> = 1 &lt;&lt; 16</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;};</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;  <span class="comment">/* is there a boot device set? */</span></div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;  <a class="code" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feea632a0f8203801a1cbaaa857c58ab67b4">kInfoBootDevice</a> = 0x00000002,</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;  <span class="comment">/* is the command-line defined? */</span></div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;  kInfoCommandLine = 0x00000004,</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;  <span class="comment">/* are there modules to do something with? */</span></div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;  kInfoModules = 0x00000008,</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;  <span class="comment">/* These next two are mutually exclusive */</span></div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;  <span class="comment">/* is there a symbol table loaded? */</span></div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;  kInfoAoutSymbols = 0x00000010,</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;  <span class="comment">/* is there an ELF section header table? */</span></div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;  kInfoElfSectionHeader = 0x00000020,</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;  <span class="comment">/* is there a full memory map? */</span></div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;  kInfoMemoryMap = 0x00000040,</div>
+<div class="line"><a name="l00092"></a><span class="lineno"><a class="code" href="namespacemultiboot.html#ac9452d833b8dc8acea04f52b3d5b313f">   92</a></span>&#160;<span class="keyword">enum class</span> <a class="code" href="namespacemultiboot.html#ac9452d833b8dc8acea04f52b3d5b313f">VideoMode</a> : uint32_t {</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;  <a class="code" href="namespacemultiboot.html#ac9452d833b8dc8acea04f52b3d5b313fa892ef96aa7c1bcb7e53a863d76e17e72">kLinearGraphics</a> = 0,</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;  <a class="code" href="namespacemultiboot.html#ac9452d833b8dc8acea04f52b3d5b313fa8be9f1b6d916351026512b2210576230">kEGATextMode</a> = 1</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;};</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;  <span class="comment">/* Is there drive info? */</span></div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;  kInfoDriveInfo = 0x00000080,</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;  <span class="comment">/* Is there a config table? */</span></div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;  kInfoConfigTable = 0x00000100,</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;  <span class="comment">/* Is there a boot loader name? */</span></div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;  kInfoBootLoaderName = 0x00000200,</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;  <span class="comment">/* Is there a APM table? */</span></div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;  kInfoAPMTable = 0x00000400,</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;  <span class="comment">/* Is there video information? */</span></div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;  kInfoVideoInfo = 0x00000800</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;};</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;</div>
-<div class="line"><a name="l00121"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_header.html">  121</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structmultiboot_1_1_header.html">Header</a> {</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;  <span class="comment">/* Must be MULTIBOOT_MAGIC - see above. */</span></div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;  <a class="code" href="namespacemultiboot.html#af732c75f49e03eeacd572864832537b4">HeaderMagic</a> magic;</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;  <span class="comment">/* Feature flags. */</span></div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;  <a class="code" href="namespacemultiboot.html#ae848564c5026f5ed91e1d6837a03f77c">HeaderFlags</a> flags;</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;  <span class="comment">/* The above fields plus this one must equal 0 mod 2^32. */</span></div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;  uint32_t checksum;</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;  <span class="comment">/* These are only valid if MULTIBOOT_AOUT_KLUDGE is set. */</span></div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;  uint32_t header_address;</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;  uint32_t load_address;</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;  uint32_t load_end_address;</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;  uint32_t bss_end_address;</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;  uint32_t entry_address;</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;  <span class="comment">/* These are only valid if MULTIBOOT_VIDEO_MODE is set. */</span></div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;  VideoMode video_mode;</div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;  uint32_t video_width;</div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;  uint32_t video_height;</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;  uint32_t video_depth;</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;};</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;<span class="comment">/* The symbol table for a.out. */</span></div>
-<div class="line"><a name="l00146"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_aout_symbol_table.html">  146</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structmultiboot_1_1_aout_symbol_table.html">AoutSymbolTable</a> {</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;  uint32_t table_size;</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;  uint32_t string_size;</div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;  uint32_t address;</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;  uint32_t reserved;</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;};</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;<span class="comment">/* The section header table for ELF. */</span></div>
-<div class="line"><a name="l00154"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_elf_section_header_table.html">  154</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structmultiboot_1_1_elf_section_header_table.html">ElfSectionHeaderTable</a> {</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;  uint32_t num;</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;  uint32_t size;</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;  uint32_t address;</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;  uint32_t shndx;</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;};</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;</div>
-<div class="line"><a name="l00161"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_info.html">  161</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structmultiboot_1_1_info.html">Info</a> {</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;  <span class="comment">/* Multiboot info version number */</span></div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;  <a class="code" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54fee">InfoFlags</a> flags;</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;  <span class="comment">/* Available memory from BIOS */</span></div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;  uint32_t memory_lower;</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;  uint32_t memory_upper;</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;  <span class="comment">/* &quot;root&quot; partition */</span></div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;  uint32_t boot_device;</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;</div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;  <span class="comment">/* Kernel command line */</span></div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;  uint32_t command_line;</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;  <span class="comment">/* Boot-Module list */</span></div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;  uint32_t modules_count;</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;  uint32_t modules_address;</div>
+<div class="line"><a name="l00108"></a><span class="lineno"><a class="code" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54fee">  108</a></span>&#160;<span class="keyword">enum class</span> <a class="code" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54fee">InfoFlags</a> : uint32_t {</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;  <a class="code" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feead4bbd8e453b8ac0f323fdab4d0fd1569">kInfoMemory</a> = 0x00000001,</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;  <a class="code" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feea632a0f8203801a1cbaaa857c58ab67b4">kInfoBootDevice</a> = 0x00000002,</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;  <a class="code" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feea6b2d6f96941b695ba0daf1ae75ef92e5">kInfoCommandLine</a> = 0x00000004,</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;  <a class="code" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feea7caaea5ca0bc278eea1a53d841ae9f92">kInfoModules</a> = 0x00000008,</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;  <a class="code" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feea4bedb550590a452dd68c758e744f7a35">kInfoAoutSymbols</a> = 0x00000010,</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;  <a class="code" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feeaf4f35500c067215861768a44cdd55eb3">kInfoElfSectionHeader</a> = 0x00000020,</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;  <a class="code" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feea46939a255a01e22de28dbd13fb0508ef">kInfoMemoryMap</a> = 0x00000040,</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;  <a class="code" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feea82a8c387b9975207187a42d834ebd11a">kInfoDriveInfo</a> = 0x00000080,</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;  <a class="code" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feea9ec3ec193fc84ea92dabc50bc8565ff2">kInfoConfigTable</a> = 0x00000100,</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;  <a class="code" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feeab368781144509e52fc593b86c806a7f1">kInfoBootLoaderName</a> = 0x00000200,</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;  <a class="code" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feea952bca1624950c70845d4aa4d1eeec26">kInfoAPMTable</a> = 0x00000400,</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;  <a class="code" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feea12e7e032acd3ec4a81ee01ec7956649f">kInfoVideoInfo</a> = 0x00000800</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;};</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;</div>
+<div class="line"><a name="l00168"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_header.html">  168</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structmultiboot_1_1_header.html">Header</a> {</div>
+<div class="line"><a name="l00172"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_header.html#a68f52d68dd61dc2d8f05c3e3f42bc5c4">  172</a></span>&#160;  <a class="code" href="namespacemultiboot.html#af732c75f49e03eeacd572864832537b4">HeaderMagic</a> <a class="code" href="structmultiboot_1_1_header.html#a68f52d68dd61dc2d8f05c3e3f42bc5c4">magic</a>;</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;</div>
+<div class="line"><a name="l00177"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_header.html#a18c6ecedc2f5f93856c5e43c7822b1d0">  177</a></span>&#160;  <a class="code" href="namespacemultiboot.html#ae848564c5026f5ed91e1d6837a03f77c">HeaderFlags</a> <a class="code" href="structmultiboot_1_1_header.html#a18c6ecedc2f5f93856c5e43c7822b1d0">flags</a>;</div>
 <div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;</div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;  <span class="keyword">union </span>{</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;    <a class="code" href="structmultiboot_1_1_aout_symbol_table.html">AoutSymbolTable</a> aout_symbols;</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;    <a class="code" href="structmultiboot_1_1_elf_section_header_table.html">ElfSectionHeaderTable</a> elf_section;</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;  } u;</div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;  <span class="comment">/* Memory Mapping buffer */</span></div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;  uint32_t mmap_length;</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;  uint32_t mmap_address;</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;  <span class="comment">/* Drive Info buffer */</span></div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;  uint32_t drives_length;</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;  uint32_t drives_address;</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;  <span class="comment">/* ROM configuration table */</span></div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;  uint32_t config_table;</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;  <span class="comment">/* Boot Loader Name */</span></div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;  <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *boot_loader_name;</div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;</div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;  <span class="comment">/* APM table */</span></div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;  uint32_t apm_table;</div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;  <span class="comment">/* Video */</span></div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;  uint32_t vbe_control_info;</div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;  uint32_t vbe_mode_info;</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;  uint16_t vbe_mode;</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;  uint16_t vbe_interface_seg;</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;  uint16_t vbe_interface_off;</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;  uint16_t vbe_interface_len;</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;};</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;<span class="keyword">enum class</span> MemoryMapType : uint32_t {</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;  kMemoryAvailable = 1,</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;  kMemoryReserved</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;};</div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;</div>
-<div class="line"><a name="l00215"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_memory_map_entry.html">  215</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structmultiboot_1_1_memory_map_entry.html">MemoryMapEntry</a> {</div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;  uint32_t size;</div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;  uint64_t address;</div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;  uint64_t length;</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;  MemoryMapType type;</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;}__attribute__((packed));</div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;</div>
-<div class="line"><a name="l00222"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_module_list.html">  222</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structmultiboot_1_1_module_list.html">ModuleList</a> {</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;  <span class="comment">/* the memory used goes from bytes &#39;mod_start&#39; to &#39;mod_end-1&#39; inclusive */</span></div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;  uint32_t module_start;</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;  uint32_t module_end;</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;  <span class="comment">/* Module command line */</span></div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;  uint32_t command_line;</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;  <span class="comment">/* padding to take it to 16 bytes (must be zero) */</span></div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;  uint32_t pad;</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;};</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;}  <span class="comment">// namespace multiboot</span></div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;</div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;<span class="preprocessor">#endif  // SRC_INCLUDE_BOOT_MULTIBOOT_H_</span></div>
+<div class="line"><a name="l00183"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_header.html#a48cfc99326057b06d52ce311ae1113f0">  183</a></span>&#160;  uint32_t <a class="code" href="structmultiboot_1_1_header.html#a48cfc99326057b06d52ce311ae1113f0">checksum</a>;</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;</div>
+<div class="line"><a name="l00191"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_header.html#a1b0bd9f4fe42291ca87b4311cc54c875">  191</a></span>&#160;  uint32_t <a class="code" href="structmultiboot_1_1_header.html#a1b0bd9f4fe42291ca87b4311cc54c875">header_address</a>;</div>
+<div class="line"><a name="l00199"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_header.html#ae7cb3c6ab4d75ab833b58efff13d6d57">  199</a></span>&#160;  uint32_t <a class="code" href="structmultiboot_1_1_header.html#ae7cb3c6ab4d75ab833b58efff13d6d57">load_address</a>;</div>
+<div class="line"><a name="l00208"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_header.html#a993527d8b600bc4678d564f65de403ac">  208</a></span>&#160;  uint32_t <a class="code" href="structmultiboot_1_1_header.html#a993527d8b600bc4678d564f65de403ac">load_end_address</a>;</div>
+<div class="line"><a name="l00216"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_header.html#a230b40bbe9e34734a776ce3e7d0b8288">  216</a></span>&#160;  uint32_t <a class="code" href="structmultiboot_1_1_header.html#a230b40bbe9e34734a776ce3e7d0b8288">bss_end_address</a>;</div>
+<div class="line"><a name="l00221"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_header.html#ae2504632c32f2f66b2c32e2f12c9eb12">  221</a></span>&#160;  uint32_t <a class="code" href="structmultiboot_1_1_header.html#ae2504632c32f2f66b2c32e2f12c9eb12">entry_address</a>;</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;</div>
+<div class="line"><a name="l00229"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_header.html#a9c2974676fa11511c9001bd88470b520">  229</a></span>&#160;  <a class="code" href="namespacemultiboot.html#ac9452d833b8dc8acea04f52b3d5b313f">VideoMode</a> <a class="code" href="structmultiboot_1_1_header.html#a9c2974676fa11511c9001bd88470b520">video_mode</a>;</div>
+<div class="line"><a name="l00235"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_header.html#add8a6e8ae1ab6d283a440a91607f8625">  235</a></span>&#160;  uint32_t <a class="code" href="structmultiboot_1_1_header.html#add8a6e8ae1ab6d283a440a91607f8625">video_width</a>;</div>
+<div class="line"><a name="l00241"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_header.html#a79a3e9d6270eb808a3775e4c57fab9b9">  241</a></span>&#160;  uint32_t <a class="code" href="structmultiboot_1_1_header.html#a79a3e9d6270eb808a3775e4c57fab9b9">video_height</a>;</div>
+<div class="line"><a name="l00246"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_header.html#a49cc3524431f9a45691e9c2f07b41876">  246</a></span>&#160;  uint32_t <a class="code" href="structmultiboot_1_1_header.html#a49cc3524431f9a45691e9c2f07b41876">video_depth</a>;</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;};</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;</div>
+<div class="line"><a name="l00252"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_aout_symbol_table.html">  252</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structmultiboot_1_1_aout_symbol_table.html">AoutSymbolTable</a> {</div>
+<div class="line"><a name="l00258"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_aout_symbol_table.html#a0effcb6142e30c677532f3a0e5dcd7dd">  258</a></span>&#160;  uint32_t <a class="code" href="structmultiboot_1_1_aout_symbol_table.html#a0effcb6142e30c677532f3a0e5dcd7dd">table_size</a>;</div>
+<div class="line"><a name="l00263"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_aout_symbol_table.html#a4050141873391eac70dff51adf6baec2">  263</a></span>&#160;  uint32_t <a class="code" href="structmultiboot_1_1_aout_symbol_table.html#a4050141873391eac70dff51adf6baec2">string_size</a>;</div>
+<div class="line"><a name="l00271"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_aout_symbol_table.html#a6a701b91cdbfea8d099e7e10cad75406">  271</a></span>&#160;  uint32_t <a class="code" href="structmultiboot_1_1_aout_symbol_table.html#a6a701b91cdbfea8d099e7e10cad75406">address</a>;</div>
+<div class="line"><a name="l00275"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_aout_symbol_table.html#a36345e309fa2fd91069a87c110e5c1eb">  275</a></span>&#160;  uint32_t <a class="code" href="structmultiboot_1_1_aout_symbol_table.html#a36345e309fa2fd91069a87c110e5c1eb">reserved</a>;</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;};</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;</div>
+<div class="line"><a name="l00287"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_elf_section_header_table.html">  287</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structmultiboot_1_1_elf_section_header_table.html">ElfSectionHeaderTable</a> {</div>
+<div class="line"><a name="l00292"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_elf_section_header_table.html#af24ba121079db0092b10c5057cd1d94b">  292</a></span>&#160;  uint32_t <a class="code" href="structmultiboot_1_1_elf_section_header_table.html#af24ba121079db0092b10c5057cd1d94b">num</a>;</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;  uint32_t size;</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;  uint32_t address;</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;  uint32_t shndx;</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;};</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;</div>
+<div class="line"><a name="l00301"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_module_info.html">  301</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structmultiboot_1_1_module_info.html">ModuleInfo</a> {</div>
+<div class="line"><a name="l00305"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_module_info.html#ae66dec7b2db0aed4413e1150f63cfaa4">  305</a></span>&#160;  uint32_t <a class="code" href="structmultiboot_1_1_module_info.html#ae66dec7b2db0aed4413e1150f63cfaa4">module_start</a>;</div>
+<div class="line"><a name="l00309"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_module_info.html#afb3ebd112d80a451debbf15cdb67116a">  309</a></span>&#160;  uint32_t <a class="code" href="structmultiboot_1_1_module_info.html#afb3ebd112d80a451debbf15cdb67116a">module_end</a>;</div>
+<div class="line"><a name="l00319"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_module_info.html#ab8d57180bec2d7f8a6df56f3f247c5b8">  319</a></span>&#160;  <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *<a class="code" href="structmultiboot_1_1_module_info.html#ab8d57180bec2d7f8a6df56f3f247c5b8">string</a>;  <span class="comment">// NOLINT</span></div>
+<div class="line"><a name="l00323"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_module_info.html#a40c867cb1f60c44cbc0d7fd09905265b">  323</a></span>&#160;<span class="comment"></span>  uint32_t <a class="code" href="structmultiboot_1_1_module_info.html#a40c867cb1f60c44cbc0d7fd09905265b">reserved</a>;</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;};</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;</div>
+<div class="line"><a name="l00329"></a><span class="lineno"><a class="code" href="namespacemultiboot.html#a1c0fe2f5486863a708d3481247932c53">  329</a></span>&#160;<span class="keyword">enum class</span> <a class="code" href="namespacemultiboot.html#a1c0fe2f5486863a708d3481247932c53">MemoryMapType</a> : uint32_t {</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;  <a class="code" href="namespacemultiboot.html#a1c0fe2f5486863a708d3481247932c53a8121cf6e378370571861acd96079e37d">kMemoryAvailable</a> = 1,</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;  <a class="code" href="namespacemultiboot.html#a1c0fe2f5486863a708d3481247932c53a2efb52db5ecf78b34dddc8635708d4d8">kMemoryReserved</a></div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;};</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;</div>
+<div class="line"><a name="l00344"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_memory_map_entry.html">  344</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structmultiboot_1_1_memory_map_entry.html">MemoryMapEntry</a> {</div>
+<div class="line"><a name="l00349"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_memory_map_entry.html#a8994a6eaf71957dd4f79f0b0d7d84043">  349</a></span>&#160;  uint32_t <a class="code" href="structmultiboot_1_1_memory_map_entry.html#a8994a6eaf71957dd4f79f0b0d7d84043">size</a>;</div>
+<div class="line"><a name="l00353"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_memory_map_entry.html#a0b9764af6b51e582126effcb39566438">  353</a></span>&#160;  uint64_t <a class="code" href="structmultiboot_1_1_memory_map_entry.html#a0b9764af6b51e582126effcb39566438">address</a>;</div>
+<div class="line"><a name="l00357"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_memory_map_entry.html#a184e11bf6eba67cda2f10ecf7317975e">  357</a></span>&#160;  uint64_t <a class="code" href="structmultiboot_1_1_memory_map_entry.html#a184e11bf6eba67cda2f10ecf7317975e">length</a>;</div>
+<div class="line"><a name="l00361"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_memory_map_entry.html#ab9c9a661aa71f9fd08edbd1495094c84">  361</a></span>&#160;  <a class="code" href="namespacemultiboot.html#a1c0fe2f5486863a708d3481247932c53">MemoryMapType</a> <a class="code" href="structmultiboot_1_1_memory_map_entry.html#ab9c9a661aa71f9fd08edbd1495094c84">type</a>;</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;}__attribute__((packed));</div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;</div>
+<div class="line"><a name="l00367"></a><span class="lineno"><a class="code" href="multiboot_8h.html#ab2c6b258f02add8fdf4cfc7c371dd772">  367</a></span>&#160;<span class="keyword">enum class</span> <a class="code" href="namespacemultiboot.html#abefbbaa505587bdd19816b45a5e0b9f6">DriveMode</a> : uint8_t {</div>
+<div class="line"><a name="l00371"></a><span class="lineno"><a class="code" href="multiboot_8h.html#ab6b52376c1b9d81e6ea6f95a1225f832">  371</a></span>&#160;  <a class="code" href="namespacemultiboot.html#abefbbaa505587bdd19816b45a5e0b9f6a2acea8ad4c1dd4bbfd4b7147559d7260">kCHS</a> = 0,</div>
+<div class="line"><a name="l00375"></a><span class="lineno"><a class="code" href="multiboot_8h.html#a190b76b1f3d5bd26920300e5f073739b">  375</a></span>&#160;  <a class="code" href="namespacemultiboot.html#abefbbaa505587bdd19816b45a5e0b9f6a32c635c864eb8638f13007f71240393b">kLBA</a> = 1</div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;};</div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;</div>
+<div class="line"><a name="l00378"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_drive_info.html">  378</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structmultiboot_1_1_drive_info.html">DriveInfo</a> {</div>
+<div class="line"><a name="l00384"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_drive_info.html#ae3b5c08978a307fb462d6ade06127404">  384</a></span>&#160;  uint32_t <a class="code" href="structmultiboot_1_1_drive_info.html#ae3b5c08978a307fb462d6ade06127404">size</a>;</div>
+<div class="line"><a name="l00388"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_drive_info.html#a180b38a3daae3680252658ba09c49b57">  388</a></span>&#160;  uint8_t <a class="code" href="structmultiboot_1_1_drive_info.html#a180b38a3daae3680252658ba09c49b57">drive_number</a>;</div>
+<div class="line"><a name="l00392"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_drive_info.html#a6dc16eec05bf1da0e05d13f131f8471f">  392</a></span>&#160;  <a class="code" href="namespacemultiboot.html#abefbbaa505587bdd19816b45a5e0b9f6">DriveMode</a> <a class="code" href="structmultiboot_1_1_drive_info.html#a6dc16eec05bf1da0e05d13f131f8471f">drive_mode</a>;</div>
+<div class="line"><a name="l00396"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_drive_info.html#ad505ba26ca70bc1008d33807a385c63b">  396</a></span>&#160;  uint16_t <a class="code" href="structmultiboot_1_1_drive_info.html#ad505ba26ca70bc1008d33807a385c63b">drive_cylinders</a>;</div>
+<div class="line"><a name="l00400"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_drive_info.html#aa9bdb0c7b032f51f58080a1fcb02ebd3">  400</a></span>&#160;  uint8_t <a class="code" href="structmultiboot_1_1_drive_info.html#aa9bdb0c7b032f51f58080a1fcb02ebd3">drive_heads</a>;</div>
+<div class="line"><a name="l00404"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_drive_info.html#ae174251be0c90e80030a5b2477bc9577">  404</a></span>&#160;  uint8_t <a class="code" href="structmultiboot_1_1_drive_info.html#ae174251be0c90e80030a5b2477bc9577">drive_sectors</a>;</div>
+<div class="line"><a name="l00411"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_drive_info.html#a6d22cc88d3befbac363257bfd47a42e2">  411</a></span>&#160;  uint16_t <a class="code" href="structmultiboot_1_1_drive_info.html#a6d22cc88d3befbac363257bfd47a42e2">drive_ports</a>[];</div>
+<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;};</div>
+<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;</div>
+<div class="line"><a name="l00414"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_a_p_m_table.html">  414</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structmultiboot_1_1_a_p_m_table.html">APMTable</a> {</div>
+<div class="line"><a name="l00418"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_a_p_m_table.html#a9d419cf648fa976d549c02ab9d0fbe2b">  418</a></span>&#160;  uint16_t <a class="code" href="structmultiboot_1_1_a_p_m_table.html#a9d419cf648fa976d549c02ab9d0fbe2b">version</a>;</div>
+<div class="line"><a name="l00422"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_a_p_m_table.html#a79f278ceb4f89c8df89aa5a215d02a4b">  422</a></span>&#160;  uint16_t <a class="code" href="structmultiboot_1_1_a_p_m_table.html#a79f278ceb4f89c8df89aa5a215d02a4b">cseg</a>;</div>
+<div class="line"><a name="l00426"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_a_p_m_table.html#a2e508eb56c24ed85ae74adf70431363f">  426</a></span>&#160;  uint32_t <a class="code" href="structmultiboot_1_1_a_p_m_table.html#a2e508eb56c24ed85ae74adf70431363f">offset</a>;</div>
+<div class="line"><a name="l00430"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_a_p_m_table.html#ad1716b78fafa654a35c4a9d8bc4a44b2">  430</a></span>&#160;  uint16_t <a class="code" href="structmultiboot_1_1_a_p_m_table.html#ad1716b78fafa654a35c4a9d8bc4a44b2">cseg_16</a>;</div>
+<div class="line"><a name="l00434"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_a_p_m_table.html#a6389cb51e571d7a70292fcb220294c7c">  434</a></span>&#160;  uint16_t <a class="code" href="structmultiboot_1_1_a_p_m_table.html#a6389cb51e571d7a70292fcb220294c7c">dseg</a>;</div>
+<div class="line"><a name="l00438"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_a_p_m_table.html#afab6b9d565901c46f8d81bc32e5b6c99">  438</a></span>&#160;  uint16_t <a class="code" href="structmultiboot_1_1_a_p_m_table.html#afab6b9d565901c46f8d81bc32e5b6c99">flags</a>;</div>
+<div class="line"><a name="l00442"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_a_p_m_table.html#a9e1efa6cb9a173485aaf2c0ceb4749b8">  442</a></span>&#160;  uint16_t <a class="code" href="structmultiboot_1_1_a_p_m_table.html#a9e1efa6cb9a173485aaf2c0ceb4749b8">cseg_len</a>;</div>
+<div class="line"><a name="l00446"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_a_p_m_table.html#a056a6af0d4e8bb52e958e2e467b4c8e2">  446</a></span>&#160;  uint16_t <a class="code" href="structmultiboot_1_1_a_p_m_table.html#a056a6af0d4e8bb52e958e2e467b4c8e2">cseg_16_len</a>;</div>
+<div class="line"><a name="l00450"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_a_p_m_table.html#ae7533285d41b5dcf9b96108af2368a64">  450</a></span>&#160;  uint16_t <a class="code" href="structmultiboot_1_1_a_p_m_table.html#ae7533285d41b5dcf9b96108af2368a64">dseg_len</a>;</div>
+<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;};</div>
+<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;</div>
+<div class="line"><a name="l00453"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_info.html">  453</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structmultiboot_1_1_info.html">Info</a> {</div>
+<div class="line"><a name="l00462"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_info.html#af860930661475ce883e699cc65cbd8e1">  462</a></span>&#160;  <a class="code" href="namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54fee">InfoFlags</a> <a class="code" href="structmultiboot_1_1_info.html#af860930661475ce883e699cc65cbd8e1">flags</a>;</div>
+<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;</div>
+<div class="line"><a name="l00468"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_info.html#accd2bcab9fdb88aaab5b692fc11a73cc">  468</a></span>&#160;  uint32_t <a class="code" href="structmultiboot_1_1_info.html#accd2bcab9fdb88aaab5b692fc11a73cc">memory_lower</a>;</div>
+<div class="line"><a name="l00475"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_info.html#ae7156d1e92a0e6279c09ac2ab071c03b">  475</a></span>&#160;  uint32_t <a class="code" href="structmultiboot_1_1_info.html#ae7156d1e92a0e6279c09ac2ab071c03b">memory_upper</a>;</div>
+<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;</div>
+<div class="line"><a name="l00510"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_info.html#a5e8d0bbafa9ef8b1fae0c9aca9943bf1">  510</a></span>&#160;  uint32_t <a class="code" href="structmultiboot_1_1_info.html#a5e8d0bbafa9ef8b1fae0c9aca9943bf1">boot_device</a>;</div>
+<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;</div>
+<div class="line"><a name="l00516"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_info.html#a9b4efa0c018bbb47312c962aebada6c4">  516</a></span>&#160;  uint32_t <a class="code" href="structmultiboot_1_1_info.html#a9b4efa0c018bbb47312c962aebada6c4">command_line</a>;</div>
+<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;</div>
+<div class="line"><a name="l00523"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_info.html#a99b627a5aa7a4c4c06265aaf146e89ba">  523</a></span>&#160;  uint32_t <a class="code" href="structmultiboot_1_1_info.html#a99b627a5aa7a4c4c06265aaf146e89ba">modules_count</a>;</div>
+<div class="line"><a name="l00527"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_info.html#a1546fdd028e495f721cee631f95dfd01">  527</a></span>&#160;  <a class="code" href="structmultiboot_1_1_module_info.html">ModuleInfo</a> *<a class="code" href="structmultiboot_1_1_info.html#a1546fdd028e495f721cee631f95dfd01">modules</a>;</div>
+<div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;</div>
+<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;  <span class="keyword">union </span>{</div>
+<div class="line"><a name="l00533"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_info.html#ac8dd8b981e9912e7783ffee00f7175b3">  533</a></span>&#160;    <a class="code" href="structmultiboot_1_1_aout_symbol_table.html">AoutSymbolTable</a> <a class="code" href="structmultiboot_1_1_info.html#ac8dd8b981e9912e7783ffee00f7175b3">aout_symbols</a>;</div>
+<div class="line"><a name="l00537"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_info.html#a6bbf2e6502bcc2daec24f18ebf3f646d">  537</a></span>&#160;    <a class="code" href="structmultiboot_1_1_elf_section_header_table.html">ElfSectionHeaderTable</a> <a class="code" href="structmultiboot_1_1_info.html#a6bbf2e6502bcc2daec24f18ebf3f646d">elf_section</a>;</div>
+<div class="line"><a name="l00538"></a><span class="lineno">  538</span>&#160;  } u;</div>
+<div class="line"><a name="l00539"></a><span class="lineno">  539</span>&#160;</div>
+<div class="line"><a name="l00543"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_info.html#a9082f3bc3e9e759ebe8d7f63dbebdb44">  543</a></span>&#160;  uint32_t <a class="code" href="structmultiboot_1_1_info.html#a9082f3bc3e9e759ebe8d7f63dbebdb44">mmap_length</a>;</div>
+<div class="line"><a name="l00547"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_info.html#ad6034b5eb9df93cc1006b2903a938512">  547</a></span>&#160;  <a class="code" href="structmultiboot_1_1_memory_map_entry.html">MemoryMapEntry</a> *<a class="code" href="structmultiboot_1_1_info.html#ad6034b5eb9df93cc1006b2903a938512">mmap</a>;</div>
+<div class="line"><a name="l00548"></a><span class="lineno">  548</span>&#160;</div>
+<div class="line"><a name="l00552"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_info.html#ae9bdf2dde03ab346a555e13762de0c41">  552</a></span>&#160;  uint32_t <a class="code" href="structmultiboot_1_1_info.html#ae9bdf2dde03ab346a555e13762de0c41">drives_length</a>;</div>
+<div class="line"><a name="l00556"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_info.html#a7a500439ff5329216f4d03a3279319ec">  556</a></span>&#160;  <a class="code" href="structmultiboot_1_1_drive_info.html">DriveInfo</a> <a class="code" href="structmultiboot_1_1_info.html#a7a500439ff5329216f4d03a3279319ec">drives</a>;</div>
+<div class="line"><a name="l00557"></a><span class="lineno">  557</span>&#160;</div>
+<div class="line"><a name="l00563"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_info.html#ad935e93ff8d0872917395039b86c22ba">  563</a></span>&#160;  uint32_t <a class="code" href="structmultiboot_1_1_info.html#ad935e93ff8d0872917395039b86c22ba">config_table</a>;</div>
+<div class="line"><a name="l00564"></a><span class="lineno">  564</span>&#160;</div>
+<div class="line"><a name="l00569"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_info.html#a18f2529d248183f729e92164f891394d">  569</a></span>&#160;  <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *<a class="code" href="structmultiboot_1_1_info.html#a18f2529d248183f729e92164f891394d">boot_loader_name</a>;</div>
+<div class="line"><a name="l00570"></a><span class="lineno">  570</span>&#160;</div>
+<div class="line"><a name="l00574"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_info.html#a98e8164f57ffc92dbe6807826c7a6c25">  574</a></span>&#160;  <a class="code" href="structmultiboot_1_1_a_p_m_table.html">APMTable</a> <a class="code" href="structmultiboot_1_1_info.html#a98e8164f57ffc92dbe6807826c7a6c25">apm_table</a>;</div>
+<div class="line"><a name="l00575"></a><span class="lineno">  575</span>&#160;</div>
+<div class="line"><a name="l00580"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_info.html#a7c69816fb27c5224a0beee8d57a1fcb1">  580</a></span>&#160;  uint32_t <a class="code" href="structmultiboot_1_1_info.html#a7c69816fb27c5224a0beee8d57a1fcb1">vbe_control_info</a>;</div>
+<div class="line"><a name="l00585"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_info.html#a00caecb4ca405b199b3ddeff8fa9aff7">  585</a></span>&#160;  uint32_t <a class="code" href="structmultiboot_1_1_info.html#a00caecb4ca405b199b3ddeff8fa9aff7">vbe_mode_info</a>;</div>
+<div class="line"><a name="l00589"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_info.html#a9883438293f5cc60c9b4d5ded658bb11">  589</a></span>&#160;  uint16_t <a class="code" href="structmultiboot_1_1_info.html#a9883438293f5cc60c9b4d5ded658bb11">vbe_mode</a>;</div>
+<div class="line"><a name="l00594"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_info.html#a860f4c25ea72842be00b441fd92708b4">  594</a></span>&#160;  uint16_t <a class="code" href="structmultiboot_1_1_info.html#a860f4c25ea72842be00b441fd92708b4">vbe_interface_seg</a>;</div>
+<div class="line"><a name="l00599"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_info.html#a9cc9ef3618cda10dd86f959169cc8529">  599</a></span>&#160;  uint16_t <a class="code" href="structmultiboot_1_1_info.html#a9cc9ef3618cda10dd86f959169cc8529">vbe_interface_off</a>;</div>
+<div class="line"><a name="l00604"></a><span class="lineno"><a class="code" href="structmultiboot_1_1_info.html#ae7d98b58aeecbb5b2f7582aea2878c2a">  604</a></span>&#160;  uint16_t <a class="code" href="structmultiboot_1_1_info.html#ae7d98b58aeecbb5b2f7582aea2878c2a">vbe_interface_len</a>;</div>
+<div class="line"><a name="l00605"></a><span class="lineno">  605</span>&#160;};</div>
+<div class="line"><a name="l00606"></a><span class="lineno">  606</span>&#160;</div>
+<div class="line"><a name="l00607"></a><span class="lineno">  607</span>&#160;}  <span class="comment">// namespace multiboot</span></div>
+<div class="line"><a name="l00608"></a><span class="lineno">  608</span>&#160;</div>
+<div class="line"><a name="l00609"></a><span class="lineno">  609</span>&#160;<span class="preprocessor">#endif  // SRC_INCLUDE_BOOT_MULTIBOOT_H_</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_b0856f6b0d80ccb263b2f415c91f9e17.html">include</a></li><li class="navelem"><a class="el" href="dir_79d9426707a1b6fbd66e426043251267.html">boot</a></li><li class="navelem"><a class="el" href="multiboot_8h.html">multiboot.h</a></li>
-    <li class="footer">Generated on Fri Oct 4 2013 02:59:02 for dallas by
+    <li class="footer">Generated on Sat Oct 5 2013 03:34:47 for dallas by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.3.1 </li>
   </ul>

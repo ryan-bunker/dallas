@@ -1,7 +1,25 @@
 var searchData=
 [
   ['kaoutkludge',['kAoutKludge',['../namespacemultiboot.html#ae848564c5026f5ed91e1d6837a03f77ca32540196f2b373619c4b00721a1cec13',1,'multiboot']]],
+  ['kchs',['kCHS',['../namespacemultiboot.html#abefbbaa505587bdd19816b45a5e0b9f6a2acea8ad4c1dd4bbfd4b7147559d7260',1,'multiboot']]],
+  ['kegatextmode',['kEGATextMode',['../namespacemultiboot.html#ac9452d833b8dc8acea04f52b3d5b313fa8be9f1b6d916351026512b2210576230',1,'multiboot']]],
+  ['kinfoaoutsymbols',['kInfoAoutSymbols',['../namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feea4bedb550590a452dd68c758e744f7a35',1,'multiboot']]],
+  ['kinfoapmtable',['kInfoAPMTable',['../namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feea952bca1624950c70845d4aa4d1eeec26',1,'multiboot']]],
   ['kinfobootdevice',['kInfoBootDevice',['../namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feea632a0f8203801a1cbaaa857c58ab67b4',1,'multiboot']]],
+  ['kinfobootloadername',['kInfoBootLoaderName',['../namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feeab368781144509e52fc593b86c806a7f1',1,'multiboot']]],
+  ['kinfocommandline',['kInfoCommandLine',['../namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feea6b2d6f96941b695ba0daf1ae75ef92e5',1,'multiboot']]],
+  ['kinfoconfigtable',['kInfoConfigTable',['../namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feea9ec3ec193fc84ea92dabc50bc8565ff2',1,'multiboot']]],
+  ['kinfodriveinfo',['kInfoDriveInfo',['../namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feea82a8c387b9975207187a42d834ebd11a',1,'multiboot']]],
+  ['kinfoelfsectionheader',['kInfoElfSectionHeader',['../namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feeaf4f35500c067215861768a44cdd55eb3',1,'multiboot']]],
+  ['kinfomemory',['kInfoMemory',['../namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feead4bbd8e453b8ac0f323fdab4d0fd1569',1,'multiboot']]],
+  ['kinfomemorymap',['kInfoMemoryMap',['../namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feea46939a255a01e22de28dbd13fb0508ef',1,'multiboot']]],
+  ['kinfomodules',['kInfoModules',['../namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feea7caaea5ca0bc278eea1a53d841ae9f92',1,'multiboot']]],
+  ['kinfovideoinfo',['kInfoVideoInfo',['../namespacemultiboot.html#aee8d4b8029a43b26722ff8cdd0e54feea12e7e032acd3ec4a81ee01ec7956649f',1,'multiboot']]],
+  ['klba',['kLBA',['../namespacemultiboot.html#abefbbaa505587bdd19816b45a5e0b9f6a32c635c864eb8638f13007f71240393b',1,'multiboot']]],
+  ['klineargraphics',['kLinearGraphics',['../namespacemultiboot.html#ac9452d833b8dc8acea04f52b3d5b313fa892ef96aa7c1bcb7e53a863d76e17e72',1,'multiboot']]],
+  ['kmemoryavailable',['kMemoryAvailable',['../namespacemultiboot.html#a1c0fe2f5486863a708d3481247932c53a8121cf6e378370571861acd96079e37d',1,'multiboot']]],
   ['kmemoryinfo',['kMemoryInfo',['../namespacemultiboot.html#ae848564c5026f5ed91e1d6837a03f77ca869aadf6883a435d7c2f3bcf252cb5c4',1,'multiboot']]],
+  ['kmemoryreserved',['kMemoryReserved',['../namespacemultiboot.html#a1c0fe2f5486863a708d3481247932c53a2efb52db5ecf78b34dddc8635708d4d8',1,'multiboot']]],
+  ['kpagealign',['kPageAlign',['../namespacemultiboot.html#ae848564c5026f5ed91e1d6837a03f77cafa1d71ea69950b44c2b826d4cba1cd2f',1,'multiboot']]],
   ['kvideomode',['kVideoMode',['../namespacemultiboot.html#ae848564c5026f5ed91e1d6837a03f77caa2552049bc680dde52261235d0cea2e0',1,'multiboot']]]
 ];

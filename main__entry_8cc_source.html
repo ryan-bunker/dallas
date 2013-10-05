@@ -69,6 +69,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
       <li><a href="files.html"><span>File&#160;List</span></a></li>
+      <li><a href="globals.html"><span>File&#160;Members</span></a></li>
     </ul>
   </div>
 </div><!-- top -->
@@ -112,40 +113,39 @@ $(document).ready(function(){initNavTree('main__entry_8cc_source.html','');});
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">namespace </span>{</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="comment">// Our kernel&#39;s first function: kmain</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keyword">extern</span> <span class="stringliteral">&quot;C&quot;</span> <span class="keywordtype">void</span> kmain(<a class="code" href="structmultiboot_1_1_info.html">multiboot::Info</a> *mbd, uint32_t magic) {</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;  <span class="keywordflow">if</span> (magic != <a class="code" href="namespacemultiboot.html#ad15a2c6c45f8e887bc4f9c0397a66e8f">multiboot::kBootloaderMagic</a>) {</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="comment">// Something went not according to specs. Print an error</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="comment">// message and halt, but do *not* rely on the multiboot</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="comment">// data structure.</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;  }</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;  <span class="comment">// mbd is currently pointing to physical memory so we need</span></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;  <span class="comment">// to adjust it for our current GDT offsets</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;  mbd = (<a class="code" href="structmultiboot_1_1_info.html">multiboot::Info</a>*) <a class="code" href="namespaceaddressing.html#a27d7ec53d92dbabf8b89fd0110fde14f">addressing::PhysicalToVirtual</a>(</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;      reinterpret_cast&lt;addressing::paddress&gt;(mbd));</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;  uint16_t* <span class="keyword">const</span> screen = <span class="keyword">reinterpret_cast&lt;</span>uint16_t*<span class="keyword">&gt;</span>(0xC00B8000);</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;  screen[0] = (15 &lt;&lt; 8) | <span class="charliteral">&#39;D&#39;</span>;</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;  screen[1] = (15 &lt;&lt; 8) | <span class="charliteral">&#39;a&#39;</span>;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;  screen[2] = (15 &lt;&lt; 8) | <span class="charliteral">&#39;l&#39;</span>;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;  screen[3] = (15 &lt;&lt; 8) | <span class="charliteral">&#39;l&#39;</span>;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;  screen[4] = (15 &lt;&lt; 8) | <span class="charliteral">&#39;a&#39;</span>;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;  screen[5] = (15 &lt;&lt; 8) | <span class="charliteral">&#39;s&#39;</span>;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;  <span class="comment">// Hang up the computer</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;  <span class="keywordflow">for</span> (;;)</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keywordflow">continue</span>;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;}</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;}  <span class="comment">// namespace</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">extern</span> <span class="stringliteral">&quot;C&quot;</span> <span class="keywordtype">void</span> kmain(<a class="code" href="structmultiboot_1_1_info.html">multiboot::Info</a> *mbd, uint32_t magic) {</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;  <span class="keywordflow">if</span> (magic != <a class="code" href="namespacemultiboot.html#ad15a2c6c45f8e887bc4f9c0397a66e8f">multiboot::kBootloaderMagic</a>) {</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="comment">// Something went not according to specs. Print an error</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="comment">// message and halt, but do *not* rely on the multiboot</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="comment">// data structure.</span></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;  }</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;  <span class="comment">// mbd is currently pointing to physical memory so we need</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;  <span class="comment">// to adjust it for our current GDT offsets</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;  mbd = (<a class="code" href="structmultiboot_1_1_info.html">multiboot::Info</a>*) <a class="code" href="namespaceaddressing.html#a27d7ec53d92dbabf8b89fd0110fde14f">addressing::PhysicalToVirtual</a>(</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;      reinterpret_cast&lt;addressing::paddress&gt;(mbd));</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;  uint16_t* <span class="keyword">const</span> screen = <span class="keyword">reinterpret_cast&lt;</span>uint16_t*<span class="keyword">&gt;</span>(0xC00B8000);</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;  screen[0] = (15 &lt;&lt; 8) | <span class="charliteral">&#39;D&#39;</span>;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;  screen[1] = (15 &lt;&lt; 8) | <span class="charliteral">&#39;a&#39;</span>;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;  screen[2] = (15 &lt;&lt; 8) | <span class="charliteral">&#39;l&#39;</span>;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;  screen[3] = (15 &lt;&lt; 8) | <span class="charliteral">&#39;l&#39;</span>;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;  screen[4] = (15 &lt;&lt; 8) | <span class="charliteral">&#39;a&#39;</span>;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;  screen[5] = (15 &lt;&lt; 8) | <span class="charliteral">&#39;s&#39;</span>;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;  <span class="comment">// Hang up the computer</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;  <span class="keywordflow">for</span> (;;)</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;}</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;}  <span class="comment">// namespace</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_cbd7f246bdf7dc0a50281a272327e6ed.html">kernel</a></li><li class="navelem"><a class="el" href="main__entry_8cc.html">main_entry.cc</a></li>
-    <li class="footer">Generated on Fri Oct 4 2013 02:59:02 for dallas by
+    <li class="footer">Generated on Sat Oct 5 2013 03:34:47 for dallas by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.3.1 </li>
   </ul>
