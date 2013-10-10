@@ -39,7 +39,7 @@ vpath % $(SRCDIR)/kernel $(SRCDIR)/arch/$(PLATFORM) $(SRCDIR)/include $(SRCDIR)/
 vpath %.h $(SRCDIR)/kernel $(SRCDIR)/arch/$(PLATFORM) $(SRCDIR)/include $(SRCDIR)/arch/$(PLATFORM)/include
 vpath %.ld $(SRCDIR)/arch/$(PLATFORM)
 
-all : kernel.elf documentation
+all : kernel.elf bootable.iso documentation
 
 ifneq "$(MAKECMDGOALS)" "clean"
   include $(dependencies)
@@ -62,6 +62,13 @@ kernel.elf: linker.ld $(objects)
 kernel.sym: kernel.elf
 	objcopy --only-keep-debug $^ $@
 	objcopy --strip-debug $^
+
+bootable.iso: kernel.elf $(SRCDIR)/grub/menu.lst
+	genisoimage -graft-points -R -b boot/grub/stage2_eltorito -no-emul-boot \
+		-boot-load-size 4 -boot-info-table -o $@ \
+		boot/kernel.elf=kernel.elf \
+		boot/grub/menu.lst=$(SRCDIR)/grub/menu.lst \
+		boot/grub/stage2_eltorito=../thirdparty/grub/stage2_eltorito
 
 .PHONY: documentation
 documentation:
