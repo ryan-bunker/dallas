@@ -39,7 +39,7 @@ vpath % $(SRCDIR)/kernel $(SRCDIR)/arch/$(PLATFORM) $(SRCDIR)/include $(SRCDIR)/
 vpath %.h $(SRCDIR)/kernel $(SRCDIR)/arch/$(PLATFORM) $(SRCDIR)/include $(SRCDIR)/arch/$(PLATFORM)/include
 vpath %.ld $(SRCDIR)/arch/$(PLATFORM)
 
-all : kernel.elf
+all : kernel.elf documentation
 
 ifneq "$(MAKECMDGOALS)" "clean"
   include $(dependencies)
@@ -62,6 +62,10 @@ kernel.elf: linker.ld $(objects)
 kernel.sym: kernel.elf
 	objcopy --only-keep-debug $^ $@
 	objcopy --strip-debug $^
-	
+
+.PHONY: documentation
+documentation:
+	doxygen $(SRCDIR)/../docs/Doxyfile
+
 endif
 
