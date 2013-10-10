@@ -16,8 +16,8 @@ CXXFLAGS := -I $(SRCDIR)/include -I $(SRCDIR)/arch/$(PLATFORM)/include \
 						-fno-builtin -nostartfiles -nodefaultlibs -fno-exceptions -ffreestanding \
 						-std=c++11 -fno-rtti -fno-stack-protector
 
-AS := nasm
-ASFLAGS := -f elf -g
+AS := i586-elf-as
+ASFLAGS := -gstabs
 
 LINK.o := i586-elf-ld
 

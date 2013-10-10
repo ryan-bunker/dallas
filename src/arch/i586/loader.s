@@ -1,159 +1,161 @@
-[BITS 32]			; 32 bit code
-[global start]		; make 'start' function global
-[extern kmain]		; our C kernel main
+.code32
+.global start
+# Our kernel entry point in main_entry.cc
+.extern kmain
 
-[extern start_ctors]	; beginning and end
-[extern end_ctors]		; of the respective
-[extern start_dtors]	; ctors and dtors section,
-[extern end_dtors]		; declare by the linker script
+# These symbols represent the beginning and end of the respective constructors
+# and destructors section, declared by the linker script.
+.extern start_ctors
+.extern end_ctors
+.extern start_dtors
+.extern end_dtors
 
-; setting up the Multiboot header - see GRUB docs for details
-MULTIBOOT_PAGE_ALIGN	equ 1<<0
-MULTIBOOT_MEMORY_INFO	equ 1<<1
-MULTIBOOT_HEADER_MAGIC	equ 0x1BADB002
-MULTIBOOT_HEADER_FLAGS	equ MULTIBOOT_PAGE_ALIGN | MULTIBOOT_MEMORY_INFO
-MULTIBOOT_CHECKSUM		equ -(MULTIBOOT_HEADER_MAGIC + MULTIBOOT_HEADER_FLAGS)
+# Declare constants used for creating a multiboot header.
+.set ALIGN,     1<<0              # align loaded modules on page boundaries
+.set MEMINFO,   1<<1              # provide memory map
+.set FLAGS,     ALIGN | MEMINFO   # this is the Multiboot 'flag' field
+.set MAGIC,     0x1BADB002        # 'magic number' lets bootloader find the header
+.set CHECKSUM,  -(MAGIC + FLAGS)  # checksum of above, to prove we are multiboot
 
-; Multiboot header (needed to boot from GRUB)
-ALIGN 4
-multiboot_header:
-	dd MULTIBOOT_HEADER_MAGIC
-	dd MULTIBOOT_HEADER_FLAGS
-	dd MULTIBOOT_CHECKSUM
-	
-section .setup
-; the kernel entry point
+# Declare a header as in the Multiboot Standard. We put this into a special
+# section so we can force the header to be in the start of the final program.
+# You don't need to understand all these details as it is just magic values that
+# is documented in the multiboot standard. The bootloader will search for this
+# magic sequence and recognize us as a multiboot kernel.
+.section .multiboot
+.align 4
+.long MAGIC
+.long FLAGS
+.long CHECKSUM
+
+# The linker script specifies _start as the entry point to the kernel and the
+# bootloader will jump to this position once the kernel has been loaded. It
+# doesn't make sense to return from this function as the bootloader is gone.
+.section .init
 start:
-	; here's the trick: we load a GDT with a base address
-	; of 0x40000000 for the code (0x08) and data (0x10) segments
-	lgdt [trickgdt]
-	mov cx, 0x10
-	mov ds, cx
-	mov es, cx
-	mov fs, cx
-	mov gs, cx
-	mov ss, cx
-	
-	; jump to the higher half kernel
-	jmp 0x08:higherhalf
-	
-section .text
+  # First things first, we need to load the trick GDT so addressing everything
+  # works correctly. Load a GDT with a base address of 0x40000000 for the
+  # code (0x08) and data (0x10) segments.
+  lgdt trickgdt
+  movw $0x10, %cx
+  movw %cx, %ds
+  movw %cx, %es
+  movw %cx, %fs
+  movw %cx, %gs
+  movw %cx, %ss
+
+  # Now we perform a jump into the higher half kernel to switch into the just
+  # loaded GDT registers.
+  jmp $0x08, $higherhalf
+
+.section .text
 higherhalf:
-	; from now the CPU will translate automatically every address
-	; by adding the base 0x40000000
-	
-	mov esp, sys_stack	; set up a new stack for our kernel
-	
-	push eax			; pass multiboot magic number
-	push ebx			; pass multiboot header pointer
-	
-	mov ebx, start_ctors	; call the constructors
-    jmp .ctors_until_end
-.call_constructor:
-    call [ebx]
-    add ebx,4
-.ctors_until_end:
-    cmp ebx, end_ctors
-    jb .call_constructor
+  # From now on, the CPU will translate automatically every address by adding
+  # the base 0x40000000, thus matching the addresses we generated at compile.
 
-	call kmain			; jump to our c kernel
-	
-	mov ebx, end_dtors	; call the destructors
-    jmp .dtors_until_end
-.call_destructor:
-    sub ebx, 4
-    call [ebx]
-.dtors_until_end:
-    cmp ebx, start_dtors
-    ja .call_destructor
+  # We now have sufficient code for the bootloader to load and run our operating
+  # system. It doesn't do anything interesting yet. Note that the processor is
+  # not fully initialized yet and stuff such as floating point instructions are
+  # not available yet.
 
-    cli
-	jmp $				; just a simple protection
-	
-[global gdt_flush]		; make gdt_flush accessible from C code
+  # To set up a stack, we simply set the esp register to point to the top of
+  # our stack (as it grows downwards).
+  movl $sys_stack, %esp
 
-; this function does the same thing of the 'start' one, this time with
-; the real GDT
+  # The bootloader put the multiboot magic number in EAX and the address of the
+  # multiboot information structure in EBX, so we need to pass those to kmain.
+  push %eax
+  push %ebx
+
+  # Before we go to the main entry point, we need to call all of our C++
+  # constructors so those objects are properly initialized.
+  movl $start_ctors, %ebx
+  jmp .Lctors_until_end
+.Lcall_constructor:
+  call *%ebx
+  addl $4, %ebx
+.Lctors_until_end:
+  cmpl $end_ctors, %ebx
+  jb .Lcall_constructor
+
+  # We are now ready to execute C++ code. Call into our kernel entry point,
+  # kmain in main_entry.cc
+  call kmain
+
+  # Since the kernel has exited, it is now time to call all of our C++
+  # destructors to make sure everything is cleaned up properly.
+  movl $end_dtors, %ebx
+  jmp .Ldtors_until_end
+.Lcall_destructor:
+  subl $4, %ebx
+  call *%ebx
+.Ldtors_until_end:
+  cmpl $start_dtors, %ebx
+  ja .Lcall_destructor
+
+  # In case the function returns, we'll want to put the computer into an
+  # infinite loop. To do that, we use the clear interrupt ('cli') instruction
+  # to disable interrupts, the halt instruction ('hlt') to stop the CPU until
+  # the next interrupt arrives, and jumping to the halt instruction if it ever
+  # continues execution, just to be safe. We will create a local label rather
+  # than real symbol and jump to there endlessly.
+  cli
+  hlt
+.Lhang:
+  jmp .Lhang
+# End of _start
+
+
+# Load GDT with a specified value.
+.global gdt_flush
 gdt_flush:
-	mov eax, [esp+4]	; Get the pointer to the GDT, passed as a parameter.
-	lgdt [eax]			; Load the new GDT pointer.
-	
-	mov ax, 0x10		; 0x10 is the offset in the GDT to our data segment
-	mov ds, ax			; Load all data segment selectors
-	mov es, ax
-	mov fs, ax
-	mov gs, ax
-	mov ss, ax
-	jmp 0x08:.flush		; 0x08 is the offset to our code segment: Far jump!
+  # Get the pointer to the GDT, passed as a parameter.
+  movl 4(%esp), %eax
+  # Load the new pointer into GDT.
+  lgdt (%eax)
+
+  # 0x10 is the offset in the GDT to our data segment.
+  movw $0x10, %ax
+  # Load all data segment selectors.
+  movw %ax, %ds
+  movw %ax, %es
+  movw %ax, %fs
+  movw %ax, %gs
+  movw %ax, %ss
+  # 0x08 is the offset to our code segment, far jump to load it
+  ljmp $0x08, $.flush
 .flush:
-	ret
-	
-[global idt_flush]		; make idt_flush accessible from C code
+  ret
 
+# Load IDT with a specified value.
+.global idt_flush
 idt_flush:
-	mov eax, [esp+4]	; Get the pointer to the IDT, passed as a parameter.
-	lidt [eax]			; Load the IDT pointer.
-	ret
+  # Get the pointer to the IDT, passed as a paramter.
+  movl 4(%esp), %eax
+  # Load the IDT pointer.
+  lidt (%eax)
+  ret
 
-[section .setup]	; tells the assembler to include this data in the '.setup' section
-
+# Tells the assembler to include this data in the '.init' section
+.section .init
 trickgdt:
-	dw gdt_end - gdt	; size of the GDT
-	dd gdt				; linear address of GDT
-	
+  # Size of the GDT
+  .word gdt_end - gdt
+  # Linear address of GDT
+  .long gdt
+
 gdt:
-	dd 0, 0
-	db 0xFF, 0xFF, 0, 0, 0, 10011010b, 11001111b, 0x40	; code selector 0x08: base 0x40000000, limit 0xFFFFFFFF, type 0x9A, granularity 0xCF
-	db 0xFF, 0xFF, 0, 0, 0, 10010010b, 11001111b, 0x40	; data selector 0x10: base 0x40000000, limit 0xFFFFFFFF, type 0x92, granularity 0xCF
- 
+  .long 0, 0
+  # Code selector 0x08: base 0x40000000, limit 0xFFFFFFFF, type 0x9A, granularity 0xCF
+  .byte 0xFF, 0xFF, 0, 0, 0, 0x9A, 0xCF, 0x40
+  # Data selector 0x10: base 0x40000000, limit 0xFFFFFFFF, type 0x92, granularity 0xCF
+  .byte 0xFF, 0xFF, 0, 0, 0, 0x92, 0xCF, 0x40
 gdt_end:
 
-[section .bss]
-
-resb 0x4000
+# Currently the stack pointer register (esp) points at anything and using it may
+# cause massive harm. Instead, we'll provide our own stack. We will allocate
+# room for a small temporary stack by allocating 16384 bytes for it, and
+# creating a symbol at the top.
+.section .bss
+.skip 0x4000
 sys_stack:
-	; our kernel stack
-	
-; reserve initial kernel stack space
-;STACKSIZE equ 0x4000		; that's 16k.
-;
-;loader:
-;	mov esp, stack+STACKSIZE	; set up the stack
-;	push eax			; pass Multiboot magic number
-;	push ebx			; pass Multiboot info structure
-;	
-;static_ctors_loop:
-;	mov ebx, start_ctors
-;	jmp .test
-;	
-;.body:
-;	call [ebx]
-;	add ebx, 4
-;	
-;.test:
-;	cmp ebx, end_ctors
-;	jb .body
-;	
-;	call kmain			; call kernel proper
-;	
-;static_dtors_loop:
-;	mov ebx, start_dtors
-;	jmp .test
-;	
-;.body:
-;	call [ebx]
-;	add ebx, 4
-;	
-;.test:
-;	cmp ebx, end_dtors
-;	jb .body
-;	
-;	cli
-;hang:
-;	hlt				; halt machine should kernel return
-;	jmp hang
-;	
-;section .bss
-;align 4
-;stack:
-;	resb STACKSIZE			; reserve 16k stack on a doubleword boundary

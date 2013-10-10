@@ -7,16 +7,17 @@ __region_virtual_base = _phys_virt_offset + __region_physical_base;
 
 SECTIONS{
   . = __region_physical_base;
-  
-  .setup :
+
+  .init :
   {
-    *(.setup)
+    *(.init)
   }
   
   . += _phys_virt_offset;
   
   .text : AT(ADDR(.text) - _phys_virt_offset)
   {
+    *(.multiboot)
     *(.text)
     *(.gnu.linkonce.t*)
   }
