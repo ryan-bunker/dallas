@@ -40,6 +40,7 @@ extern "C" void kmain(multiboot::Info *mbd, uint32_t magic) {
     // Something went not according to specs. Print an error
     // message and halt, but do *not* rely on the multiboot
     // data structure.
+    return;
   }
 
   // mbd is currently pointing to physical memory so we need
