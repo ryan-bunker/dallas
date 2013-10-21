@@ -47,10 +47,8 @@ enum class Interrupts {
   kStackSegmentOverrun = 0x0C,
   kGPF = 0x0D,
   kPageFault = 0x0E,
-  kCoprocessorError = 0x10
-};
+  kCoprocessorError = 0x10,
 
-enum class IRQs {
   kIRQ0 = 32,
   kIRQ1 = 33,
   kIRQ2 = 34,
@@ -98,6 +96,80 @@ struct Registers {
            eflags,   /// The current flags register.
            useresp,  /// ???
            ss;       /// ???
+};
+
+class InterruptHandler {
+ public:
+  /**
+   * Create a new InterruptHandler instance and optionally register it.
+   * @param interrupt_number The interrupt number for this handler.
+   * @param register_immediately If true, the handler will be registered with
+   * the system during construction.
+   */
+  InterruptHandler(Interrupts interrupt_number, bool register_immediately = false);
+
+  //virtual ~InterruptHandler();
+
+  /**
+   * Register this handler with the system.
+   */
+  void RegisterHandler();
+
+  /**
+   * Unregister this handler with the system. It will no longer be raised.
+   */
+  void UnregisterHandler();
+
+  /**
+   * Gets whether the handler is currently registered with the system.
+   * @return True if the handler is currently registered.
+   */
+  inline bool is_registered() { return is_registered_; }
+
+protected:
+  /**
+   * Sends an EOI (end of interrupt) signal to the PICs. Should only be called
+   * for interrupts (not exceptions).
+   * @param regs The value of the registers when the interrupt was raised.
+   */
+  static void EndOfInterrupt(Registers regs);
+
+  /**
+   * Called when the interrupt is raised. Perform all handling here.
+   * @param regs The value of the registers when the interrupt was raised.
+   */
+  virtual void Handle(Registers regs) = 0;
+
+private:
+  /**
+   * Iterates and executes the handler chain for the specified interrupt.
+   * @param regs The value of the registers when the interrupt was raised.
+   * @return True if at least one handler is registered for the interrupt.
+   */
+  static bool FindAndHandle(Registers regs);
+
+  /**
+   * The table of all registered interrupt handlers.
+   */
+  static InterruptHandler* interrupt_handlers_[];
+
+  /**
+   * The interrupt number that this handler has been setup for.
+   */
+  Interrupts interrupt_number_;
+
+  /**
+   * Whether the handler is currently registered.
+   */
+  bool is_registered_;
+
+  /**
+   * The next handler in the handler chain for this interrupt number.
+   */
+  InterruptHandler* next_;
+
+  friend void GlobalISRHandler_CPP(Registers);
+  friend void GlobalIRQHandler_CPP(Registers);
 };
 
 }  // namespace isr
