@@ -23,6 +23,7 @@
  */
 
 #include "int/isr.h"
+#include "video/text_screen.h"
 
 /**
  * Called from an assembly defined ISR stub in order to handle individual
@@ -31,17 +32,9 @@
  */
 extern "C" void GlobalISRHandler(isr::Registers regs) {
   // nothing to do for now
-  uint16_t* const screen = reinterpret_cast<uint16_t*>(0xC00B8000);
-  screen[0] = (15 << 8) | 'I';
-  screen[1] = (15 << 8) | 'N';
-  screen[2] = (15 << 8) | 'T';
-  screen[3] = (15 << 8) | ' ';
-  if (regs.int_num < 10)
-    screen[4] = (15 << 8) | ('0' + regs.int_num);
-  if (regs.int_num < 100) {
-    screen[4] = (15 << 8) | ('0' + regs.int_num / 10);
-    screen[5] = (15 << 8) | ('0' + regs.int_num % 10);
-  }
+
+  screen::Write("INT 0x");
+  screen::WriteHex(regs.int_num);
 
   for (;;)
     continue;

@@ -29,6 +29,7 @@
 #include "sys/io.h"
 #include "boot/multiboot.h"
 #include "int/idt.h"
+#include "video/text_screen.h"
 
 namespace {
 
@@ -57,17 +58,11 @@ extern "C" void kmain(multiboot::Info *mbd, uint32_t magic) {
   int y = 0;
   int z = x / y;
 
-  uint16_t* const screen = reinterpret_cast<uint16_t*>(0xC00B8000);
-  screen[0] = (15 << 8) | 'D';
-  screen[1] = (15 << 8) | 'a';
-  screen[2] = (15 << 8) | 'l';
-  screen[3] = (15 << 8) | 'l';
-  screen[4] = (15 << 8) | 'a';
-  screen[5] = (15 << 8) | 's';
+  screen::Write("Dallas");
 
   // Hang up the computer
   for (;;)
-    continue;
+    z++;
 }
 
 }  // namespace
