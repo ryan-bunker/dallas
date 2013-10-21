@@ -25,8 +25,10 @@
  */
 
 #include <stdint.h>
-#include "core/addressing.h"
+#include "sys/addressing.h"
+#include "sys/io.h"
 #include "boot/multiboot.h"
+#include "int/idt.h"
 
 namespace {
 
@@ -47,6 +49,13 @@ extern "C" void kmain(multiboot::Info *mbd, uint32_t magic) {
   // to adjust it for our current GDT offsets
   mbd = (multiboot::Info*) addressing::PhysicalToVirtual(
       reinterpret_cast<addressing::paddress>(mbd));
+
+  idt::Initialize();
+
+  enable_interrupts();
+  int x = 10;
+  int y = 0;
+  int z = x / y;
 
   uint16_t* const screen = reinterpret_cast<uint16_t*>(0xC00B8000);
   screen[0] = (15 << 8) | 'D';
