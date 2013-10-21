@@ -26,7 +26,7 @@ LDLIBS := -lc
 
 
 build_dir := build
-sources := loader.s interrupt.s idt.cc isr.cc main_entry.cc
+sources := loader.s icxxabi.cc interrupt.s idt.cc isr.cc main_entry.cc
            
 TSTDIR := $(SRCDIR)/tests
 test_sources := BitmapTest.cpp test_main.cpp
