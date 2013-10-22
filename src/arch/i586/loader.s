@@ -72,7 +72,7 @@ higherhalf:
   movl $start_ctors, %ebx
   jmp .Lctors_until_end
 .Lcall_constructor:
-  call *%ebx
+  call *(%ebx)
   addl $4, %ebx
 .Lctors_until_end:
   cmpl $end_ctors, %ebx
