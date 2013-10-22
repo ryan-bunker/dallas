@@ -26,7 +26,7 @@ LDLIBS := -lc
 
 
 build_dir := build
-sources := loader.s icxxabi.cc text_screen.cc kernel.cc \
+sources := loader.s icxxabi.cc text_screen.cc kernel.cc allocator.cc ks_allocator.cc \
 	interrupt.s idt.cc isr.cc main_entry.cc
            
 TSTDIR := $(SRCDIR)/tests

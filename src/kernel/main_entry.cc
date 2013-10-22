@@ -25,10 +25,11 @@
  */
 
 #include <stdint.h>
-#include "sys/addressing.h"
-#include "sys/io.h"
+
 #include "boot/multiboot.h"
 #include "int/idt.h"
+#include "sys/addressing.h"
+#include "sys/io.h"
 #include "video/text_screen.h"
 
 namespace {
@@ -54,15 +55,39 @@ extern "C" void kmain(multiboot::Info *mbd, uint32_t magic) {
   idt::Initialize();
 
   enable_interrupts();
-  int x = 10;
-  int y = 0;
-  int z = x / y;
 
-  screen::Write("Dallas");
+  screen::Clear();
+  screen::WriteLine("Dallas");
+
+  int* a = new int;
+  int* b = new int;
+  int* c = new int;
+
+  *a = 1;
+  *b = 2;
+  *c = 3;
+
+  screen::Write("0x");
+  screen::WriteHex(reinterpret_cast<uint32_t>(a));
+  screen::Write(" = ");
+  screen::WriteDec(*a);
+  screen::WriteLine("");
+
+  screen::Write("0x");
+  screen::WriteHex(reinterpret_cast<uint32_t>(b));
+  screen::Write(" = ");
+  screen::WriteDec(*b);
+  screen::WriteLine("");
+
+  screen::Write("0x");
+  screen::WriteHex(reinterpret_cast<uint32_t>(c));
+  screen::Write(" = ");
+  screen::WriteDec(*c);
+  screen::WriteLine("");
 
   // Hang up the computer
   for (;;)
-    z++;
+    continue;
 }
 
 }  // namespace
