@@ -39,10 +39,10 @@ InterruptHandler::InterruptHandler(Interrupts interrupt_number,
     RegisterHandler();
 }
 
-//InterruptHandler::~InterruptHandler() {
-//  if (is_registered_)
-//    UnregisterHandler();
-//}
+InterruptHandler::~InterruptHandler() {
+  if (is_registered_)
+    UnregisterHandler();
+}
 
 void InterruptHandler::RegisterHandler() {
   InterruptHandler* handler =

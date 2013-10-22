@@ -108,7 +108,7 @@ class InterruptHandler {
    */
   InterruptHandler(Interrupts interrupt_number, bool register_immediately = false);
 
-  //virtual ~InterruptHandler();
+  virtual ~InterruptHandler();
 
   /**
    * Register this handler with the system.
