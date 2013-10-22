@@ -22,7 +22,6 @@
  *
  */
 
-#include <stdio.h>
 #include "video/text_screen.h"
 #include "sys/io.h"
 

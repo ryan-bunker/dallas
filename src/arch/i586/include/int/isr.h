@@ -27,7 +27,7 @@
 #ifndef SRC_ARCH_I586_INCLUDE_INT_ISR_H_
 #define SRC_ARCH_I586_INCLUDE_INT_ISR_H_
 
-#include <stdint.h>
+#include <cstdint>
 
 namespace isr {
 

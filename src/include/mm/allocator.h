@@ -26,7 +26,7 @@
 #ifndef SRC_INCLUDE_MM_ALLOCATOR_H_
 #define SRC_INCLUDE_MM_ALLOCATOR_H_
 
-#include <stddef.h>
+#include <cstddef>
 
 namespace alloc {
 

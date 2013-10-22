@@ -26,7 +26,7 @@
 #ifndef SRC_ARCH_I586_INCLUDE_SYS_IO_H_
 #define SRC_ARCH_I586_INCLUDE_SYS_IO_H_
 
-#include <stdint.h>
+#include <cstdint>
 
 /**
  * Writes a byte value to the specified port.

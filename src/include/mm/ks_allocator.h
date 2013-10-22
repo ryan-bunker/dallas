@@ -26,8 +26,8 @@
 #ifndef SRC_INCLUDE_MM_KS_ALLOCATOR_H_
 #define SRC_INCLUDE_MM_KS_ALLOCATOR_H_
 
-#include <stddef.h>
-#include <stdint.h>
+#include <cstddef>
+#include <cstdint>
 
 #include "mm/allocator.h"
 

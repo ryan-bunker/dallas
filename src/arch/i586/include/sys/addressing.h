@@ -27,7 +27,7 @@
 #ifndef SRC_ARCH_I586_INCLUDE_CORE_ADDRESSING_H_
 #define SRC_ARCH_I586_INCLUDE_CORE_ADDRESSING_H_
 
-#include <stdint.h>
+#include <cstdint>
 
 extern const unsigned int __region_physical_base;
 extern const unsigned int __region_virtual_base;

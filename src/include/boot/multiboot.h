@@ -26,7 +26,7 @@
 #ifndef SRC_INCLUDE_BOOT_MULTIBOOT_H_
 #define SRC_INCLUDE_BOOT_MULTIBOOT_H_
 
-#include <stdint.h>
+#include <cstdint>
 
 /**
  * Contains types and constants related to the Multiboot specification.

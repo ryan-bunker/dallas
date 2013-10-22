@@ -24,7 +24,7 @@
  * by the boot loader.
  */
 
-#include <stdint.h>
+#include <cstdint>
 
 #include "boot/multiboot.h"
 #include "int/idt.h"

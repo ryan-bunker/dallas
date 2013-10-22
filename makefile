@@ -21,7 +21,7 @@ AS := i586-elf-as
 ASFLAGS := -gstabs
 
 LINK.o := i586-elf-ld
-LDFLAGS := -L/home/ryan/opt/cross/i586-elf/lib
+LDFLAGS := -L$(LIBPATH)
 LDLIBS := -lc
 
 

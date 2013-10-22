@@ -24,8 +24,8 @@
 
 #include "int/idt.h"
 
-#include <stdint.h>
-#include <string.h>
+#include <cstdint>
+#include <cstring>
 
 #include "sys/addressing.h"
 #include "sys/io.h"

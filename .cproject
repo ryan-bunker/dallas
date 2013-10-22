@@ -28,6 +28,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/dallas/src/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/dallas/src/arch/i586/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${HOME}/opt/cross/i586-elf/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${HOME}/opt/cross/i586-elf/include/c++/4.8.1&quot;"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.882221633" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
@@ -46,7 +47,9 @@
 		</cconfiguration>
 		<cconfiguration id="0.1980512522.1943393403">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="0.1980512522.1943393403" moduleId="org.eclipse.cdt.core.settings" name="Debug - i586">
-				<externalSettings/>
+				<externalSettings>
+					<externalSetting/>
+				</externalSettings>
 				<extensions>
 					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
 					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
@@ -70,6 +73,7 @@
 								<option id="org.eclipse.cdt.build.core.settings.holder.incpaths.18599546" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/dallas/src/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${HOME}/opt/cross/i586-elf/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${HOME}/opt/cross/i586-elf/include/c++/4.8.1&quot;"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.338339398" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>

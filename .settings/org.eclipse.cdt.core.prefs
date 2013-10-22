@@ -1,4 +1,7 @@
 eclipse.preferences.version=1
+environment/project/0.1980512522.1943393403/LIBPATH/delimiter=\:
+environment/project/0.1980512522.1943393403/LIBPATH/operation=append
+environment/project/0.1980512522.1943393403/LIBPATH/value=${HOME}/opt/cross/i586-elf/lib
 environment/project/0.1980512522.1943393403/PATH/delimiter=\:
 environment/project/0.1980512522.1943393403/PATH/operation=append
 environment/project/0.1980512522.1943393403/PATH/value=${HOME}/opt/cross/bin\:${PATH}

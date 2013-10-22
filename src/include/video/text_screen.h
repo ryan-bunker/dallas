@@ -26,7 +26,7 @@
 #ifndef SRC_INCLUDE_VIDEO_TEXT_SCREEN_H_
 #define SRC_INCLUDE_VIDEO_TEXT_SCREEN_H_
 
-#include <stdint.h>
+#include <cstdint>
 
 namespace screen {
 

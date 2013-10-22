@@ -24,8 +24,8 @@
 
 #include "mm/allocator.h"
 
-#include <stddef.h>
-#include <stdint.h>
+#include <cstddef>
+#include <cstdint>
 
 #include "mm/ks_allocator.h"
 #include "sys/kernel.h"
