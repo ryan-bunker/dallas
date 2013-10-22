@@ -22,10 +22,13 @@
  *
  */
 
+#include "int/idt.h"
+
+#include <stdint.h>
 #include <string.h>
+
 #include "sys/addressing.h"
 #include "sys/io.h"
-#include "int/idt.h"
 
 extern "C" {
   void idt_flush(uint32_t);
@@ -141,7 +144,7 @@ struct IDTRegister {
 IDTEntry g_idt_entries[256];
 IDTRegister g_idtr;
 
-static void idt_set_gate(uint8_t number, void (*handler)(), uint16_t selector,
+static void IDTSetGate(uint8_t number, void (*handler)(), uint16_t selector,
                          IDTGateType gate_type, bool storage_segment,
                          uint8_t dpl, bool is_present) {
   uint32_t base = reinterpret_cast<uint32_t>(handler);
@@ -164,7 +167,7 @@ void Initialize() {
   memset(&g_idt_entries, 0, sizeof(IDTEntry) * 256);
 
 #define ISR(num) \
-  idt_set_gate(num, isr##num, 0x08, IDTGateType::k32bitInterruptGate, false, 0, true)
+  IDTSetGate(num, isr##num, 0x08, IDTGateType::k32bitInterruptGate, false, 0, true)
 
   ISR(0);  ISR(1);  ISR(2);  ISR(3);  ISR(4);  ISR(5);  ISR(6);  ISR(7);
   ISR(8);  ISR(9);  ISR(10); ISR(11); ISR(12); ISR(13); ISR(14); ISR(15);
@@ -193,7 +196,7 @@ void Initialize() {
   outb(0xA1, 0x0);
 
 #define IRQ(isr,irq_n) \
-  idt_set_gate(isr, irq##irq_n, 0x08, IDTGateType::k32bitInterruptGate, false, 0, true)
+  IDTSetGate(isr, irq##irq_n, 0x08, IDTGateType::k32bitInterruptGate, false, 0, true)
 
   IRQ(32,0);  IRQ(33,1);  IRQ(34,2);  IRQ(35,3);  IRQ(36,4);  IRQ(37,5);
   IRQ(38,6);  IRQ(39,7);  IRQ(40,8);  IRQ(41,9);  IRQ(42,10); IRQ(43,11);
