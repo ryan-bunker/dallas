@@ -56,40 +56,35 @@ inline uint8_t GetColor(Color fore_color = Color::kDefault,
 }
 
 /**
- * Converts an unsigned integer to a null-terminated string using the specified
- * base and stores the result in the provided buffer.
- * @param number The number to be converted to a string.
- * @param base Numerical base used to represent the value as a string, between
- * 2 and 16, where 10 means decimal base, 16 hexadecimal, 8 octal, and 2 binary.
- * @param text_out Array in memory where to store the resulting null-terminated
- * string.
- * @param offset Offset into \p text_out at which to start writing.
- * @param len The minimum number of digits to use to represent \p number.
- * @param groupDigits Whether to separate digits into groups of three.
+ * C++ version 0.4 char* style "itoa":
+ * Written by Lukás Chmela
+ * Released under GPLv3.
  */
-static void NumberToTextUnsigned(uint32_t number, int base, char *text_out,
-                                 int offset, int len, bool group_digits)
-{
-  int digits = 0;
-  uint32_t numberCopy = number;
-  while (digits < 10 && numberCopy > 0) {
-    numberCopy /= base;
-    ++digits;
+char* itoa(uint32_t value, char* result, int base) {
+  // check that the base if valid
+  if (base < 2 || base > 36) {
+    *result = '\0';
+    return result;
   }
 
-  if (group_digits)
-    digits += digits / 3;
+  char* ptr = result, *ptr1 = result, tmp_char;
+  uint32_t tmp_value;
 
-  if (len < 1)
-    len = 1;
-  if (digits < len)
-    digits = len;
+  do {
+    tmp_value = value;
+    value /= base;
+    *ptr++ =
+        "zyxwvutsrqponmlkjihgfedcba9876543210123456789abcdefghijklmnopqrstuvwxyz" [35 + (tmp_value - value * base)];
+  } while ( value );
 
-  int i = digits - 1;
-  for (; i >= 0; --i, number /= base) {
-    char c = kHexAlphabet[number % base];
-    text_out[i + offset] = c;
+  *ptr-- = '\0';
+  while(ptr1 < ptr) {
+    tmp_char = *ptr;
+    *ptr--= *ptr1;
+    *ptr1++ = tmp_char;
   }
+
+  return result;
 }
 
 /**
@@ -243,7 +238,7 @@ void WriteLine(const char *str) {
 void WriteHex(uint32_t n, Color fore_color, Color back_color) {
   char hex[9];
   //TODO(ryan-bunker): sprintf(hex, "%08lx", n);when sbrk syscall is implemented
-  NumberToTextUnsigned(n, 16, hex, 0, 8, false);
+  itoa(n, hex, 16);
   Write(hex, fore_color, back_color);
 }
 
@@ -254,7 +249,7 @@ void WriteHex(uint32_t n) {
 void WriteDec(uint32_t n, Color fore_color, Color back_color) {
   char dec[20];
   //TODO(ryan-bunker): sprintf(dec, "%ld", n); when sbrk syscall is implemented
-  NumberToTextUnsigned(n, 10, dec, 0, 0, false);
+  itoa(n, dec, 10);
   Write(dec, fore_color, back_color);
 }
 
