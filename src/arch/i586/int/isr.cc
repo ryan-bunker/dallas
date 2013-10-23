@@ -98,8 +98,12 @@ bool InterruptHandler::FindAndHandle(Registers regs) {
 }
 
 void GlobalISRHandler_CPP(Registers regs) {
-  if (!InterruptHandler::FindAndHandle(regs))
-    PANIC("Unhandled exception");
+  if (!InterruptHandler::FindAndHandle(regs)) {
+    char msg[] = "Unhandled exception [xx]";
+    msg[21] = '0' + regs.int_num / 10;
+    msg[22] = '0' + regs.int_num % 10;
+    PANIC(msg);
+  }
 }
 
 void GlobalIRQHandler_CPP(Registers regs) {

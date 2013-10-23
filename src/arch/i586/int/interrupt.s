@@ -28,8 +28,8 @@
   .global isr\isr_num
   isr\isr_num:
     cli
-    pushw $0
-    pushw $\isr_num
+    push $0x0
+    push $\isr_num
     jmp isr_common_stub
 .endm
 
@@ -38,7 +38,7 @@
   .global isr\isr_num
   isr\isr_num:
     cli
-    pushw $\isr_num
+    push $\isr_num
     jmp isr_common_stub
 .endm
 
@@ -114,7 +114,7 @@ isr_common_stub:
   pusha           // Pushes edi,esi,ebp,esp,ebx,edx,ecx,eax
 
   movw %ds, %ax   // Lower 16-bits of eax = ds
-  pushl %eax      // save the data segment descriptor
+  push %eax      // save the data segment descriptor
 
   movw $0x10, %ax // load the kernel data segment selector
   movw %ax, %ds
@@ -124,7 +124,7 @@ isr_common_stub:
 
   call GlobalISRHandler
 
-  popl %eax       // reload the original data segment descriptor
+  pop %eax       // reload the original data segment descriptor
   movw %ax, %ds
   movw %ax, %es
   movw %ax, %fs
