@@ -28,6 +28,8 @@
 
 #include "boot/multiboot.h"
 #include "int/idt.h"
+#include "mm/gdt.h"
+#include "mm/paging.h"
 #include "sys/addressing.h"
 #include "sys/io.h"
 #include "video/text_screen.h"
@@ -52,6 +54,9 @@ extern "C" void kmain(multiboot::Info *mbd, uint32_t magic) {
   mbd = (multiboot::Info*) addressing::PhysicalToVirtual(
       reinterpret_cast<addressing::paddress>(mbd));
 
+  paging::Initialize(mbd->mmap_length,
+                     addressing::PhysicalToVirtual(mbd->mmap_addr));
+  gdt::Initialize();
   idt::Initialize();
 
   enable_interrupts();
@@ -85,7 +90,11 @@ extern "C" void kmain(multiboot::Info *mbd, uint32_t magic) {
   screen::WriteDec(*c);
   screen::WriteLine("");
 
-  // Hang up the computer
+  screen::WriteLine("Now we're going to page fault at 0x500000...");
+
+  // this memory is not in the first 4MB or in the kernel's 4MB
+  *reinterpret_cast<int*>(0x500000) = 1234;
+
   for (;;)
     continue;
 }

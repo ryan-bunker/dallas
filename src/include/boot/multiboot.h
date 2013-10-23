@@ -544,7 +544,7 @@ struct Info {
   /**
    * The memory map buffer containing zero or more MemoryMapEntry structures.
    */
-  MemoryMapEntry *mmap;
+  uint32_t mmap_addr;
 
   /**
    * Total size of the drives information buffer.

@@ -30,7 +30,7 @@
 #include "mm/ks_allocator.h"
 #include "sys/kernel.h"
 
-extern uint32_t ebss;
+extern const uint32_t ebss;
 
 namespace alloc {
 

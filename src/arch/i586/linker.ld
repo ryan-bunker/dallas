@@ -51,6 +51,8 @@ SECTIONS{
     ebss = .;
   }
   
+  __kernel_end = .;
+  
   /DISCARD/ :
     {
         *(.comment)
