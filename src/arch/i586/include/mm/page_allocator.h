@@ -35,6 +35,11 @@ namespace paging {
 const uint32_t kPageSize = 0x1000;
 
 /**
+ * Bitmask to page align an integer.
+ */
+const uint32_t kPageAlignMask = 0xFFFFF000;
+
+/**
  * Contains information about an individual memory page.
  */
 struct Page {
@@ -114,7 +119,7 @@ class PageAllocator {
    * @return The memory page that corresponds to address.
    */
   inline Page& GetPage(addressing::paddress address) const {
-    return *(pages_ + address / kPageSize);
+    return pages_[address / kPageSize];
   }
 
  private:

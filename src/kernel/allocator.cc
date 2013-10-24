@@ -37,25 +37,25 @@ namespace alloc {
 KernelSpaceAllocator g_ks_allocator(reinterpret_cast<uint32_t>(&ebss));
 Allocator* g_current_allocator = &g_ks_allocator;
 
+void SetActiveAllocator(Allocator& allocator) {
+  g_current_allocator = &allocator;
+}
+
 }  // namespace alloc
 
 void *operator new(size_t size) {
-  ASSERT(alloc::g_current_allocator != 0);
   return alloc::g_current_allocator->Allocate(size, false);
 }
 
 void *operator new[](size_t size) {
-  ASSERT(alloc::g_current_allocator != 0);
   return alloc::g_current_allocator->Allocate(size, false);
 }
 
 void operator delete(void *ptr) {
-  ASSERT(alloc::g_current_allocator != 0);
   alloc::g_current_allocator->Free(ptr);
 }
 
 void operator delete[](void *ptr) {
-  ASSERT(alloc::g_current_allocator != 0);
   alloc::g_current_allocator->Free(ptr);
 }
 

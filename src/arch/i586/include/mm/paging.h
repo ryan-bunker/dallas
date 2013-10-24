@@ -232,7 +232,7 @@ class PageDirectory {
    * Gets the currently active page directory.
    * @return The page directory that is currently active.
    */
-  inline static const PageDirectory* current_directory() {
+  inline static PageDirectory* current_directory() {
     return current_directory_;
   }
 
@@ -240,7 +240,7 @@ class PageDirectory {
    * Gets the kernel's page directory.
    * @return The kerne's page directory.
    */
-  inline static const PageDirectory& kernel_directory() {
+  inline static PageDirectory& kernel_directory() {
     return kernel_directory_;
   }
 

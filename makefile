@@ -27,7 +27,7 @@ LDLIBS := -lc
 
 build_dir := build
 sources := loader.s icxxabi.cc text_screen.cc kernel.cc \
-	allocator.cc ks_allocator.cc \
+	allocator.cc ks_allocator.cc kheap.cc \
 	gdt.cc page_allocator.cc paging.cc page_fault_handler.cc \
 	interrupt.s idt.cc isr.cc main_entry.cc
            

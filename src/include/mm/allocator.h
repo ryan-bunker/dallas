@@ -50,8 +50,20 @@ public:
    * @param ptr A pointer to the block to release.
    */
   virtual void Free(void* ptr) = 0;
+
 };
 
+/**
+ * Sets the active allocator that is used for new/delete operators.
+ * @param allocator The allocator to make active.
+ */
+void SetActiveAllocator(Allocator& allocator);
+
 }  // namespace alloc
+
+inline void *operator new(size_t, void *p)     throw() { return p; }
+inline void *operator new[](size_t, void *p)   throw() { return p; }
+inline void  operator delete  (void *, void *) throw() { };
+inline void  operator delete[](void *, void *) throw() { };
 
 #endif  // SRC_INCLUDE_MM_ALLOCATOR_H_

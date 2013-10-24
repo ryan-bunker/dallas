@@ -70,8 +70,7 @@ void PageDirectory::Activate() {
           "mov %%eax, %%cr0\n" :: "m" (physical_address_));
 }
 
-void PageDirectory::MapPage(Page* frame, addressing::vaddress virtAddress)
-{
+void PageDirectory::MapPage(Page* frame, addressing::vaddress virtAddress) {
   uint32_t pdeIdx = reinterpret_cast<uint32_t>(virtAddress) >> 22;
   uint32_t pteIdx = reinterpret_cast<uint32_t>(virtAddress) >> 12;
   PageDirectoryEntry* pde = &page_directory_entries_[pdeIdx];
@@ -100,8 +99,9 @@ void PageDirectory::MapPage(Page* frame, addressing::vaddress virtAddress)
   pte->user = true;
   pte->frame = frame->physical_address() >> 12;
 
-  char virt_address_byte = *static_cast<char*>(virtAddress);
-  __asm__ volatile("invlpg %0"::"m" (virt_address_byte));
+  //char virt_address_byte = *static_cast<char*>(virtAddress);
+  //__asm__ volatile("invlpg %0"::"m" (virt_address_byte));
+  __asm__ volatile("invlpg %0"::"m" (virtAddress));
 }
 
 Page* PageDirectory::GetPage(addressing::vaddress virtAddress) {
@@ -176,15 +176,16 @@ void Initialize(uint32_t mmap_length, addressing::vaddress mmap_addr) {
   }
 
   PageAllocator::InitSingleton(total_memory);
+  addressing::paddress end_of_kernel =
+      addressing::VirtualToPhysical(const_cast<uint32_t*>(&__kernel_end));
   for (uint32_t k = reinterpret_cast<uint32_t>(mmap_addr); k < mmap_end;) {
     map = reinterpret_cast<multiboot::MemoryMapEntry*>(k);
     if (map->type == multiboot::MemoryMapType::kMemoryAvailable) {
-      for (uint64_t j = map->address;
+      for (addressing::paddress j = map->address;
           j < map->address + map->length;
           j += paging::kPageSize) {
         // don't push any addresses that are inside the kernel
-        //if (j > reinterpret_cast<uint64_t>(&__kernel_end))
-        if (j > 0x400000)
+        if (j > end_of_kernel)
           PageAllocator::instance().FreePageAddress(j);
       }
     }
