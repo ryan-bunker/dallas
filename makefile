@@ -8,11 +8,11 @@ PLATFORM=i586
 ARCHDIR=$(SRCDIR)/arch/$(PLATFORM)
 
 CC := i586-elf-gcc
-CFLAGS := -I $(SRCDIR)/include -I $(ARCHDIR)/include \
+CFLAGS := -I $(SRCDIR) -I $(ARCHDIR) \
 					-gstabs+ -DDEBUG -ffreestanding
 
 CXX := i586-elf-g++
-CXXFLAGS := -I $(SRCDIR)/include -I $(ARCHDIR)/include \
+CXXFLAGS := -I $(SRCDIR) -I $(ARCHDIR) \
 						-gstabs+ -DDEBUG -Wall -Wextra -Werror \
 						-fno-exceptions -ffreestanding \
 						-std=c++11 -fno-rtti -fno-stack-protector
@@ -39,10 +39,10 @@ dependencies := $(subst .c,.d,$(filter %.c,$(sources)))
 dependencies += $(subst .cc,.d,$(filter %.cc,$(sources)))
 
 vpath %.c $(SRCDIR)/kernel $(ARCHDIR)
-vpath %.cc $(SRCDIR)/kernel $(ARCHDIR) $(ARCHDIR)/int $(ARCHDIR)/mm
+vpath %.cc $(SRCDIR)/kernel $(SRCDIR)/mm $(SRCDIR)/sys $(SRCDIR)/video $(ARCHDIR)/int $(ARCHDIR)/mm $(ARCHDIR)/sys
 vpath %.s $(ARCHDIR) $(ARCHDIR)/int
-vpath % $(SRCDIR)/kernel $(ARCHDIR) $(SRCDIR)/include $(ARCHDIR)/include
-vpath %.h $(SRCDIR)/kernel $(ARCHDIR) $(SRCDIR)/include $(ARCHDIR)/include
+vpath % $(SRCDIR)/kernel $(SRCDIR)/mm $(SRCDIR)/sys $(SRCDIR)/video $(ARCHDIR)/int $(ARCHDIR)/mm $(ARCHDIR)/sys
+vpath %.h $(SRCDIR) $(ARCHDIR)
 vpath %.ld $(ARCHDIR)
 
 all : kernel.elf bootable.iso documentation
