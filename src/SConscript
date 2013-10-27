@@ -1,0 +1,46 @@
+import os
+cross = os.environ['CROSS_TOOLS']
+cross_bin = os.path.join(cross, 'bin')
+cross_lib = os.path.join(cross, 'i586-elf/lib')
+
+env = Environment()   # Initialize the environment
+
+# setup the C compiler
+env.Replace(CC = os.path.join(cross_bin, 'i586-elf-gcc'))
+env.Append(CFLAGS = ['-gstabs+', '-ffreestanding'])
+env.Append(CDEFINES = ['DEBUG'])
+
+# setup the C++ compiler
+env.Replace(CXX = os.path.join(cross_bin, 'i586-elf-g++'))
+env.Append(CXXFLAGS = ['-Wall', '-Wextra', '-Werror', '-fno-exceptions',
+  '-ffreestanding', '-std=c++11', '-fno-rtti', '-fno-stack-protector'])
+env.Append(CPPDEFINES = ['DEBUG'])
+
+# setup the Assembler
+env.Replace(AS = os.path.join(cross_bin, 'i586-elf-as'))
+env.Append(ASFLAGS = '-gstabs')
+
+# setup the Linker
+env.Replace(LINK = os.path.join(cross_bin, 'i586-elf-ld'))
+env.Append(LIBS = 'c')
+env.Append(LIBPATH = cross_lib)
+env.Replace(LINKFLAGS = '-T src/arch/i586/linker.ld')
+
+env.Append(CPPPATH = ['.', 'arch/i586'])
+
+env.Program(target = 'kernel.elf', source = [
+  'arch/i586/loader.s',
+  'sys/icxxabi.cc',
+  'video/text_screen.cc',
+  'sys/kernel.cc',
+  'mm/allocator.cc',
+  'mm/ks_allocator.cc',
+  'mm/kheap.cc',
+  'arch/i586/mm/gdt.cc',
+  'arch/i586/mm/page_allocator.cc',
+  'arch/i586/mm/paging.cc',
+  'arch/i586/mm/page_fault_handler.cc',
+  'arch/i586/int/interrupt.s',
+  'arch/i586/int/idt.cc',
+  'arch/i586/int/isr.cc',
+  'kernel/main_entry.cc'])
