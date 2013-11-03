@@ -1,0 +1,54 @@
+import os
+
+arch = ARGUMENTS.get('arch', 'i586')
+
+cross = ARGUMENTS.get('CROSS_TOOLS', os.environ.get('CROSS_TOOLS', ''))
+if cross == '':
+  cross_bin = ''
+  cross_lib = ''
+else:
+  cross_bin = os.path.join(cross, 'bin')
+  cross_lib = os.path.join(cross, arch + '-elf', 'lib')
+
+env = Environment()   # Initialize the environment
+
+# setup the C compiler
+env.Replace(CC = os.path.join(cross_bin, arch + '-elf-gcc'))
+env.Append(CFLAGS = ['-gstabs+', '-ffreestanding'])
+env.Append(CDEFINES = ['DEBUG'])
+
+# setup the C++ compiler
+env.Replace(CXX = os.path.join(cross_bin, arch + '-elf-g++'))
+env.Append(CXXFLAGS = ['-Wall', '-Wextra', '-Werror', '-fno-exceptions',
+  '-ffreestanding', '-std=c++11', '-fno-rtti', '-fno-stack-protector'])
+env.Append(CPPDEFINES = ['DEBUG'])
+
+# setup the Assembler
+env.Replace(AS = os.path.join(cross_bin, arch + '-elf-as'))
+env.Append(ASFLAGS = '-gstabs')
+
+# setup the Linker
+env.Replace(LINK = os.path.join(cross_bin, arch + '-elf-ld'))
+env.Append(LIBS = 'c')
+if cross_lib != '':
+  env.Append(LIBPATH = cross_lib)
+env.Replace(LINKFLAGS = '-T src/arch/' + arch + '/linker.ld')
+
+env.Append(CPPPATH = ['.', 'arch/' + arch])
+
+env.Program(target = 'kernel.elf', source = [
+  'arch/' + arch + '/loader.s',
+  'sys/icxxabi.cc',
+  'video/text_screen.cc',
+  'sys/kernel.cc',
+  'mm/allocator.cc',
+  'mm/ks_allocator.cc',
+  'mm/kheap.cc',
+  'arch/' + arch + '/mm/gdt.cc',
+  'arch/' + arch + '/mm/page_allocator.cc',
+  'arch/' + arch + '/mm/paging.cc',
+  'arch/' + arch + '/mm/page_fault_handler.cc',
+  'arch/' + arch + '/int/interrupt.s',
+  'arch/' + arch + '/int/idt.cc',
+  'arch/' + arch + '/int/isr.cc',
+  'kernel/main_entry.cc'])
