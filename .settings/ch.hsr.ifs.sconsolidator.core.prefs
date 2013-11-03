@@ -1,3 +1,4 @@
+additionalCommandlineOptions=arch\=i586
 ch.hsr.sconsolidator.core.BuildSettingsPreferencePage_useParentScope=false
 eclipse.preferences.version=1
 environmentVariables=TERM\=dumb CROSS_TOOLS\=${HOME}/opt/cross

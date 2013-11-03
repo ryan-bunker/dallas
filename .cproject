@@ -24,7 +24,7 @@
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1312666097" languageId="org.eclipse.cdt.core.assembly" languageName="Assembly" sourceContentType="org.eclipse.cdt.core.asmSource" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
 							<tool id="org.eclipse.cdt.build.core.settings.holder.1651042127" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder">
-								<option id="org.eclipse.cdt.build.core.settings.holder.incpaths.1740921187" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
+								<option id="org.eclipse.cdt.build.core.settings.holder.incpaths.1740921187" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${HOME}/opt/cross/i586-elf/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${HOME}/opt/cross/i586-elf/include/c++/4.8.1&quot;"/>
 								</option>
