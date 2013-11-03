@@ -2,7 +2,7 @@ import os
 
 arch = ARGUMENTS.get('arch', 'i586')
 
-cross = os.environ['CROSS_TOOLS']
+cross = ARGUMENTS.get('CROSS_TOOLS', os.environ['CROSS_TOOLS'])
 cross_bin = os.path.join(cross, 'bin')
 cross_lib = os.path.join(cross, arch + '-elf', 'lib')
 
