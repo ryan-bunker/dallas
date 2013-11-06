@@ -12,6 +12,13 @@ else:
 
 env = Environment()   # Initialize the environment
 
+# Create a builder for mkisofs
+mkisofs_builder = Builder(action=Action('$MKISOFSCOM', '$MKISOFSCOMSTR'),
+                          source_factory=env.fs.Dir)
+env.Append(BUILDERS={'MkIsoFs': mkisofs_builder})
+env['MKISOFSCOM'] = 'mkisofs $MKISOFSFLAGS -o $TARGET $SOURCE'
+env['MKISOFSCOMSTR'] = '$MKISOFSCOM'
+
 # setup the C compiler
 env.Replace(CC = os.path.join(cross_bin, arch + '-elf-gcc'))
 env.Append(CFLAGS = ['-gstabs+', '-ffreestanding'])
@@ -36,7 +43,7 @@ env.Replace(LINKFLAGS = '-T src/arch/' + arch + '/linker.ld')
 
 env.Append(CPPPATH = ['.', 'arch/' + arch])
 
-env.Program(target = 'kernel.elf', source = [
+kernel = env.Program(target = 'kernel.elf', source = [
   'arch/' + arch + '/loader.s',
   'sys/icxxabi.cc',
   'video/text_screen.cc',
@@ -52,3 +59,26 @@ env.Program(target = 'kernel.elf', source = [
   'arch/' + arch + '/int/idt.cc',
   'arch/' + arch + '/int/isr.cc',
   'kernel/main_entry.cc'])
+  
+# Create a bootable ISO image
+iso = env.MkIsoFs(
+    target='bootable.iso',
+    source=[Dir('#iso'),
+            File('#iso/boot/grub/menu.lst'),
+            File('#iso/boot/grub/stage2_eltorito'),
+            env.Command('#iso/boot/kernel.elf', kernel, Copy('$TARGET', '$SOURCE')),
+    ],
+    MKISOFSFLAGS=['-graft-points',
+                  '-R',
+                  '-b', 'boot/grub/stage2_eltorito',
+                  '-no-emul-boot',
+                  '-boot-load-size', '4',
+                  '-boot-info-table'
+    ],
+)
+env.Alias('iso', iso)
+
+# Documentation
+env.Alias('documentation', env.Command('html', '#docs/Doxyfile', 'doxygen $SOURCE'))
+
+Default(kernel, iso)

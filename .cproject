@@ -72,7 +72,6 @@
 			</target>
 		</buildTargets>
 	</storageModule>
-	<storageModule moduleId="ch.hsr.ifs.sconsolidator.core.buildtargets"/>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		<scannerConfigBuildInfo instanceId="0.743341053">
@@ -87,5 +86,17 @@
 		<scannerConfigBuildInfo instanceId="0.1980512522">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
+	</storageModule>
+	<storageModule moduleId="ch.hsr.ifs.sconsolidator.core.buildtargets">
+		<buildTargets>
+			<target description="build/kernel.elf" targetID="ch.hsr.ifs.sconsolidator.Builder">
+				<buildTargetName>kernel</buildTargetName>
+				<buildArguments/>
+			</target>
+			<target description="documentation" targetID="ch.hsr.ifs.sconsolidator.Builder">
+				<buildTargetName>documentation</buildTargetName>
+				<buildArguments/>
+			</target>
+		</buildTargets>
 	</storageModule>
 </cproject>

@@ -15,6 +15,7 @@
 # Build output
 build/
 html/
+iso/boot/kernel.elf
 
 # SCons cache data
 .sconsign*
