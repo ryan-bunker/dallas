@@ -28,7 +28,11 @@
 
 #include "sys/addressing.h"
 
-extern "C" void gdt_flush(uint32_t);
+/**
+ * Places the specified address into the GDT register.
+ * @param addr The address to place in the GDT register.
+ */
+extern "C" void gdt_flush(uint32_t addr);
 
 namespace gdt {
 
@@ -131,7 +135,7 @@ struct GDTEntry {
    * The upper 8-bits of base.
    */
   uint8_t base_high;
-} __attribute((packed));
+} __attribute__((packed));
 
 /**
  * Represents the contents of the GDT register which points to the global
@@ -148,9 +152,15 @@ struct GDTRegister {
    * this address.
    */
   uint32_t base;
-} __attribute((packed));
+} __attribute__((packed));
 
+/**
+ * Global list of GDT entries.
+ */
 GDTEntry g_gdt_entries[5];
+/**
+ * Global GDT register contents.
+ */
 GDTRegister g_gdtr;
 
 static void GDTSetGate(int num, uint32_t base, uint32_t limit,

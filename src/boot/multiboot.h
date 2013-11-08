@@ -165,6 +165,10 @@ enum class InfoFlags : uint32_t {
   kInfoVideoInfo = 0x00000800
 };
 
+/**
+ * Represents the information that must be contained in the first 4kb of the
+ * kernel in order to be recognized as a multi-boot compliant kernel.
+ */
 struct Header {
   /**
    * The magic number identifying the header, which must be HeaderMagic::kMagic.
@@ -290,8 +294,17 @@ struct ElfSectionHeaderTable {
    * InfoFlags::kInfoElfSectionHeader flag of Info::flags is set.
    */
   uint32_t num;
+  /**
+   * The size of the entry.
+   */
   uint32_t size;
+  /**
+   * The address of the entry.
+   */
   uint32_t address;
+  /**
+   * The string table used as the index of names.
+   */
   uint32_t shndx;
 };
 
@@ -375,6 +388,9 @@ enum class DriveMode : uint8_t {
   kLBA = 1
 };
 
+/**
+ * Contains information about the drives available to the system.
+ */
 struct DriveInfo {
   /**
    * Specifies the size of this structure. The size varies, depending on the
@@ -411,6 +427,9 @@ struct DriveInfo {
   uint16_t drive_ports[];
 };
 
+/**
+ * Contains information provided by the BIOS about advanced power management.
+ */
 struct APMTable {
   /**
    * Version number of the APM table.
@@ -450,6 +469,11 @@ struct APMTable {
   uint16_t dseg_len;
 };
 
+/**
+ * Represents the multiboot information structure provided by the bootloader.
+ * See http://www.gnu.org/software/grub/manual/multiboot/multiboot.html#Boot-information-format
+ * for more information.
+ */
 struct Info {
   /**
    * Indicates the presence and validity of other fields in the Multiboot
@@ -535,7 +559,12 @@ struct Info {
      * Contains the section header table from an ELF kernel.
      */
     ElfSectionHeaderTable elf_section;
-  } u;
+  }
+  /**
+   * Contains either the symbol table from an a.out kernel image or the section
+   * header table from an ELF kernel.
+   */
+  u;
 
   /**
    * The total size of the memory map buffer.

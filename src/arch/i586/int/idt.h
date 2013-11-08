@@ -30,6 +30,9 @@
 
 namespace idt {
 
+/**
+ * Initialize interrupts and the IDT table.
+ */
 void Initialize();
 
 }  // namespace idt

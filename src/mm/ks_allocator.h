@@ -39,6 +39,10 @@ namespace alloc {
  */
 class KernelSpaceAllocator : public Allocator {
 public:
+  /**
+   * Creates a new KernelSpaceAllocator instance.
+   * @param place_address The address to start allocating memory from.
+   */
   KernelSpaceAllocator(uint32_t place_address);
 
   /**

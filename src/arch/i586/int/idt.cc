@@ -31,8 +31,13 @@
 #include "sys/io.h"
 
 extern "C" {
-  void idt_flush(uint32_t);
+  /**
+   * Places the specified address into the IDT register.
+   * @param addr The address to place in the IDT register.
+   */
+  void idt_flush(uint32_t addr);
 
+/// @cond
   void isr0();  void isr1();  void isr2();  void isr3();  void isr4();
   void isr5();  void isr6();  void isr7();  void isr8();  void isr9();
   void isr10(); void isr11(); void isr12(); void isr13(); void isr14();
@@ -45,6 +50,7 @@ extern "C" {
   void irq5();  void irq6();  void irq7();  void irq8();  void irq9();
   void irq10(); void irq11(); void irq12(); void irq13(); void irq14();
   void irq15();
+/// @endcond
 }
 
 namespace idt {
@@ -122,7 +128,7 @@ struct IDTEntry {
    * The high 16 bits of the address to jump to when this interrupt is raised.
    */
   uint16_t base_hi;
-} __attribute((packed));
+} __attribute__((packed));
 
 /**
  * Represents the contents of the IDT register which points to the interrupt
@@ -139,9 +145,15 @@ struct IDTRegister {
    * The physical address where the IDT starts (INT 0).
    */
   uint32_t base;
-} __attribute((packed));
+} __attribute__((packed));
 
+/**
+ * Global list of IDT entries.
+ */
 IDTEntry g_idt_entries[256];
+/**
+ * Global IDT register contents.
+ */
 IDTRegister g_idtr;
 
 static void IDTSetGate(uint8_t number, void (*handler)(), uint16_t selector,

@@ -273,7 +273,7 @@ class PageDirectory {
 
   PageTableEntry* page_table_entries_;
 
-  friend void Initialize(uint32_t, addressing::vaddress);
+  friend void Initialize(uint32_t mmap_length, addressing::vaddress mmap_addr);
 };
 
 

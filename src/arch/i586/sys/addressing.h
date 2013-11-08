@@ -29,7 +29,14 @@
 
 #include <cstdint>
 
+/**
+ * Symbol provided by the linker for the base address of physical memory.
+ */
 extern const unsigned int __region_physical_base;
+
+/**
+ * Symbol provided by the linker for the base address of virtual memory.
+ */
 extern const unsigned int __region_virtual_base;
 
 /**

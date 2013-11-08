@@ -36,6 +36,15 @@ namespace alloc {
  */
 class KHeap : public Allocator {
  public:
+  /**
+   * Creates a new KHeap instance.
+   * @param start_address The virtual address of the start of the heap.
+   * @param end_address The virtual address of the end of the heap.
+   * @param max_address The maximum allowable address for the heap to grow into.
+   * @param supervisor Indicates whether the heap is only accessible from
+   * kernel-space.
+   * @param readonly Indicates whether the heap is read only.
+   */
   KHeap(void *start_address, void* end_address, void* max_address,
         bool supervisor, bool readonly);
 

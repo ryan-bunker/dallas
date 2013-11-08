@@ -33,16 +33,25 @@
 #include "mm/page_fault_handler.h"
 #include "sys/kernel.h"
 
+/**
+ * Symbol provided by the linker indicating the end of the kernel in memory.
+ */
 extern const uint32_t __kernel_end;
 
 namespace paging {
 
-// The kernel's page directory
+/**
+ * The page directory used by the kernel.
+ */
 PageTableEntry kernel_identity_page_table[1024] __attribute__((aligned(4096)));
 
 PageDirectory* PageDirectory::current_directory_ = nullptr;
 PageDirectory PageDirectory::kernel_directory_(0);
 
+/**
+ * The kernel's handler for page faults. Responsible for paging memory to and
+ * from disk, as well as allocating new pages as needed.
+ */
 PageFaultHandler page_fault_handler;
 
 PageDirectory::PageDirectory(addressing::paddress address)

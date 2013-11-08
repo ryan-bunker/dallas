@@ -43,11 +43,27 @@ const uint32_t kPageAlignMask = 0xFFFFF000;
  * Contains information about an individual memory page.
  */
 struct Page {
-  uint32_t flags;
+//  uint32_t flags;
+
+  /**
+   * The index of the page in a page table.
+   */
   uint32_t index;
+
+  /**
+   * Indicates whether the page is available for mapping.
+   */
   bool available;
+
+  /**
+   * The virtual address that the page is currently mapped to.
+   */
   addressing::vaddress virtual_address;
 
+  /**
+   * Gets the physical address of the page in memory.
+   * @return The physical address of this page in memory.
+   */
   inline addressing::paddress physical_address() const {
     return index * kPageSize;
   }

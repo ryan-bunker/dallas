@@ -27,23 +27,59 @@
 
 namespace screen {
 
-// screen attributes
+/**
+ * The width of the default screen buffer, in characters.
+ */
 const int kScreenWidth = 80;
+/**
+ * The height of the default screen buffer, in rows.
+ */
 const int kScreenHeight = 25;
 
-const char kHexAlphabet[] = "0123456789ABCDEF";
-
+/**
+ * Represents a single character in the screen buffer.
+ */
 struct ScreenChar {
+  /**
+   * The ASCII character to display.
+   */
   unsigned char character;
+  /**
+   * The foreground and background color of the character.
+   */
   uint8_t color;
-} __attribute((packed));
+} __attribute__((packed));
 
+/**
+ * The active screen buffer.
+ */
 ScreenChar* const screen_buffer = reinterpret_cast<ScreenChar*>(0xC00B8000);
+/**
+ * The cursor's current x (column) position.
+ */
 int cursor_x = 0;
+/**
+ * The cursor's current y (row) position.
+ */
 int cursor_y = 0;
+/**
+ * The current default foreground color to use if no color is specified
+ * when printing.
+ */
 Color default_fore_color = Color::kWhite;
+/**
+ * The current default background color to use if no color is specified
+ * when printing.
+ */
 Color default_back_color = Color::kBlack;
 
+/**
+ * Packs color information into an unsigned byte, for placing into the screen
+ * buffer.
+ * @param fore_color The foreground color to use.
+ * @param back_color The background color to use.
+ * @return The foreground and background color packed into a single byte.
+ */
 inline uint8_t GetColor(Color fore_color = Color::kDefault,
                       Color back_color = Color::kDefault) {
   if (fore_color == Color::kDefault)
@@ -59,6 +95,15 @@ inline uint8_t GetColor(Color fore_color = Color::kDefault,
  * Written by Lukás Chmela
  * Released under GPLv3.
  */
+
+/**
+ * Converts an integer into a string.
+ * @param[in] value The integer to convert.
+ * @param[out] result The buffer to place the resulting string.
+ * @param[in] base The base to use when converting. Can be any integer between
+ * 2 and 36 inclusive.
+ * @return result
+ */
 char* itoa(uint32_t value, char* result, int base) {
   // check that the base if valid
   if (base < 2 || base > 36) {
@@ -69,11 +114,12 @@ char* itoa(uint32_t value, char* result, int base) {
   char* ptr = result, *ptr1 = result, tmp_char;
   uint32_t tmp_value;
 
+  const char *alphabet =
+      "zyxwvutsrqponmlkjihgfedcba9876543210123456789abcdefghijklmnopqrstuvwxyz";
   do {
     tmp_value = value;
     value /= base;
-    *ptr++ =
-        "zyxwvutsrqponmlkjihgfedcba9876543210123456789abcdefghijklmnopqrstuvwxyz" [35 + (tmp_value - value * base)];
+    *ptr++ = alphabet[35 + (tmp_value - value * base)];
   } while ( value );
 
   *ptr-- = '\0';
@@ -90,8 +136,7 @@ char* itoa(uint32_t value, char* result, int base) {
  * Moves the hardware cursor to the specified location.
  * @param x,y The location to move the cursor to.
  */
-static void MoveHardwareCursor(int x, int y)
-{
+static void MoveHardwareCursor(int x, int y) {
   int cursor_location = y * kScreenWidth + x;
   // Tell the VGA board we are setting the high cursor byte.
   outb(0x3D4, 14);

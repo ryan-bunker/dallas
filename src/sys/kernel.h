@@ -26,7 +26,16 @@
 #ifndef SRC_INCLUDE_SYS_KERNEL_H_
 #define SRC_INCLUDE_SYS_KERNEL_H_
 
+/**
+ * Halt the kernel and display an error message on screen.
+ * @param msg The message to display on screen.
+ */
 #define PANIC(msg) panic(msg, __FILE__, __LINE__);
+/**
+ * Assert that a given condition is true, and if false, halt the kernel and
+ * display an error message on screen.
+ * @param b The condition to assert is true.
+ */
 #define ASSERT(b) ((b) ? (void)0 : panic_assert(__FILE__, __LINE__, #b))
 
 /**

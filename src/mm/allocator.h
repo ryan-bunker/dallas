@@ -61,9 +61,11 @@ void SetActiveAllocator(Allocator& allocator);
 
 }  // namespace alloc
 
+/// @cond
 inline void *operator new(size_t, void *p)     throw() { return p; }
 inline void *operator new[](size_t, void *p)   throw() { return p; }
 inline void  operator delete  (void *, void *) throw() { };
 inline void  operator delete[](void *, void *) throw() { };
+/// @endcond
 
 #endif  // SRC_INCLUDE_MM_ALLOCATOR_H_

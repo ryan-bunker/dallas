@@ -1,5 +1,5 @@
 /**
- * @file cpp_alloc_operators.cc
+ * @file allocator.cc
  *
  * @section LICENSE
  *
@@ -30,11 +30,23 @@
 #include "mm/ks_allocator.h"
 #include "sys/kernel.h"
 
+/**
+ * Symbol provided by the linker that indicates the end of the bss section.
+ */
 extern const uint32_t ebss;
 
 namespace alloc {
 
+/**
+ * Singleton instance of the KernelSpaceAllocator used before the heap is
+ * initialized.
+ */
 KernelSpaceAllocator g_ks_allocator(reinterpret_cast<uint32_t>(&ebss));
+
+/**
+ * Points the currently active allocator that will be used to satisfy C++
+ * new/delete requests.
+ */
 Allocator* g_current_allocator = &g_ks_allocator;
 
 void SetActiveAllocator(Allocator& allocator) {
@@ -43,6 +55,7 @@ void SetActiveAllocator(Allocator& allocator) {
 
 }  // namespace alloc
 
+/// @cond
 void *operator new(size_t size) {
   return alloc::g_current_allocator->Allocate(size, false);
 }
@@ -59,5 +72,4 @@ void operator delete[](void *ptr) {
   alloc::g_current_allocator->Free(ptr);
 }
 
-
-
+/// @endcond

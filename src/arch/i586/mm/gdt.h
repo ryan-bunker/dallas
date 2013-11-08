@@ -28,6 +28,9 @@
 
 namespace gdt {
 
+/**
+ * Initializes the global descriptor table.
+ */
 void Initialize();
 
 }  // namespace gdt

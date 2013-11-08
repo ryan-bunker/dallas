@@ -33,7 +33,14 @@
 
 namespace alloc {
 
+/**
+ * The amount of space to use to store the heap index.
+ */
 const uint32_t kHeapIndexSize = 0x4000;
+
+/**
+ * The minimum size of the heap.
+ */
 const size_t kHeapMinSize = 0x70000;
 
 KHeap::KHeap(void* start_address, void* end_address, void* max_address,

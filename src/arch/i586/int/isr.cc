@@ -97,6 +97,11 @@ bool InterruptHandler::FindAndHandle(Registers regs) {
   return true;
 }
 
+/**
+ * Routes an exception to the registered handlers, or panics if no handler is
+ * registered.
+ * @param regs The state of the system's registers at the time of the exception.
+ */
 void GlobalISRHandler_CPP(Registers regs) {
   if (!InterruptHandler::FindAndHandle(regs)) {
     char msg[] = "Unhandled exception [xx]";
@@ -106,6 +111,11 @@ void GlobalISRHandler_CPP(Registers regs) {
   }
 }
 
+/**
+ * Routes an interrupt to the registered handlers. If no handler is regsitered
+ * then the interrupt is silently discarded.
+ * @param regs The state of the system's registers at the time of the exception.
+ */
 void GlobalIRQHandler_CPP(Registers regs) {
   if (!InterruptHandler::FindAndHandle(regs))
     // there is no registered handler for this interrupt so we have to

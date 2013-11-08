@@ -60,7 +60,7 @@ inline uint16_t inw(uint16_t port) {
 }
 
 /**
- *
+ * Wait for the IO port to be ready.
  */
 inline void io_wait() {
   asm volatile ("outb %%al, $0x80" : : "a" (0));

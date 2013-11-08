@@ -71,15 +71,50 @@ enum class Interrupts {
  * Represents the full set of registers on an x86 system.
  */
 struct Registers {
-  uint32_t  ds;   /// Data segment selector
-  uint32_t  edi,  /// Represents the EDI register.
-            esi,  /// Represents the ESI register.
-            ebp,  /// Represents the EBP register.
-            esp,  /// Represents the ESP register.
-            ebx,  /// Represents the EBX register.
-            edx,  /// Represents the EDX register.
-            ecx,  /// Represents the ECX register.
-            eax;  /// Represents the EAX register.
+  /**
+   * Data segment selector.
+   */
+  uint32_t ds;
+
+  /**
+   * Represents the EDI register.
+   */
+  uint32_t edi;
+
+  /**
+   * Represents the ESI register.
+   */
+  uint32_t esi;
+
+  /**
+   * Represents the EBP register.
+   */
+  uint32_t ebp;
+
+  /**
+   * Represents the ESP register.
+   */
+  uint32_t esp;
+
+  /**
+   * Represents the EBX register.
+   */
+  uint32_t ebx;
+
+  /**
+   * Represents the EDX register.
+   */
+  uint32_t edx;
+
+  /**
+   * Represents the ECX register.
+   */
+  uint32_t ecx;
+
+  /**
+   * Represents the EAX register.
+   */
+  uint32_t eax;
 
   /**
    * The interrupt number currently executing.
@@ -91,13 +126,35 @@ struct Registers {
    */
   uint32_t err_code;
 
-  uint32_t eip,      /// The instruction point register
-           cs,       /// Code segment selector
-           eflags,   /// The current flags register.
-           useresp,  /// ???
-           ss;       /// ???
+  /**
+   * The instruction pointer register.
+   */
+  uint32_t eip;
+
+  /**
+   * The code segment selector.
+   */
+  uint32_t cs;
+
+  /**
+   * The current flags register.
+   */
+  uint32_t eflags;
+
+  /**
+   * The value of the ESP register.
+   */
+  uint32_t user_esp;
+
+  /**
+   * The value of the SS register.
+   */
+  uint32_t ss;
 };
 
+/**
+ * Abstract base class representing an interrupt handler.
+ */
 class InterruptHandler {
  public:
   /**

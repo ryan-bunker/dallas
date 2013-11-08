@@ -30,24 +30,27 @@
 
 namespace screen {
 
+/**
+ * Represents a foreground or background color of characters on the screen.
+ */
 enum class Color : uint8_t {
-  kDefault = static_cast<uint8_t>(-1),
-  kBlack = 0,
-  kBlue,
-  kGreen,
-  kCyan,
-  kRed,
-  kMagenta,
-  kBrown,
-  kLightGray,
-  kDarkGray,
-  kLightBlue,
-  kLightGreen,
-  kLightCyan,
-  kLightRed,
-  kLightMagenta,
-  kYellow,
-  kWhite
+  kDefault = static_cast<uint8_t>(-1),//!< kDefault
+  kBlack = 0,                         //!< kBlack
+  kBlue,                              //!< kBlue
+  kGreen,                             //!< kGreen
+  kCyan,                              //!< kCyan
+  kRed,                               //!< kRed
+  kMagenta,                           //!< kMagenta
+  kBrown,                             //!< kBrown
+  kLightGray,                         //!< kLightGray
+  kDarkGray,                          //!< kDarkGray
+  kLightBlue,                         //!< kLightBlue
+  kLightGreen,                        //!< kLightGreen
+  kLightCyan,                         //!< kLightCyan
+  kLightRed,                          //!< kLightRed
+  kLightMagenta,                      //!< kLightMagenta
+  kYellow,                            //!< kYellow
+  kWhite                              //!< kWhite
 };
 
 /**
