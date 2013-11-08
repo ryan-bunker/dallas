@@ -27,6 +27,7 @@
 								<option id="org.eclipse.cdt.build.core.settings.holder.incpaths.1740921187" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${HOME}/opt/cross/i586-elf/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${HOME}/opt/cross/i586-elf/include/c++/4.8.1&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${HOME}/opt/cross/i586-elf/include/c++/4.8.1/i586-elf&quot;"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1914470573" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
