@@ -28,18 +28,28 @@
 
 #include "boot/multiboot.h"
 #include "int/idt.h"
+#include "fs/initrd.h"
 #include "mm/gdt.h"
 #include "mm/kheap.h"
 #include "mm/paging.h"
 #include "mm/page_allocator.h"
 #include "sys/addressing.h"
 #include "sys/io.h"
+#include "sys/kernel.h"
 #include "video/text_screen.h"
 
 namespace {
 
 unsigned char heap_memory[sizeof(alloc::KHeap)];
 alloc::KHeap* kernel_heap = nullptr;
+
+void TestA() {
+  PANIC("testing");
+}
+
+void TestB() { TestA(); }
+void TestC() { TestB(); }
+void TestD() { TestC(); }
 
 void InitializeKernelHeap() {
   // set up the heap boundaries (1MiB initial, 2MiB max)
@@ -93,9 +103,6 @@ extern "C" void kmain(multiboot::Info *mbd, uint32_t magic) {
   gdt::Initialize();
   idt::Initialize();
 
-  // allocate this before we set up the heap
-  int* a = new int;
-
   // get the Heap ready
   InitializeKernelHeap();
 
@@ -105,30 +112,31 @@ extern "C" void kmain(multiboot::Info *mbd, uint32_t magic) {
   screen::Clear();
   screen::WriteLine("Dallas");
 
-  int* b = new int;
+  TestD();
+  /*
+  // load up the initial ramdrive
+  fs::FSNode& fs_root = initrd::Initialize(
+      addressing::PhysicalToVirtual(mbd->modules[0].module_start));
 
-  *a = 1;
-  *b = 2;
+  int i = 0;
+  fs::dirent* node = nullptr;
+  while ( (node = fs_root.ReadDirectory(i)) != nullptr) {
+    screen::Write("Found file ");
+    screen::WriteLine(node->name);
+    fs::FSNode* fsnode = fs_root.Find(node->name);
 
-  screen::Write("0x");
-  screen::WriteHex(reinterpret_cast<uint32_t>(a));
-  screen::Write(" = ");
-  screen::WriteDec(*a);
-  screen::WriteLine(" (allocated from kernel space)");
-
-  screen::Write("0x");
-  screen::WriteHex(reinterpret_cast<uint32_t>(b));
-  screen::Write(" = ");
-  screen::WriteDec(*b);
-  screen::WriteLine(" (allocated from the heap)");
-
-  screen::WriteLine("Now we're going to page fault at 0x500000...");
-
-  // this memory is not in the first 4MB or in the kernel's 4MB
-  *reinterpret_cast<int*>(0x500000) = 1234;
-
-  for (;;)
-    continue;
+    if (fsnode->node_type() == fs::FSNodeType::kDirectory)
+      screen::WriteLine("\t(directory)");
+    else {
+      screen::Write("\t contents: \"");
+      uint8_t buf[256];
+      uint32_t sz = fsnode->Read(0, 256, buf);
+      buf[sz] = 0;
+      screen::Write(reinterpret_cast<char*>(buf));
+      screen::WriteLine("\"");
+    }
+    ++i;
+  }*/
 }
 
 }  // namespace

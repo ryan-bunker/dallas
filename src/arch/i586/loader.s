@@ -80,6 +80,7 @@ higherhalf:
 
   # We are now ready to execute C++ code. Call into our kernel entry point,
   # kmain in main_entry.cc
+  movl $0x1234ab, %ebp
   call kmain
 
   # Since the kernel has exited, it is now time to call all of our C++

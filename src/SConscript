@@ -1,16 +1,17 @@
 import os
+import struct
 
 arch = ARGUMENTS.get('arch', 'i586')
 
 cross = ARGUMENTS.get('CROSS_TOOLS', os.environ.get('CROSS_TOOLS', ''))
 if cross == '':
-  cross_bin = ''
-  cross_lib = ''
+    cross_bin = ''
+    cross_lib = ''
 else:
-  cross_bin = os.path.join(cross, 'bin')
-  cross_lib = os.path.join(cross, arch + '-elf', 'lib')
+    cross_bin = os.path.join(cross, 'bin')
+    cross_lib = os.path.join(cross, arch + '-elf', 'lib')
 
-env = Environment()   # Initialize the environment
+env = Environment()  # Initialize the environment
 
 # Create a builder for mkisofs
 mkisofs_builder = Builder(action=Action('$MKISOFSCOM', '$MKISOFSCOMSTR'),
@@ -19,47 +20,83 @@ env.Append(BUILDERS={'MkIsoFs': mkisofs_builder})
 env['MKISOFSCOM'] = 'mkisofs $MKISOFSFLAGS -o $TARGET $SOURCE'
 env['MKISOFSCOMSTR'] = '$MKISOFSCOM'
 
+# Create a builder for initrd
+def build_initrd(target, source, env):
+    nheaders = len(source)
+    headers = []
+    offset = 0
+    
+    for src in source:
+        header = {'magic': 0xBF,
+                  'name': os.path.basename(str(src)),
+                  'offset': offset,
+                  'length': os.stat(str(src)).st_size}
+        offset += header['length']
+        headers.append(header)
+    
+    wstream = open(str(target[0]), 'wb')
+    wstream.write(struct.pack('=i', len(source)))
+    for header in headers:
+        wstream.write(struct.pack('=B64sII',
+                                  header['magic'],
+                                  header['name'],
+                                  header['offset'],
+                                  header['length']))
+    
+    for src in source:
+        stream = open(str(src), 'rb')
+        srccontents = stream.read()
+        wstream.write(srccontents)
+        stream.close()
+    
+    wstream.close()
+initrd_builder = Builder(action = build_initrd,
+                         suffix = '.img')
+env.Append(BUILDERS={'InitRd': initrd_builder})
+
 # setup the C compiler
-env.Replace(CC = os.path.join(cross_bin, arch + '-elf-gcc'))
-env.Append(CFLAGS = ['-gstabs+', '-ffreestanding'])
-env.Append(CDEFINES = ['DEBUG'])
+env.Replace(CC=os.path.join(cross_bin, arch + '-elf-gcc'))
+env.Append(CFLAGS=['-gstabs+', '-ffreestanding'])
+env.Append(CDEFINES=['DEBUG'])
 
 # setup the C++ compiler
-env.Replace(CXX = os.path.join(cross_bin, arch + '-elf-g++'))
-env.Append(CXXFLAGS = ['-Wall', '-Wextra', '-Werror', '-fno-exceptions',
+env.Replace(CXX=os.path.join(cross_bin, arch + '-elf-g++'))
+env.Append(CXXFLAGS=['-Wall', '-Wextra', '-Werror', '-fno-exceptions',
   '-ffreestanding', '-std=c++11', '-fno-rtti', '-fno-stack-protector'])
-env.Append(CPPDEFINES = ['DEBUG'])
+env.Append(CPPDEFINES=['DEBUG'])
 
 # setup the Assembler
-env.Replace(AS = os.path.join(cross_bin, arch + '-elf-as'))
-env.Append(ASFLAGS = '-gstabs')
+env.Replace(AS=os.path.join(cross_bin, arch + '-elf-as'))
+env.Append(ASFLAGS='-gstabs')
 
 # setup the Linker
-env.Replace(LINK = os.path.join(cross_bin, arch + '-elf-ld'))
-env.Append(LIBS = 'c')
+env.Replace(LINK=os.path.join(cross_bin, arch + '-elf-ld'))
+env.Append(LIBS='c')
 if cross_lib != '':
-  env.Append(LIBPATH = cross_lib)
-env.Replace(LINKFLAGS = '-T src/arch/' + arch + '/linker.ld')
+  env.Append(LIBPATH=cross_lib)
+env.Replace(LINKFLAGS='-Map build/kernel.map -T src/arch/' + arch + '/linker.ld')
 
-env.Append(CPPPATH = ['.', 'arch/' + arch])
+env.Append(CPPPATH=['.', 'arch/' + arch])
 
-kernel = env.Program(target = 'kernel.elf', source = [
-  'arch/' + arch + '/loader.s',
-  'sys/icxxabi.cc',
-  'video/text_screen.cc',
-  'sys/kernel.cc',
-  'mm/allocator.cc',
-  'mm/ks_allocator.cc',
-  'mm/kheap.cc',
-  'arch/' + arch + '/mm/gdt.cc',
-  'arch/' + arch + '/mm/page_allocator.cc',
-  'arch/' + arch + '/mm/paging.cc',
-  'arch/' + arch + '/mm/page_fault_handler.cc',
-  'arch/' + arch + '/int/interrupt.s',
-  'arch/' + arch + '/int/idt.cc',
-  'arch/' + arch + '/int/isr.cc',
-  'kernel/main_entry.cc'])
-  
+kernel = env.Program(target='kernel.elf', source=[
+    'arch/' + arch + '/loader.s',
+    'sys/icxxabi.cc',
+    'video/text_screen.cc',
+    'sys/kernel.cc',
+    'mm/allocator.cc',
+    'mm/ks_allocator.cc',
+    'mm/kheap.cc',
+    'arch/' + arch + '/mm/gdt.cc',
+    'arch/' + arch + '/mm/page_allocator.cc',
+    'arch/' + arch + '/mm/paging.cc',
+    'arch/' + arch + '/mm/page_fault_handler.cc',
+    'arch/' + arch + '/int/interrupt.s',
+    'arch/' + arch + '/int/idt.cc',
+    'arch/' + arch + '/int/isr.cc',
+    'fs/fs_node.cc',
+    'fs/initrd.cc',
+    'kernel/main_entry.cc'])
+
 # Create a bootable ISO image
 iso = env.MkIsoFs(
     target='bootable.iso',
@@ -74,9 +111,12 @@ iso = env.MkIsoFs(
                   '-no-emul-boot',
                   '-boot-load-size', '4',
                   '-boot-info-table'
-    ],
-)
+                  ]
+    )
 env.Alias('iso', iso)
+
+# Create initialization ramdrive
+env.InitRd('initrd.img', ['test1.txt', 'test2.txt'])
 
 # Documentation
 env.Alias('documentation', env.Command('html', '#docs/Doxyfile', 'doxygen $SOURCE'))

@@ -39,6 +39,27 @@ extern void panic(const char *message, const char *file, int line)
     screen::WriteDec(line);
     screen::Write("\n");
 
+    // Stack contains:
+    //  Second function argument
+    //  First function argument (MaxFrames)
+    //  Return address in calling function
+    //  ebp of calling function (pointed to by current ebp)
+    unsigned int * ebp = reinterpret_cast<unsigned int *>(&message) - 2;
+    screen::Write("Stack trace:\n");
+    for (unsigned int frame = 0; frame < 5; ++frame)
+    {
+        unsigned int eip = ebp[1];
+        if (eip == 0)
+            // No caller on stack
+            break;
+        // Unwind to previous stack frame
+        ebp = reinterpret_cast<unsigned int *>(ebp[0]);
+        //unsigned int * arguments = &ebp[2];
+        screen::Write("  0x");
+        screen::WriteHex(eip);
+        screen::Write("\n");
+    }
+
     // Halt by going into an infinite loop.
     for(;;);
 }

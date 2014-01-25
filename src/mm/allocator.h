@@ -68,4 +68,7 @@ inline void  operator delete  (void *, void *) throw() { };
 inline void  operator delete[](void *, void *) throw() { };
 /// @endcond
 
+void* kmalloc(size_t size);
+void kfree(void* ptr);
+
 #endif  // SRC_INCLUDE_MM_ALLOCATOR_H_

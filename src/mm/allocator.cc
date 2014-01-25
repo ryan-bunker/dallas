@@ -71,5 +71,12 @@ void operator delete(void *ptr) {
 void operator delete[](void *ptr) {
   alloc::g_current_allocator->Free(ptr);
 }
-
 /// @endcond
+
+void* kmalloc(size_t size) {
+  return alloc::g_current_allocator->Allocate(size, false);
+}
+
+void kfree(void* ptr) {
+  alloc::g_current_allocator->Free(ptr);
+}
