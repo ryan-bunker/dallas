@@ -1,7 +1,7 @@
 import os
 import struct
 
-arch = ARGUMENTS.get('arch', 'i586')
+arch = ARGUMENTS.get('arch', 'i686')
 
 cross = ARGUMENTS.get('CROSS_TOOLS', os.environ.get('CROSS_TOOLS', ''))
 if cross == '':

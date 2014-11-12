@@ -1,0 +1,305 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"el",
+				"else"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"contents": "/**\n * @file main_entry.cc\n *\n * @section LICENSE\n *\n * Copyright (C) 2013  Ryan Bunker\n *\n * This program is free software: you can redistribute it and/or modify\n * it under the terms of the GNU General Public License as published by\n * the Free Software Foundation, either version 3 of the License, or\n * (at your option) any later version.\n *\n * This program is distributed in the hope that it will be useful,\n * but WITHOUT ANY WARRANTY; without even the implied warranty of\n * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n * GNU General Public License for more details.\n *\n * You should have received a copy of the GNU General Public License\n * along with this program.  If not, see [http://www.gnu.org/licenses/].\n *\n * @section DESCRIPTION\n *\n * Main entry point of kernel after initial environment has been set up\n * by the boot loader.\n */\n\n#include <cstdint>\n\n#include \"boot/multiboot.h\"\n#include \"int/idt.h\"\n#include \"mm/gdt.h\"\n#include \"mm/kheap.h\"\n#include \"mm/paging.h\"\n#include \"mm/page_allocator.h\"\n#include \"sys/addressing.h\"\n#include \"sys/io.h\"\n#include \"video/text_screen.h\"\n\nnamespace {\n\nunsigned char heap_memory[sizeof(alloc::KHeap)];\nalloc::KHeap* kernel_heap = nullptr;\n\nvoid InitializeKernelHeap() {\n  // set up the heap boundaries (1MiB initial, 2MiB max)\n  // 0xC0400000  <-- 1MiB -->  0xC0500000  <-- 1MiB -->  0xC0600000\n  uint32_t heap_start = static_cast<uint32_t>(0xC0400000);\n  if (heap_start % paging::kPageSize)\n    heap_start += paging::kPageSize - (heap_start % paging::kPageSize);\n  uint32_t heap_end = heap_start + 0x100000;\n  uint32_t max_heap = heap_end + 0x100000;\n\n  // now map in the necessary pages for the heap\n  paging::Page* page = paging::PageAllocator::instance().AllocatePages(\n      (heap_end - heap_start) / paging::kPageSize);\n  for (uint32_t addr = heap_start; addr < heap_end; addr += paging::kPageSize)\n    paging::PageDirectory::kernel_directory().MapPage(\n        page++, reinterpret_cast<void*>(addr));\n\n  // create the heap instance and tell it the memory to manage\n  kernel_heap = new (static_cast<void*>(heap_memory))\n      alloc::KHeap(reinterpret_cast<void*>(heap_start),\n                   reinterpret_cast<void*>(heap_end),\n                   reinterpret_cast<void*>(max_heap),\n                   false, false);\n\n  // make the heap our active allocator\n  alloc::SetActivesetAllocator(*kernel_heap);\n}\n\n/**\n * Main entry point into kernel from loader assembly.\n * @param mbd The multiboot information structure.\n * @param magic Must match kBootloaderMagic to verify that mbd is valid.\n */\nextern \"C\" void kmain(multiboot::Info *mbd, uint32_t magic) {\n  if (magic != multiboot::kBootloaderMagic) {\n    // Something went not according to specs. Print an error\n    // message and halt, but do *not* rely on the multiboot\n    // data structure.\n    return;\n  }\n\n  // mbd is currently pointing to physical memory so we need\n  // to adjust it for our current GDT offsets\n  mbd = (multiboot::Info*) addressing::PhysicalToVirtual(\n      reinterpret_cast<addressing::paddress>(mbd));\n\n  // first step is to initialize paging\n  paging::Initialize(mbd->mmap_length,\n                     addressing::PhysicalToVirtual(mbd->mmap_addr));\n  // then we can restore the GDT back to normal and initialize interrupts\n  gdt::Initialize();\n  idt::Initialize();\n\n  // allocate this before we set up the heap\n  int* a = new int;\n\n  // get the Heap ready\n  InitializeKernelHeap();\n\n  // now that everything is set up we can enable interrupts again\n  enable_interrupts();\n\n  screen::Clear();\n  screen::WriteLine(\"Dallas\");\n\n  int* b = new int;\n\n  *a = 1;\n  *b = 2;\n\n  screen::Write(\"0x\");\n  screen::WriteHex(reinterpret_cast<uint32_t>(a));\n  screen::Write(\" = \");\n  screen::WriteDec(*a);\n  screen::WriteLine(\" (allocated from kernel space)\");\n\n  screen::Write(\"0x\");\n  screen::WriteHex(reinterpret_cast<uint32_t>(b));\n  screen::Write(\" = \");\n  screen::WriteDec(*b);\n  screen::WriteLine(\" (allocated from the heap)\");\n\n  screen::WriteLine(\"Now we're going to page fault at 0x500000...\");\n\n  // this memory is not in the first 4MB or in the kernel's 4MB\n  *reinterpret_cast<int*>(0x500000) = 1234;\n\n  for (;;)\n    continue;\n}\n\n}  // namespace\n",
+			"file": "src/kernel/main_entry.cc",
+			"file_size": 4196,
+			"file_write_time": 1415675830000000,
+			"settings":
+			{
+				"buffer_size": 4199,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/mm/allocator.h",
+			"settings":
+			{
+				"buffer_size": 1988,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/SConscript",
+			"settings":
+			{
+				"buffer_size": 2637,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/ryan/source/cross/newlib-2.1.0/configure",
+			"settings":
+			{
+				"buffer_size": 472915,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 347.0,
+		"selected_items":
+		[
+			[
+				"pack",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 125.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/ryan/source/dallas/dallas.sublime-project",
+		"/Users/ryan/source/scratch/state.scala",
+		"/Users/ryan/source/scratch/age.py",
+		"/Users/ryan/source/golang/src/samples/babelOverJsonRpc/gen/sampleInterface.go",
+		"/Users/ryan/source/golang/src/samples/babelOverJsonRpc/server/babjs.go",
+		"/Users/ryan/source/conquest/Conquest.Data/Mongo/MongoConquest.cs",
+		"/Users/ryan/source/golang/src/samples/babelOverJsonRpc/phttp.sh",
+		"/Users/ryan/source/GameArena/src/main/scala/Main.scala",
+		"/Users/ryan/source/GameArena/build.gradle",
+		"/Users/ryan/Documents/temp.txt",
+		"/Applications/IntelliJ IDEA 13 CE.app/Contents/Info.plist"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"cannot crea",
+			"print"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 3,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "src/kernel/main_entry.cc",
+					"settings":
+					{
+						"buffer_size": 4199,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2356,
+								2356
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 324.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "src/mm/allocator.h",
+					"settings":
+					{
+						"buffer_size": 1988,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1201,
+								1201
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 346.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/SConscript",
+					"settings":
+					{
+						"buffer_size": 2637,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								43,
+								43
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "/Users/ryan/source/cross/newlib-2.1.0/configure",
+					"settings":
+					{
+						"buffer_size": 472915,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								951,
+								956
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 215.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.clang":
+	{
+		"height": 100.0
+	},
+	"replace":
+	{
+		"height": 0.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 200.0,
+	"status_bar_visible": true
+}
