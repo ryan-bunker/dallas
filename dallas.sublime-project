@@ -1,0 +1,20 @@
+{
+	"folders":
+	[
+		{
+			"path": "src",
+			"name": "src"
+		}
+	],
+	"settings":
+	{
+		"sublimeclang_options":
+		[
+			"-ffreestanding",
+			"-std=c++11",
+			"-I${home}/cross/i686-elf/include/c++/4.9.2/",
+			"-I${folder:${project_path:SConscript}}",
+			"-I${folder:${project_path:SConscript}}/arch/i686"
+		]
+	}
+}
