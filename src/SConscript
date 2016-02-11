@@ -62,7 +62,7 @@ env.Append(CDEFINES=['DEBUG'])
 # setup the C++ compiler
 env.Replace(CXX=os.path.join(cross_bin, arch + '-elf-g++'))
 env.Append(CXXFLAGS=['-Wall', '-Wextra', '-Werror', '-fno-exceptions',
-  '-ffreestanding', '-std=c++11', '-fno-rtti', '-fno-stack-protector'])
+  '-ffreestanding', '-std=c++11', '-fno-rtti', '-fno-stack-protector', '-O0'])
 env.Append(CPPDEFINES=['DEBUG'])
 
 # setup the Assembler
@@ -74,7 +74,7 @@ env.Replace(LINK=os.path.join(cross_bin, arch + '-elf-ld'))
 env.Append(LIBS='c')
 if cross_lib != '':
   env.Append(LIBPATH=cross_lib)
-env.Replace(LINKFLAGS='-Map build/kernel.map -T src/arch/' + arch + '/linker.ld')
+env.Replace(LINKFLAGS='-O0 -Map build/kernel.map -T src/arch/' + arch + '/linker.ld')
 
 env.Append(CPPPATH=['.', 'arch/' + arch])
 

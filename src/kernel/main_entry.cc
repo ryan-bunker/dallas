@@ -43,13 +43,13 @@ namespace {
 unsigned char heap_memory[sizeof(alloc::KHeap)];
 alloc::KHeap* kernel_heap = nullptr;
 
-void TestA() {
+/*extern void TestA() {
   PANIC("testing");
 }
 
-void TestB() { TestA(); }
-void TestC() { TestB(); }
-void TestD() { TestC(); }
+extern void TestB() { TestA(); }
+extern void TestC() { TestB(); }
+extern void TestD() { TestC(); }*/
 
 void InitializeKernelHeap() {
   // set up the heap boundaries (1MiB initial, 2MiB max)
@@ -112,8 +112,7 @@ extern "C" void kmain(multiboot::Info *mbd, uint32_t magic) {
   screen::Clear();
   screen::WriteLine("Dallas");
 
-  TestD();
-  /*
+  //TestD();
   // load up the initial ramdrive
   fs::FSNode& fs_root = initrd::Initialize(
       addressing::PhysicalToVirtual(mbd->modules[0].module_start));
@@ -136,7 +135,7 @@ extern "C" void kmain(multiboot::Info *mbd, uint32_t magic) {
       screen::WriteLine("\"");
     }
     ++i;
-  }*/
+  }
 }
 
 }  // namespace

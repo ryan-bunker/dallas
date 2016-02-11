@@ -23,6 +23,7 @@
  */
 
 #include "video/text_screen.h"
+#include "sys/addressing.h"
 
 extern void panic(const char *message, const char *file, int line)
 {
