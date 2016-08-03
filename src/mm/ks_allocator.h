@@ -22,7 +22,6 @@
  *
  */
 
-
 #ifndef SRC_INCLUDE_MM_KS_ALLOCATOR_H_
 #define SRC_INCLUDE_MM_KS_ALLOCATOR_H_
 
@@ -51,18 +50,18 @@ public:
    * @param size The size, in bytes, of the memory to allocate.
    * @param align True to align the returned region on a page boundary.
    */
-  virtual void* Allocate(size_t size, bool align = false);
+  virtual void *Allocate(size_t size, bool align = false);
 
   /**
    * Memory allocated by this allocator cannot be freed.
    * @param ptr
    */
-  virtual void Free(void* ptr);
+  virtual void Free(void *ptr);
 
   /**
    * Gets the address of the next region of memory to be allocated by Allocate.
    */
-  inline void* next() { return (void*)current_address_; }
+  inline void *next() { return (void *)current_address_; }
 
 private:
   /**
@@ -75,7 +74,6 @@ private:
   uint32_t current_address_;
 };
 
+} // namespace alloc
 
-}  // namespace alloc
-
-#endif  // SRC_INCLUDE_MM_KS_ALLOCATOR_H_
+#endif // SRC_INCLUDE_MM_KS_ALLOCATOR_H_

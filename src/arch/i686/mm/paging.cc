@@ -45,7 +45,7 @@ namespace paging {
  */
 PageTableEntry kernel_identity_page_table[1024] __attribute__((aligned(4096)));
 
-PageDirectory* PageDirectory::current_directory_ = nullptr;
+PageDirectory *PageDirectory::current_directory_ = nullptr;
 PageDirectory PageDirectory::kernel_directory_(0);
 
 /**
@@ -55,7 +55,7 @@ PageDirectory PageDirectory::kernel_directory_(0);
 PageFaultHandler page_fault_handler;
 
 PageDirectory::PageDirectory(addressing::paddress address)
-  : physical_address_(address) {
+    : physical_address_(address) {
   memset(tables_physical_, 0, sizeof(tables_physical_));
 
   // map the page directory into the last page of the address
@@ -66,26 +66,26 @@ PageDirectory::PageDirectory(addressing::paddress address)
   tables_physical_[1023].user = true;
 
   // now point tables to the upper 4MB of memory
-  page_directory_entries_ = reinterpret_cast<PageDirectoryEntry*>(0xFFFFF000);
-  page_table_entries_ = reinterpret_cast<PageTableEntry*>(0xFFC00000);
+  page_directory_entries_ = reinterpret_cast<PageDirectoryEntry *>(0xFFFFF000);
+  page_table_entries_ = reinterpret_cast<PageTableEntry *>(0xFFC00000);
 }
 
 void PageDirectory::Activate() {
   current_directory_ = this;
-  asm volatile (  "mov %0, %%eax\n"
-          "mov %%eax, %%cr3\n"
-          "mov %%cr0, %%eax\n"
-          "orl $0x80000000, %%eax\n"
-          "mov %%eax, %%cr0\n" :: "m" (physical_address_));
+  asm volatile("mov %0, %%eax\n"
+               "mov %%eax, %%cr3\n"
+               "mov %%cr0, %%eax\n"
+               "orl $0x80000000, %%eax\n"
+               "mov %%eax, %%cr0\n" ::"m"(physical_address_));
 }
 
-void PageDirectory::MapPage(Page* frame, addressing::vaddress virtAddress) {
+void PageDirectory::MapPage(Page *frame, addressing::vaddress virtAddress) {
   uint32_t pdeIdx = reinterpret_cast<uint32_t>(virtAddress) >> 22;
   uint32_t pteIdx = reinterpret_cast<uint32_t>(virtAddress) >> 12;
-  PageDirectoryEntry* pde = &page_directory_entries_[pdeIdx];
+  PageDirectoryEntry *pde = &page_directory_entries_[pdeIdx];
   if (!pde->present) {
     // there is no page table present for this address, we need to map one in
-    Page* ptf = PageAllocator::instance().AllocatePage();
+    Page *ptf = PageAllocator::instance().AllocatePage();
     pde->present = true;
     pde->read_write = true;
     pde->user = true;
@@ -95,7 +95,7 @@ void PageDirectory::MapPage(Page* frame, addressing::vaddress virtAddress) {
            sizeof(PageTableEntry) * 1024);
   }
 
-  PageTableEntry* pte = &page_table_entries_[pteIdx];
+  PageTableEntry *pte = &page_table_entries_[pteIdx];
   if (pte->present) {
     // we're attempting to map a frame into an address that already has
     // a frame mapped, that is a big no-no
@@ -108,13 +108,13 @@ void PageDirectory::MapPage(Page* frame, addressing::vaddress virtAddress) {
   pte->user = true;
   pte->frame = frame->physical_address() >> 12;
 
-  //char virt_address_byte = *static_cast<char*>(virtAddress);
+  // char virt_address_byte = *static_cast<char*>(virtAddress);
   //__asm__ volatile("invlpg %0"::"m" (virt_address_byte));
-  __asm__ volatile("invlpg %0"::"m" (virtAddress));
+  __asm__ volatile("invlpg %0" ::"m"(virtAddress));
 }
 
-Page* PageDirectory::GetPage(addressing::vaddress virtAddress) {
-  PageDirectoryEntry* pde =
+Page *PageDirectory::GetPage(addressing::vaddress virtAddress) {
+  PageDirectoryEntry *pde =
       &page_directory_entries_[reinterpret_cast<uint32_t>(virtAddress) >> 20];
   if (!pde->present)
     return nullptr;
@@ -125,32 +125,33 @@ Page* PageDirectory::GetPage(addressing::vaddress virtAddress) {
   return &PageAllocator::instance().GetPage(pte.frame << 12);
 }
 
-Page* PageDirectory::UnmapPage(addressing::vaddress virtAddress) {
-  // TODO: make this handle releasing the page table when the last frame is unmapped
-  Page* frame = GetPage(virtAddress);
+Page *PageDirectory::UnmapPage(addressing::vaddress virtAddress) {
+  // TODO: make this handle releasing the page table when the last frame is
+  // unmapped
+  Page *frame = GetPage(virtAddress);
   if (!frame)
     return nullptr;
 
   // we have the frame now, time to unmap from the address space
-  PageTableEntry* pte =
+  PageTableEntry *pte =
       &page_table_entries_[reinterpret_cast<uint32_t>(virtAddress) >> 12];
   pte->present = false;
   return frame;
 }
-
 
 void Initialize(uint32_t mmap_length, addressing::vaddress mmap_addr) {
   // record the physical address of the kernel's directory
   addressing::paddress phys =
       addressing::VirtualToPhysical(&PageDirectory::kernel_directory_);
   PageDirectory::kernel_directory_.physical_address_ = phys;
-  PageDirectory::kernel_directory_.tables_physical_[1023].page_table = phys >> 12;
+  PageDirectory::kernel_directory_.tables_physical_[1023].page_table =
+      phys >> 12;
 
   // clear out the first page table which will be used for the kernel
   memset(&kernel_identity_page_table, 0, sizeof(kernel_identity_page_table));
 
   // set up the page table in the directory
-  PageDirectoryEntry& zero_pde =
+  PageDirectoryEntry &zero_pde =
       PageDirectory::kernel_directory_.tables_physical_[0];
   zero_pde.page_table =
       addressing::VirtualToPhysical(&kernel_identity_page_table) >> 12;
@@ -160,14 +161,15 @@ void Initialize(uint32_t mmap_length, addressing::vaddress mmap_addr) {
 
   // identity map the first 4MB of memory
   for (int k = 0; k < 1024; ++k) {
-    PageTableEntry& page = kernel_identity_page_table[k];
-    page.present = true;      // mark it as present
-    page.read_write = false;  // Should the page be writable?
-    page.user = 1;            // Should the page be user-mode?
-    page.frame = k;           // map the address onto itself
+    PageTableEntry &page = kernel_identity_page_table[k];
+    page.present = true;     // mark it as present
+    page.read_write = false; // Should the page be writable?
+    page.user = 1;           // Should the page be user-mode?
+    page.frame = k;          // map the address onto itself
   }
 
-  // point 3072MB...3076MB to the same page table as 0...4MB (this is where the kernel lives)
+  // point 3072MB...3076MB to the same page table as 0...4MB (this is where the
+  // kernel lives)
   PageDirectory::kernel_directory_.tables_physical_[768] =
       PageDirectory::kernel_directory_.tables_physical_[0];
 
@@ -178,7 +180,7 @@ void Initialize(uint32_t mmap_length, addressing::vaddress mmap_addr) {
   uint32_t mmap_end = reinterpret_cast<uint32_t>(mmap_addr) + mmap_length;
   // iterate over memory map to find the total amount of available memory
   for (uint32_t k = reinterpret_cast<uint32_t>(mmap_addr); k < mmap_end;) {
-    map = reinterpret_cast<multiboot::MemoryMapEntry*>(k);
+    map = reinterpret_cast<multiboot::MemoryMapEntry *>(k);
     if (map->type == multiboot::MemoryMapType::kMemoryAvailable)
       total_memory += map->length;
     k += map->size + sizeof(map->size);
@@ -186,13 +188,12 @@ void Initialize(uint32_t mmap_length, addressing::vaddress mmap_addr) {
 
   PageAllocator::InitSingleton(total_memory);
   addressing::paddress end_of_kernel =
-      addressing::VirtualToPhysical(const_cast<uint32_t*>(&__kernel_end));
+      addressing::VirtualToPhysical(const_cast<uint32_t *>(&__kernel_end));
   for (uint32_t k = reinterpret_cast<uint32_t>(mmap_addr); k < mmap_end;) {
-    map = reinterpret_cast<multiboot::MemoryMapEntry*>(k);
+    map = reinterpret_cast<multiboot::MemoryMapEntry *>(k);
     if (map->type == multiboot::MemoryMapType::kMemoryAvailable) {
       for (addressing::paddress j = map->address;
-          j < map->address + map->length;
-          j += paging::kPageSize) {
+           j < map->address + map->length; j += paging::kPageSize) {
         // don't push any addresses that are inside the kernel
         if (j > end_of_kernel)
           PageAllocator::instance().FreePageAddress(j);
@@ -208,4 +209,4 @@ void Initialize(uint32_t mmap_length, addressing::vaddress mmap_addr) {
   PageDirectory::kernel_directory_.Activate();
 }
 
-}  // namespace paging
+} // namespace paging

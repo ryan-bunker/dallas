@@ -33,10 +33,10 @@ uarch_t __atexit_func_count = 0;
 
 // Attention! Optimally, you should remove the '= 0' part and define this in
 // your asm script.
-void* __dso_handle = 0;
+void *__dso_handle = 0;
 
 void __cxa_pure_virtual() {
-    // Do nothing or print an error message.
+  // Do nothing or print an error message.
 }
 
 int __cxa_atexit(void (*f)(void *), void *objptr, void *dso) {

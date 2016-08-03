@@ -43,14 +43,13 @@ const uint32_t kHeapIndexSize = 0x4000;
  */
 const size_t kHeapMinSize = 0x70000;
 
-KHeap::KHeap(void* start_address, void* end_address, void* max_address,
+KHeap::KHeap(void *start_address, void *end_address, void *max_address,
              bool supervisor, bool readonly)
-  : start_address_(reinterpret_cast<uint32_t>(start_address)),
-    end_address_(reinterpret_cast<uint32_t>(end_address)),
-    max_address_(reinterpret_cast<uint32_t>(max_address)),
-    supervisor_(supervisor),
-    readonly_(readonly),
-    index_(static_cast<KHeap::Header**>(start_address), kHeapIndexSize) {
+    : start_address_(reinterpret_cast<uint32_t>(start_address)),
+      end_address_(reinterpret_cast<uint32_t>(end_address)),
+      max_address_(reinterpret_cast<uint32_t>(max_address)),
+      supervisor_(supervisor), readonly_(readonly),
+      index_(static_cast<KHeap::Header **>(start_address), kHeapIndexSize) {
   // assert that the start and end address are page aligned
   ASSERT(start_address_ % paging::kPageSize == 0);
   ASSERT(end_address_ % paging::kPageSize == 0);
@@ -65,14 +64,14 @@ KHeap::KHeap(void* start_address, void* end_address, void* max_address,
   }
 
   // We start off with one large hole in the index
-  KHeap::Header* hole = reinterpret_cast<KHeap::Header*>(start_address_);
+  KHeap::Header *hole = reinterpret_cast<KHeap::Header *>(start_address_);
   hole->size = end_address_ - start_address_;
   hole->magic = Magic::kValue;
   hole->is_hole = true;
   index_.Insert(hole);
 }
 
-void* KHeap::Allocate(size_t size, bool align) {
+void *KHeap::Allocate(size_t size, bool align) {
   // make sure we take the size of header/footer into account
   size_t new_size = size + sizeof(KHeap::Header) + sizeof(KHeap::Footer);
   // find the smallest hole that will fit
@@ -101,33 +100,34 @@ void* KHeap::Allocate(size_t size, bool align) {
 
     // if we didn't find ANY headers, we need to add one
     if (idx == -1) {
-      KHeap::Header *header = reinterpret_cast<KHeap::Header*>(old_end_address);
+      KHeap::Header *header =
+          reinterpret_cast<KHeap::Header *>(old_end_address);
       header->magic = Magic::kValue;
       header->size = new_length - old_length;
       header->is_hole = true;
 
-      KHeap::Footer *footer = reinterpret_cast<KHeap::Footer*>(
+      KHeap::Footer *footer = reinterpret_cast<KHeap::Footer *>(
           old_end_address + header->size - sizeof(KHeap::Footer));
       footer->magic = Magic::kValue;
       footer->header = header;
       index_.Insert(header);
     } else {
       // the last header needs adjusting
-      KHeap::Header* header = index_[idx];
+      KHeap::Header *header = index_[idx];
       header->size += new_length - old_length;
       // rewrite the footer
-      KHeap::Footer *footer = reinterpret_cast<KHeap::Footer*>(
-          reinterpret_cast<uint32_t>(header)
-            + header->size - sizeof(KHeap::Footer));
+      KHeap::Footer *footer = reinterpret_cast<KHeap::Footer *>(
+          reinterpret_cast<uint32_t>(header) + header->size -
+          sizeof(KHeap::Footer));
       footer->header = header;
       footer->magic = Magic::kValue;
     }
 
     // we now have enough space. Recurse, and call the function again
     return Allocate(size, align);
-  }  // if no hole found
+  } // if no hole found
 
-  KHeap::Header* orig_hole_header = index_[iterator];
+  KHeap::Header *orig_hole_header = index_[iterator];
   uint32_t orig_hole_pos = reinterpret_cast<uint32_t>(orig_hole_header);
   uint32_t orig_hole_size = orig_hole_header->size;
   // here we work out if we should split the hole we found into two parts
@@ -143,18 +143,18 @@ void* KHeap::Allocate(size_t size, bool align) {
   // if we need to page-align the data, do it now and make a new hole in front
   // of our block.
   if (align && (orig_hole_pos & paging::kPageAlignMask)) {
-    uint32_t new_location = orig_hole_pos + paging::kPageSize
-        - (orig_hole_pos & 0xFFF) - sizeof(KHeap::Header);
+    uint32_t new_location = orig_hole_pos + paging::kPageSize -
+                            (orig_hole_pos & 0xFFF) - sizeof(KHeap::Header);
 
     KHeap::Header *hole_header =
-        reinterpret_cast<KHeap::Header*>(orig_hole_pos);
+        reinterpret_cast<KHeap::Header *>(orig_hole_pos);
     hole_header->size =
         paging::kPageSize - (orig_hole_pos & 0xFFF) - sizeof(KHeap::Header);
     hole_header->magic = Magic::kValue;
-    hole_header->is_hole  = true;
+    hole_header->is_hole = true;
 
     KHeap::Footer *hole_footer =
-        reinterpret_cast<KHeap::Footer*>(new_location - sizeof(KHeap::Footer));
+        reinterpret_cast<KHeap::Footer *>(new_location - sizeof(KHeap::Footer));
     hole_footer->magic = Magic::kValue;
     hole_footer->header = hole_header;
     orig_hole_pos = new_location;
@@ -165,13 +165,14 @@ void* KHeap::Allocate(size_t size, bool align) {
   }
 
   // overwrite the original header...
-  KHeap::Header *block_header = reinterpret_cast<KHeap::Header*>(orig_hole_pos);
+  KHeap::Header *block_header =
+      reinterpret_cast<KHeap::Header *>(orig_hole_pos);
   block_header->magic = Magic::kValue;
   block_header->is_hole = false;
   block_header->size = new_size;
 
   // ...and the footer
-  KHeap::Footer *block_footer = reinterpret_cast<KHeap::Footer*>(
+  KHeap::Footer *block_footer = reinterpret_cast<KHeap::Footer *>(
       orig_hole_pos + sizeof(KHeap::Header) + size);
   block_footer->magic = Magic::kValue;
   block_footer->header = block_header;
@@ -179,15 +180,15 @@ void* KHeap::Allocate(size_t size, bool align) {
   // we may need to write a new hole after the allocated block
   // we do this only if the new hole would have positive size...
   if (orig_hole_size - new_size > 0) {
-    KHeap::Header *hole_header = reinterpret_cast<KHeap::Header*>(
+    KHeap::Header *hole_header = reinterpret_cast<KHeap::Header *>(
         orig_hole_pos + sizeof(KHeap::Header) + size + sizeof(KHeap::Footer));
     hole_header->magic = Magic::kValue;
     hole_header->is_hole = true;
     hole_header->size = orig_hole_size - new_size;
 
-    KHeap::Footer *hole_footer = reinterpret_cast<KHeap::Footer*>(
-        reinterpret_cast<uint32_t>(hole_header) + orig_hole_size - new_size
-          - sizeof(KHeap::Footer));
+    KHeap::Footer *hole_footer = reinterpret_cast<KHeap::Footer *>(
+        reinterpret_cast<uint32_t>(hole_header) + orig_hole_size - new_size -
+        sizeof(KHeap::Footer));
     if (reinterpret_cast<uint32_t>(hole_footer) < end_address_) {
       hole_footer->magic = Magic::kValue;
       hole_footer->header = hole_header;
@@ -198,21 +199,21 @@ void* KHeap::Allocate(size_t size, bool align) {
   }
 
   // ...and we're done!
-  return reinterpret_cast<void*>(
-      reinterpret_cast<uint32_t>(block_header) + sizeof(KHeap::Header));
+  return reinterpret_cast<void *>(reinterpret_cast<uint32_t>(block_header) +
+                                  sizeof(KHeap::Header));
 }
 
-void KHeap::Free(void* p) {
+void KHeap::Free(void *p) {
   // exit gracefully for null pointers
   if (p == nullptr)
     return;
 
   // get the header and footer associated with this pointer
-  KHeap::Header* header = reinterpret_cast<KHeap::Header*>(
+  KHeap::Header *header = reinterpret_cast<KHeap::Header *>(
       reinterpret_cast<uint32_t>(p) - sizeof(KHeap::Header));
-  KHeap::Footer* footer = reinterpret_cast<KHeap::Footer*>(
-      reinterpret_cast<uint32_t>(header) + header->size
-        - sizeof(KHeap::Footer));
+  KHeap::Footer *footer =
+      reinterpret_cast<KHeap::Footer *>(reinterpret_cast<uint32_t>(header) +
+                                        header->size - sizeof(KHeap::Footer));
 
   // sanity checks
   ASSERT(header->magic == Magic::kValue);
@@ -226,7 +227,7 @@ void KHeap::Free(void* p) {
 
   // == unify left ==
   // if the thing immediately to the left of us is a footer...
-  KHeap::Footer* test_footer = reinterpret_cast<KHeap::Footer*>(
+  KHeap::Footer *test_footer = reinterpret_cast<KHeap::Footer *>(
       reinterpret_cast<uint32_t>(header) - sizeof(KHeap::Footer));
   if (test_footer->magic == Magic::kValue && test_footer->header->is_hole) {
     // cache our current size
@@ -243,15 +244,15 @@ void KHeap::Free(void* p) {
 
   // == unify right ==
   // if the thing immediately to the right of us is a header...
-  KHeap::Header* test_header = reinterpret_cast<KHeap::Header*>(
+  KHeap::Header *test_header = reinterpret_cast<KHeap::Header *>(
       reinterpret_cast<uint32_t>(footer) + sizeof(KHeap::Footer));
   if (test_header->magic == Magic::kValue && test_header->is_hole) {
     // increase our size
     header->size += test_header->size;
     // rewrite it's footer to point to our header
-    test_footer = reinterpret_cast<KHeap::Footer*>(
-        reinterpret_cast<uint32_t>(test_header) + test_header->size
-          - sizeof(KHeap::Footer));
+    test_footer = reinterpret_cast<KHeap::Footer *>(
+        reinterpret_cast<uint32_t>(test_header) + test_header->size -
+        sizeof(KHeap::Footer));
     footer = test_footer;
     // find and remove this header from the index
     int iterator = 0;
@@ -265,8 +266,8 @@ void KHeap::Free(void* p) {
   }
 
   // if the footer location is the end address, we can contract
-  if (reinterpret_cast<uint32_t>(footer) + sizeof(KHeap::Footer)
-      == end_address_) {
+  if (reinterpret_cast<uint32_t>(footer) + sizeof(KHeap::Footer) ==
+      end_address_) {
     uint32_t old_length = end_address_ - start_address_;
     uint32_t new_length =
         Contract(reinterpret_cast<uint32_t>(header) - start_address_);
@@ -274,9 +275,9 @@ void KHeap::Free(void* p) {
     if (header->size - (old_length - new_length) > 0) {
       // we will still exist, so resize us
       header->size -= old_length - new_length;
-      footer = reinterpret_cast<KHeap::Footer*>(
-          reinterpret_cast<uint32_t>(header) + header->size
-            - sizeof(KHeap::Footer));
+      footer = reinterpret_cast<KHeap::Footer *>(
+          reinterpret_cast<uint32_t>(header) + header->size -
+          sizeof(KHeap::Footer));
       footer->magic = Magic::kValue;
       footer->header = header;
     } else {
@@ -298,15 +299,15 @@ int32_t KHeap::FindSmallestHole(size_t size, bool align) {
   // find the smallest hole that will fit
   int iterator = 0;
   while (iterator < index_.size()) {
-    KHeap::Header* header = index_[iterator];
+    KHeap::Header *header = index_[iterator];
     // if the user has requested the memory be page-aligned
     if (align) {
       // page-align the starting point of this header
       uint32_t location = reinterpret_cast<uint32_t>(&header);
       int32_t offset = 0;
       if (((location + sizeof(KHeap::Header)) & paging::kPageAlignMask) != 0)
-        offset = paging::kPageSize
-          - (location + sizeof(KHeap::Header)) % paging::kPageSize;
+        offset = paging::kPageSize -
+                 (location + sizeof(KHeap::Header)) % paging::kPageSize;
       int32_t hole_size = static_cast<int32_t>(header->size) - offset;
       // can we fit now?
       if (hole_size >= static_cast<int32_t>(size))
@@ -319,7 +320,7 @@ int32_t KHeap::FindSmallestHole(size_t size, bool align) {
 
   // why did the loop exit?
   if (iterator == index_.size())
-    return -1;  // we got to the end and didn't find anything
+    return -1; // we got to the end and didn't find anything
   else
     return iterator;
 }
@@ -338,12 +339,12 @@ void KHeap::Expand(size_t new_size) {
   // this should always be on a page boundary
   size_t old_size = end_address_ - start_address_;
   uint32_t frames_needed = (new_size - old_size) / paging::kPageSize;
-  paging::Page* first_frame =
+  paging::Page *first_frame =
       paging::PageAllocator::instance().AllocatePages(frames_needed);
   for (uint32_t i = 0; i < frames_needed; ++i, ++first_frame)
     paging::PageDirectory::current_directory()->MapPage(
         first_frame,
-        reinterpret_cast<void*>(end_address_ + i * paging::kPageSize));
+        reinterpret_cast<void *>(end_address_ + i * paging::kPageSize));
 
   end_address_ = start_address_ + new_size;
 }
@@ -363,12 +364,10 @@ size_t KHeap::Contract(size_t new_size) {
 
   size_t old_size = end_address_ - start_address_;
 
-  for (uint32_t i = old_size - paging::kPageSize;
-      new_size < i;
-      i -= paging::kPageSize) {
-    paging::Page* frame =
-        paging::PageDirectory::current_directory()->UnmapPage(
-            reinterpret_cast<void*>(i));
+  for (uint32_t i = old_size - paging::kPageSize; new_size < i;
+       i -= paging::kPageSize) {
+    paging::Page *frame = paging::PageDirectory::current_directory()->UnmapPage(
+        reinterpret_cast<void *>(i));
     paging::PageAllocator::instance().FreePage(*frame);
   }
 
@@ -377,48 +376,42 @@ size_t KHeap::Contract(size_t new_size) {
 }
 
 KHeap::OrderedHeaderArray::OrderedHeaderArray(uint32_t max_size)
-  : array_(new KHeap::Header*[max_size]),
-    size_(0),
-    max_size_(max_size) {
-  memset(array_, 0, max_size * sizeof(KHeap::Header*));
+    : array_(new KHeap::Header *[max_size]), size_(0), max_size_(max_size) {
+  memset(array_, 0, max_size * sizeof(KHeap::Header *));
 }
 
-KHeap::OrderedHeaderArray::OrderedHeaderArray(
-    KHeap::Header** addr, uint32_t max_size)
-  : array_(addr),
-    size_(0),
-    max_size_(max_size) {
-  memset(array_, 0, max_size * sizeof(KHeap::Header*));
+KHeap::OrderedHeaderArray::OrderedHeaderArray(KHeap::Header **addr,
+                                              uint32_t max_size)
+    : array_(addr), size_(0), max_size_(max_size) {
+  memset(array_, 0, max_size * sizeof(KHeap::Header *));
 }
 
-KHeap::OrderedHeaderArray::~OrderedHeaderArray() {
-  delete [] array_;
-}
+KHeap::OrderedHeaderArray::~OrderedHeaderArray() { delete[] array_; }
 
-bool KHeap::OrderedHeaderArray::Insert(const KHeap::Header* item) {
+bool KHeap::OrderedHeaderArray::Insert(const KHeap::Header *item) {
   if (size_ == max_size_)
     return false;
 
   int iterator = 0;
   while (iterator < size_ && array_[iterator]->size < item->size)
-     iterator++;
-  if (iterator == size_) {  // just add at the end of the array.
-     array_[size_++] = const_cast<KHeap::Header*>(item);
+    iterator++;
+  if (iterator == size_) { // just add at the end of the array.
+    array_[size_++] = const_cast<KHeap::Header *>(item);
   } else {
-     KHeap::Header* tmp = array_[iterator];
-     array_[iterator] = const_cast<KHeap::Header*>(item);
-     while (iterator < size_) {
-       ++iterator;
-       KHeap::Header* tmp2 = array_[iterator];
-       array_[iterator] = tmp;
-       tmp = tmp2;
-     }
-     ++size_;
+    KHeap::Header *tmp = array_[iterator];
+    array_[iterator] = const_cast<KHeap::Header *>(item);
+    while (iterator < size_) {
+      ++iterator;
+      KHeap::Header *tmp2 = array_[iterator];
+      array_[iterator] = tmp;
+      tmp = tmp2;
+    }
+    ++size_;
   }
   return true;
 }
 
-KHeap::Header* KHeap::OrderedHeaderArray::operator[](const int index) {
+KHeap::Header *KHeap::OrderedHeaderArray::operator[](const int index) {
   return array_[index];
 }
 
@@ -428,5 +421,4 @@ void KHeap::OrderedHeaderArray::Remove(int i) {
   --size_;
 }
 
-}  // namespace alloc
-
+} // namespace alloc

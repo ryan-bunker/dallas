@@ -25,7 +25,7 @@
 #ifndef SRC_INCLUDE_SYS_ICXXABI_H_
 #define SRC_INCLUDE_SYS_ICXXABI_H_
 
-#define ATEXIT_MAX_FUNCS  128
+#define ATEXIT_MAX_FUNCS 128
 
 #ifdef __cplusplus
 extern "C" {
@@ -50,4 +50,4 @@ void __cxa_finalize(void *f);
 };
 #endif
 
-#endif  // SRC_INCLUDE_SYS_ICXXABI_H_
+#endif // SRC_INCLUDE_SYS_ICXXABI_H_

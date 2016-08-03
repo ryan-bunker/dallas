@@ -22,30 +22,27 @@
  *
  */
 
-#include <cstring>
 #include "mm/page_allocator.h"
+
+#include <cstring>
 
 namespace paging {
 
-PageAllocator* PageAllocator::instance_ = nullptr;
+PageAllocator *PageAllocator::instance_ = nullptr;
 
 PageAllocator::PageAllocator(size_t memory_available)
-  : free_pages_(0),
-    last_freed_index_(0)
-{
+    : free_pages_(0), last_freed_index_(0) {
   page_count_ = memory_available / kPageSize;
   pages_ = new Page[page_count_];
   memset(pages_, 0, sizeof(Page) * page_count_);
-  for (uint32_t i=0; i<page_count_; i++)
+  for (uint32_t i = 0; i < page_count_; i++)
     pages_[i].index = i;
 }
 
-PageAllocator::~PageAllocator() {
-  delete [] pages_;
-}
+PageAllocator::~PageAllocator() { delete[] pages_; }
 
-Page* PageAllocator::AllocatePages(int count) {
-  Page* free_page = nullptr;
+Page *PageAllocator::AllocatePages(int count) {
+  Page *free_page = nullptr;
   uint32_t i = last_freed_index_;
   do {
     if (pages_[i].available) {
@@ -69,19 +66,18 @@ Page* PageAllocator::AllocatePages(int count) {
 
   if (free_page) {
     // we found a set of free pages, so mark them all used
-    for (int i=0; i<count; ++i)
+    for (int i = 0; i < count; ++i)
       free_page[i].available = false;
   }
 
   return free_page;
 }
 
-void PageAllocator::FreePage(Page& page)
-{
+void PageAllocator::FreePage(Page &page) {
   page.available = true;
   page.virtual_address = nullptr;
   last_freed_index_ = page.index;
   ++free_pages_;
 }
 
-}  // namespace paging
+} // namespace paging

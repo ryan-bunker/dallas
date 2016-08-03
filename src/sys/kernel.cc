@@ -24,44 +24,40 @@
 
 #include "video/text_screen.h"
 
-extern void panic(const char *message, const char *file, int line)
-{
-    // We encountered a massive problem and have to stop.
-    asm volatile("cli"); // Disable interrupts.
+extern void panic(const char *message, const char *file, int line) {
+  // We encountered a massive problem and have to stop.
+  asm volatile("cli"); // Disable interrupts.
 
-    screen::SetForeColor(screen::Color::kWhite);
-    screen::SetBackColor(screen::Color::kRed);
-    screen::Write("PANIC(");
-    screen::Write(message);
-    screen::Write(") at ");
-    screen::Write(file);
-    screen::Write(":");
-    screen::WriteDec(line);
-    screen::Write("\n");
+  screen::SetForeColor(screen::Color::kWhite);
+  screen::SetBackColor(screen::Color::kRed);
+  screen::Write("PANIC(");
+  screen::Write(message);
+  screen::Write(") at ");
+  screen::Write(file);
+  screen::Write(":");
+  screen::WriteDec(line);
+  screen::Write("\n");
 
-    // Halt by going into an infinite loop.
-    for(;;);
+  // Halt by going into an infinite loop.
+  for (;;)
+    ;
 }
 
-extern void panic_assert(const char *file, int line, const char *desc)
-{
-    // An assertion failed, and we have to panic.
-    asm volatile("cli"); // Disable interrupts.
+extern void panic_assert(const char *file, int line, const char *desc) {
+  // An assertion failed, and we have to panic.
+  asm volatile("cli"); // Disable interrupts.
 
-    screen::SetForeColor(screen::Color::kWhite);
-    screen::SetBackColor(screen::Color::kRed);
-    screen::Write("ASSERTION-FAILED(");
-    screen::Write(desc);
-    screen::Write(") at ");
-    screen::Write(file);
-    screen::Write(":");
-    screen::WriteDec(line);
-    screen::Write("\n");
+  screen::SetForeColor(screen::Color::kWhite);
+  screen::SetBackColor(screen::Color::kRed);
+  screen::Write("ASSERTION-FAILED(");
+  screen::Write(desc);
+  screen::Write(") at ");
+  screen::Write(file);
+  screen::Write(":");
+  screen::WriteDec(line);
+  screen::Write("\n");
 
-    // Halt by going into an infinite loop.
-    for(;;);
+  // Halt by going into an infinite loop.
+  for (;;)
+    ;
 }
-
-
-
-

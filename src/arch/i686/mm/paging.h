@@ -28,6 +28,7 @@
 #define SRC_ARCH_I586_INCLUDE_MM_PAGING_H_
 
 #include <cstdint>
+
 #include "sys/addressing.h"
 
 namespace paging {
@@ -194,7 +195,7 @@ void Initialize(uint32_t mmap_length, addressing::vaddress mmap_addr);
  * Represents a memory mapped page directory.
  */
 class PageDirectory {
- public:
+public:
   /**
    * Creates a new PageDirectory instance.
    * @param address The address of the new directory.
@@ -212,27 +213,27 @@ class PageDirectory {
    * @param page The physical page of memory to map.
    * @param address The virtual address to map \p page to.
    */
-  void MapPage(Page* page, addressing::vaddress address);
+  void MapPage(Page *page, addressing::vaddress address);
 
   /**
    * Gets the memory page that currently contains the specified virtual address.
    * @param address The virtual address to lookup.
    * @return The memory page that \p address is currently mapped to.
    */
-  Page* GetPage(addressing::vaddress address);
+  Page *GetPage(addressing::vaddress address);
 
   /**
    * Unmaps the memory page mapped to the specified virtual address.
    * @param address The virtual address to unmap.
    * @return The page that was mapped to \p address and that is now unmapped.
    */
-  Page* UnmapPage(addressing::vaddress address);
+  Page *UnmapPage(addressing::vaddress address);
 
   /**
    * Gets the currently active page directory.
    * @return The page directory that is currently active.
    */
-  inline static PageDirectory* current_directory() {
+  inline static PageDirectory *current_directory() {
     return current_directory_;
   }
 
@@ -240,15 +241,13 @@ class PageDirectory {
    * Gets the kernel's page directory.
    * @return The kerne's page directory.
    */
-  inline static PageDirectory& kernel_directory() {
-    return kernel_directory_;
-  }
+  inline static PageDirectory &kernel_directory() { return kernel_directory_; }
 
- private:
+private:
   /**
    * A pointer to the currently active page directory.
    */
-  static PageDirectory* current_directory_;
+  static PageDirectory *current_directory_;
 
   /**
    * The kerne's page directory.
@@ -269,14 +268,13 @@ class PageDirectory {
    * A virtual pointer to tables_physical_. Intended to be used once paging is
    * initialized, since physical addresses can no longer be accessed.
    */
-  PageDirectoryEntry* page_directory_entries_;
+  PageDirectoryEntry *page_directory_entries_;
 
-  PageTableEntry* page_table_entries_;
+  PageTableEntry *page_table_entries_;
 
   friend void Initialize(uint32_t mmap_length, addressing::vaddress mmap_addr);
 };
 
+} // namespace paging
 
-}  // namespace paging
-
-#endif  // SRC_ARCH_I586_INCLUDE_MM_PAGING_H_
+#endif // SRC_ARCH_I586_INCLUDE_MM_PAGING_H_

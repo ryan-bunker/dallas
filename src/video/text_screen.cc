@@ -22,8 +22,8 @@
  *
  */
 
-#include "video/text_screen.h"
 #include "sys/io.h"
+#include "video/text_screen.h"
 
 namespace screen {
 
@@ -53,7 +53,7 @@ struct ScreenChar {
 /**
  * The active screen buffer.
  */
-ScreenChar* const screen_buffer = reinterpret_cast<ScreenChar*>(0xC00B8000);
+ScreenChar *const screen_buffer = reinterpret_cast<ScreenChar *>(0xC00B8000);
 /**
  * The cursor's current x (column) position.
  */
@@ -81,13 +81,13 @@ Color default_back_color = Color::kBlack;
  * @return The foreground and background color packed into a single byte.
  */
 inline uint8_t GetColor(Color fore_color = Color::kDefault,
-                      Color back_color = Color::kDefault) {
+                        Color back_color = Color::kDefault) {
   if (fore_color == Color::kDefault)
     fore_color = default_fore_color;
   if (back_color == Color::kDefault)
     back_color = default_back_color;
-  return (static_cast<uint8_t>(back_color) << 4)
-      | (static_cast<uint8_t>(fore_color) & 0x0F);
+  return (static_cast<uint8_t>(back_color) << 4) |
+         (static_cast<uint8_t>(fore_color) & 0x0F);
 }
 
 /**
@@ -104,14 +104,14 @@ inline uint8_t GetColor(Color fore_color = Color::kDefault,
  * 2 and 36 inclusive.
  * @return result
  */
-char* itoa(uint32_t value, char* result, int base) {
+char *itoa(uint32_t value, char *result, int base) {
   // check that the base if valid
   if (base < 2 || base > 36) {
     *result = '\0';
     return result;
   }
 
-  char* ptr = result, *ptr1 = result, tmp_char;
+  char *ptr = result, *ptr1 = result, tmp_char;
   uint32_t tmp_value;
 
   const char *alphabet =
@@ -120,12 +120,12 @@ char* itoa(uint32_t value, char* result, int base) {
     tmp_value = value;
     value /= base;
     *ptr++ = alphabet[35 + (tmp_value - value * base)];
-  } while ( value );
+  } while (value);
 
   *ptr-- = '\0';
-  while(ptr1 < ptr) {
+  while (ptr1 < ptr) {
     tmp_char = *ptr;
-    *ptr--= *ptr1;
+    *ptr-- = *ptr1;
     *ptr1++ = tmp_char;
   }
 
@@ -152,14 +152,13 @@ static void MoveHardwareCursor(int x, int y) {
  * Scroll the text on the screen up by one line if the cursor is on the last
  * line.
  */
-static void Scroll()
-{
+static void Scroll() {
   // if the cursor isn't on the last line then there's no need to scroll
   if (cursor_y < kScreenHeight)
     return;
 
   // get a space character with the default color attributes
-  ScreenChar blank = { ' ', GetColor() };
+  ScreenChar blank = {' ', GetColor()};
 
   // move the current text chunk that makes up the screen back in the buffer
   // by a line
@@ -169,21 +168,17 @@ static void Scroll()
 
   // the last line should now be blank. Do this by writing kScreenWidth spaces
   // to it.
-  for (i = (kScreenHeight - 1) * kScreenWidth;
-      i < kScreenHeight * kScreenWidth; ++i)
+  for (i = (kScreenHeight - 1) * kScreenWidth; i < kScreenHeight * kScreenWidth;
+       ++i)
     screen_buffer[i] = blank;
 
   // the cursor should now be on the last line
   cursor_y = kScreenHeight - 1;
 }
 
-void SetForeColor(Color fore_color) {
-  default_fore_color = fore_color;
-}
+void SetForeColor(Color fore_color) { default_fore_color = fore_color; }
 
-void SetBackColor(Color back_color) {
-  default_back_color = back_color;
-}
+void SetBackColor(Color back_color) { default_back_color = back_color; }
 
 void SetCursorPos(int x, int y) {
   cursor_x = x;
@@ -192,7 +187,7 @@ void SetCursorPos(int x, int y) {
 }
 
 void PutChar(char c, Color fore_color, Color back_color, int x, int y) {
-  ScreenChar* location = screen_buffer + (y * kScreenWidth + x);
+  ScreenChar *location = screen_buffer + (y * kScreenWidth + x);
   location->character = c;
   location->color = GetColor(fore_color, back_color);
 }
@@ -238,12 +233,10 @@ void PutChar(char c, Color fore_color, Color back_color) {
   MoveHardwareCursor(cursor_x, cursor_y);
 }
 
-void PutChar(char c) {
-  PutChar(c, Color::kDefault, Color::kDefault);
-}
+void PutChar(char c) { PutChar(c, Color::kDefault, Color::kDefault); }
 
 void Clear(Color clear_color) {
-  ScreenChar blank = { ' ', GetColor(Color::kDefault, clear_color) };
+  ScreenChar blank = {' ', GetColor(Color::kDefault, clear_color)};
 
   for (int i = 0; i < kScreenWidth * kScreenHeight; ++i)
     screen_buffer[i] = blank;
@@ -262,13 +255,11 @@ void Write(const char *str, Color fore_color, Color back_color, int x, int y) {
 }
 
 void Write(const char *str, Color fore_color, Color back_color) {
-  for (int i=0; str[i]; ++i)
+  for (int i = 0; str[i]; ++i)
     PutChar(str[i], fore_color, back_color);
 }
 
-void Write(const char *str) {
-  Write(str, Color::kDefault, Color::kDefault);
-}
+void Write(const char *str) { Write(str, Color::kDefault, Color::kDefault); }
 
 void WriteLine(const char *str, Color fore_color, Color back_color) {
   Write(str, fore_color, back_color);
@@ -281,24 +272,21 @@ void WriteLine(const char *str) {
 
 void WriteHex(uint32_t n, Color fore_color, Color back_color) {
   char hex[9];
-  //TODO(ryan-bunker): sprintf(hex, "%08lx", n);when sbrk syscall is implemented
+  // TODO(ryan-bunker): sprintf(hex, "%08lx", n);when sbrk syscall is
+  // implemented
   itoa(n, hex, 16);
   Write(hex, fore_color, back_color);
 }
 
-void WriteHex(uint32_t n) {
-  WriteHex(n, Color::kDefault, Color::kDefault);
-}
+void WriteHex(uint32_t n) { WriteHex(n, Color::kDefault, Color::kDefault); }
 
 void WriteDec(uint32_t n, Color fore_color, Color back_color) {
   char dec[20];
-  //TODO(ryan-bunker): sprintf(dec, "%ld", n); when sbrk syscall is implemented
+  // TODO(ryan-bunker): sprintf(dec, "%ld", n); when sbrk syscall is implemented
   itoa(n, dec, 10);
   Write(dec, fore_color, back_color);
 }
 
-void WriteDec(uint32_t n) {
-  WriteDec(n, Color::kDefault, Color::kDefault);
-}
+void WriteDec(uint32_t n) { WriteDec(n, Color::kDefault, Color::kDefault); }
 
-}  // namespace screen
+} // namespace screen

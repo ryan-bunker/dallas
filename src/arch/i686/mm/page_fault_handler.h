@@ -22,7 +22,6 @@
  *
  */
 
-
 #ifndef SRC_ARCH_I586_INCLUDE_MM_PAGE_FAULT_HANDLER_H_
 #define SRC_ARCH_I586_INCLUDE_MM_PAGE_FAULT_HANDLER_H_
 
@@ -34,15 +33,13 @@ namespace paging {
  * Kernel page fault interrupt handler.
  */
 class PageFaultHandler : public isr::InterruptHandler {
- public:
-  PageFaultHandler()
-   : InterruptHandler(isr::Interrupts::kPageFault) {
-  }
+public:
+  PageFaultHandler() : InterruptHandler(isr::Interrupts::kPageFault) {}
 
- private:
+private:
   virtual void Handle(isr::Registers regs);
 };
 
-}  // namespace paging
+} // namespace paging
 
-#endif  // SRC_ARCH_I586_INCLUDE_MM_PAGE_FAULT_HANDLER_H_
+#endif // SRC_ARCH_I586_INCLUDE_MM_PAGE_FAULT_HANDLER_H_

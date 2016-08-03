@@ -47,13 +47,13 @@ KernelSpaceAllocator g_ks_allocator(reinterpret_cast<uint32_t>(&ebss));
  * Points the currently active allocator that will be used to satisfy C++
  * new/delete requests.
  */
-Allocator* g_current_allocator = &g_ks_allocator;
+Allocator *g_current_allocator = &g_ks_allocator;
 
-void SetActiveAllocator(Allocator& allocator) {
+void SetActiveAllocator(Allocator &allocator) {
   g_current_allocator = &allocator;
 }
 
-}  // namespace alloc
+} // namespace alloc
 
 /// @cond
 void *operator new(size_t size) {
@@ -64,12 +64,8 @@ void *operator new[](size_t size) {
   return alloc::g_current_allocator->Allocate(size, false);
 }
 
-void operator delete(void *ptr) {
-  alloc::g_current_allocator->Free(ptr);
-}
+void operator delete(void *ptr) { alloc::g_current_allocator->Free(ptr); }
 
-void operator delete[](void *ptr) {
-  alloc::g_current_allocator->Free(ptr);
-}
+void operator delete[](void *ptr) { alloc::g_current_allocator->Free(ptr); }
 
 /// @endcond

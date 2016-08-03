@@ -329,7 +329,7 @@ struct ModuleInfo {
    * pathname (e.g. if the operating system treats boot modules as files in a
    * file system), but its exact use is specific to the operating system.
    */
-  unsigned char *string;  // NOLINT
+  unsigned char *string; // NOLINT
   /**
    * Must be set to 0 by the boot loader and ignored by the operating system.
    */
@@ -372,7 +372,7 @@ struct MemoryMapEntry {
    * Type of address range represented.
    */
   MemoryMapType type;
-}__attribute__((packed));
+} __attribute__((packed));
 
 /**
  * Represents the types of drive access modes used by the boot loader.
@@ -471,7 +471,8 @@ struct APMTable {
 
 /**
  * Represents the multiboot information structure provided by the bootloader.
- * See http://www.gnu.org/software/grub/manual/multiboot/multiboot.html#Boot-information-format
+ * See
+ * http://www.gnu.org/software/grub/manual/multiboot/multiboot.html#Boot-information-format
  * for more information.
  */
 struct Info {
@@ -633,6 +634,6 @@ struct Info {
   uint16_t vbe_interface_len;
 };
 
-}  // namespace multiboot
+} // namespace multiboot
 
-#endif  // SRC_INCLUDE_BOOT_MULTIBOOT_H_
+#endif // SRC_INCLUDE_BOOT_MULTIBOOT_H_

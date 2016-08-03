@@ -23,7 +23,6 @@
  * Items related to interrupt service routines and interrupt request handlers.
  */
 
-
 #ifndef SRC_ARCH_I586_INCLUDE_INT_ISR_H_
 #define SRC_ARCH_I586_INCLUDE_INT_ISR_H_
 
@@ -156,14 +155,15 @@ struct Registers {
  * Abstract base class representing an interrupt handler.
  */
 class InterruptHandler {
- public:
+public:
   /**
    * Create a new InterruptHandler instance and optionally register it.
    * @param interrupt_number The interrupt number for this handler.
    * @param register_immediately If true, the handler will be registered with
    * the system during construction.
    */
-  InterruptHandler(Interrupts interrupt_number, bool register_immediately = false);
+  InterruptHandler(Interrupts interrupt_number,
+                   bool register_immediately = false);
 
   virtual ~InterruptHandler();
 
@@ -208,7 +208,7 @@ private:
   /**
    * The table of all registered interrupt handlers.
    */
-  static InterruptHandler* interrupt_handlers_[];
+  static InterruptHandler *interrupt_handlers_[];
 
   /**
    * The interrupt number that this handler has been setup for.
@@ -223,12 +223,12 @@ private:
   /**
    * The next handler in the handler chain for this interrupt number.
    */
-  InterruptHandler* next_;
+  InterruptHandler *next_;
 
   friend void GlobalISRHandler_CPP(Registers);
   friend void GlobalIRQHandler_CPP(Registers);
 };
 
-}  // namespace isr
+} // namespace isr
 
-#endif  // SRC_ARCH_I586_INCLUDE_INT_ISR_H_
+#endif // SRC_ARCH_I586_INCLUDE_INT_ISR_H_

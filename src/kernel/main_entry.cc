@@ -30,8 +30,8 @@
 #include "int/idt.h"
 #include "mm/gdt.h"
 #include "mm/kheap.h"
-#include "mm/paging.h"
 #include "mm/page_allocator.h"
+#include "mm/paging.h"
 #include "sys/addressing.h"
 #include "sys/io.h"
 #include "video/text_screen.h"
@@ -39,7 +39,7 @@
 namespace {
 
 unsigned char heap_memory[sizeof(alloc::KHeap)];
-alloc::KHeap* kernel_heap = nullptr;
+alloc::KHeap *kernel_heap = nullptr;
 
 void InitializeKernelHeap() {
   // set up the heap boundaries (1MiB initial, 2MiB max)
@@ -51,18 +51,16 @@ void InitializeKernelHeap() {
   uint32_t max_heap = heap_end + 0x100000;
 
   // now map in the necessary pages for the heap
-  paging::Page* page = paging::PageAllocator::instance().AllocatePages(
+  paging::Page *page = paging::PageAllocator::instance().AllocatePages(
       (heap_end - heap_start) / paging::kPageSize);
   for (uint32_t addr = heap_start; addr < heap_end; addr += paging::kPageSize)
     paging::PageDirectory::kernel_directory().MapPage(
-        page++, reinterpret_cast<void*>(addr));
+        page++, reinterpret_cast<void *>(addr));
 
   // create the heap instance and tell it the memory to manage
-  kernel_heap = new (static_cast<void*>(heap_memory))
-      alloc::KHeap(reinterpret_cast<void*>(heap_start),
-                   reinterpret_cast<void*>(heap_end),
-                   reinterpret_cast<void*>(max_heap),
-                   false, false);
+  kernel_heap = new (static_cast<void *>(heap_memory)) alloc::KHeap(
+      reinterpret_cast<void *>(heap_start), reinterpret_cast<void *>(heap_end),
+      reinterpret_cast<void *>(max_heap), false, false);
 
   // make the heap our active allocator
   alloc::SetActiveAllocator(*kernel_heap);
@@ -83,7 +81,7 @@ extern "C" void kmain(multiboot::Info *mbd, uint32_t magic) {
 
   // mbd is currently pointing to physical memory so we need
   // to adjust it for our current GDT offsets
-  mbd = (multiboot::Info*) addressing::PhysicalToVirtual(
+  mbd = (multiboot::Info *)addressing::PhysicalToVirtual(
       reinterpret_cast<addressing::paddress>(mbd));
 
   // first step is to initialize paging
@@ -94,7 +92,7 @@ extern "C" void kmain(multiboot::Info *mbd, uint32_t magic) {
   idt::Initialize();
 
   // allocate this before we set up the heap
-  int* a = new int;
+  int *a = new int;
 
   // get the Heap ready
   InitializeKernelHeap();
@@ -105,7 +103,7 @@ extern "C" void kmain(multiboot::Info *mbd, uint32_t magic) {
   screen::Clear();
   screen::WriteLine("Dallas");
 
-  int* b = new int;
+  int *b = new int;
 
   *a = 1;
   *b = 2;
@@ -125,10 +123,10 @@ extern "C" void kmain(multiboot::Info *mbd, uint32_t magic) {
   screen::WriteLine("Now we're going to page fault at 0x500000...");
 
   // this memory is not in the first 4MB or in the kernel's 4MB
-  *reinterpret_cast<int*>(0x500000) = 1234;
+  *reinterpret_cast<int *>(0x500000) = 1234;
 
   for (;;)
     continue;
 }
 
-}  // namespace
+} // namespace

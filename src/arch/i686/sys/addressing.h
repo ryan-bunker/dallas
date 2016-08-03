@@ -53,7 +53,7 @@ typedef uint32_t paddress;
 /**
  * Represents a virtual address in memory.
  */
-typedef void* vaddress;
+typedef void *vaddress;
 
 /**
  * Calculates the offset between physical and virtual memory using symbols
@@ -86,6 +86,6 @@ inline vaddress PhysicalToVirtual(paddress address) {
   return reinterpret_cast<vaddress>(address - GetVirtualPhysicalOffset());
 }
 
-}  // namespace addressing
+} // namespace addressing
 
-#endif  // SRC_ARCH_I586_INCLUDE_CORE_ADDRESSING_H_
+#endif // SRC_ARCH_I586_INCLUDE_CORE_ADDRESSING_H_

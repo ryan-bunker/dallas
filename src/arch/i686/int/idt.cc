@@ -31,25 +31,62 @@
 #include "sys/io.h"
 
 extern "C" {
-  /**
-   * Places the specified address into the IDT register.
-   * @param addr The address to place in the IDT register.
-   */
-  void idt_flush(uint32_t addr);
+/**
+ * Places the specified address into the IDT register.
+ * @param addr The address to place in the IDT register.
+ */
+void idt_flush(uint32_t addr);
 
 /// @cond
-  void isr0();  void isr1();  void isr2();  void isr3();  void isr4();
-  void isr5();  void isr6();  void isr7();  void isr8();  void isr9();
-  void isr10(); void isr11(); void isr12(); void isr13(); void isr14();
-  void isr15(); void isr16(); void isr17(); void isr18(); void isr19();
-  void isr20(); void isr21(); void isr22(); void isr23(); void isr24();
-  void isr25(); void isr26(); void isr27(); void isr28(); void isr29();
-  void isr30(); void isr31();
+void isr0();
+void isr1();
+void isr2();
+void isr3();
+void isr4();
+void isr5();
+void isr6();
+void isr7();
+void isr8();
+void isr9();
+void isr10();
+void isr11();
+void isr12();
+void isr13();
+void isr14();
+void isr15();
+void isr16();
+void isr17();
+void isr18();
+void isr19();
+void isr20();
+void isr21();
+void isr22();
+void isr23();
+void isr24();
+void isr25();
+void isr26();
+void isr27();
+void isr28();
+void isr29();
+void isr30();
+void isr31();
 
-  void irq0();  void irq1();  void irq2();  void irq3();  void irq4();
-  void irq5();  void irq6();  void irq7();  void irq8();  void irq9();
-  void irq10(); void irq11(); void irq12(); void irq13(); void irq14();
-  void irq15();
+void irq0();
+void irq1();
+void irq2();
+void irq3();
+void irq4();
+void irq5();
+void irq6();
+void irq7();
+void irq8();
+void irq9();
+void irq10();
+void irq11();
+void irq12();
+void irq13();
+void irq14();
+void irq15();
 /// @endcond
 }
 
@@ -157,8 +194,8 @@ IDTEntry g_idt_entries[256];
 IDTRegister g_idtr;
 
 static void IDTSetGate(uint8_t number, void (*handler)(), uint16_t selector,
-                         IDTGateType gate_type, bool storage_segment,
-                         uint8_t dpl, bool is_present) {
+                       IDTGateType gate_type, bool storage_segment, uint8_t dpl,
+                       bool is_present) {
   uint32_t base = reinterpret_cast<uint32_t>(handler);
   g_idt_entries[number].base_low = base & 0xFFFF;
   g_idt_entries[number].base_hi = (base >> 16) & 0xFFFF;
@@ -178,13 +215,42 @@ void Initialize() {
 
   memset(&g_idt_entries, 0, sizeof(IDTEntry) * 256);
 
-#define ISR(num) \
-  IDTSetGate(num, isr##num, 0x08, IDTGateType::k32bitInterruptGate, false, 0, true)
+#define ISR(num)                                                               \
+  IDTSetGate(num, isr##num, 0x08, IDTGateType::k32bitInterruptGate, false, 0,  \
+             true)
 
-  ISR(0);  ISR(1);  ISR(2);  ISR(3);  ISR(4);  ISR(5);  ISR(6);  ISR(7);
-  ISR(8);  ISR(9);  ISR(10); ISR(11); ISR(12); ISR(13); ISR(14); ISR(15);
-  ISR(16); ISR(17); ISR(18); ISR(19); ISR(20); ISR(21); ISR(22); ISR(23);
-  ISR(24); ISR(25); ISR(26); ISR(27); ISR(28); ISR(29); ISR(30); ISR(31);
+  ISR(0);
+  ISR(1);
+  ISR(2);
+  ISR(3);
+  ISR(4);
+  ISR(5);
+  ISR(6);
+  ISR(7);
+  ISR(8);
+  ISR(9);
+  ISR(10);
+  ISR(11);
+  ISR(12);
+  ISR(13);
+  ISR(14);
+  ISR(15);
+  ISR(16);
+  ISR(17);
+  ISR(18);
+  ISR(19);
+  ISR(20);
+  ISR(21);
+  ISR(22);
+  ISR(23);
+  ISR(24);
+  ISR(25);
+  ISR(26);
+  ISR(27);
+  ISR(28);
+  ISR(29);
+  ISR(30);
+  ISR(31);
 #undef ISR
 
   // Re-map the IRQ table.
@@ -207,15 +273,29 @@ void Initialize() {
   outb(0x21, 0x0);
   outb(0xA1, 0x0);
 
-#define IRQ(isr,irq_n) \
-  IDTSetGate(isr, irq##irq_n, 0x08, IDTGateType::k32bitInterruptGate, false, 0, true)
+#define IRQ(isr, irq_n)                                                        \
+  IDTSetGate(isr, irq##irq_n, 0x08, IDTGateType::k32bitInterruptGate, false,   \
+             0, true)
 
-  IRQ(32,0);  IRQ(33,1);  IRQ(34,2);  IRQ(35,3);  IRQ(36,4);  IRQ(37,5);
-  IRQ(38,6);  IRQ(39,7);  IRQ(40,8);  IRQ(41,9);  IRQ(42,10); IRQ(43,11);
-  IRQ(44,12); IRQ(45,13); IRQ(46,14); IRQ(47,15);
+  IRQ(32, 0);
+  IRQ(33, 1);
+  IRQ(34, 2);
+  IRQ(35, 3);
+  IRQ(36, 4);
+  IRQ(37, 5);
+  IRQ(38, 6);
+  IRQ(39, 7);
+  IRQ(40, 8);
+  IRQ(41, 9);
+  IRQ(42, 10);
+  IRQ(43, 11);
+  IRQ(44, 12);
+  IRQ(45, 13);
+  IRQ(46, 14);
+  IRQ(47, 15);
 #undef IRQ
 
   idt_flush(reinterpret_cast<uint32_t>(&g_idtr));
 }
 
-}  // namespace idt
+} // namespace idt

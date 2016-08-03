@@ -23,8 +23,8 @@
 #ifndef SRC_ARCH_I586_INCLUDE_MM_PAGE_ALLOCATOR_H_
 #define SRC_ARCH_I586_INCLUDE_MM_PAGE_ALLOCATOR_H_
 
-//#include <cstddef>
 #include <cstdint>
+
 #include "sys/addressing.h"
 
 namespace paging {
@@ -43,7 +43,7 @@ const uint32_t kPageAlignMask = 0xFFFFF000;
  * Contains information about an individual memory page.
  */
 struct Page {
-//  uint32_t flags;
+  //  uint32_t flags;
 
   /**
    * The index of the page in a page table.
@@ -73,7 +73,7 @@ struct Page {
  * Allocator used to manage free and used memory pages.
  */
 class PageAllocator {
- public:
+public:
   /**
    * Initializes the single instance of this allocator.
    * @param memory_available The amount of physical memory available to the
@@ -87,7 +87,7 @@ class PageAllocator {
    * Gets the single instance of this allocator.
    * @return The single allocator instance.
    */
-  static PageAllocator& instance() { return *instance_; }
+  static PageAllocator &instance() { return *instance_; }
 
   /**
    * Gets the number of available memory pages.
@@ -106,19 +106,19 @@ class PageAllocator {
    * @param count The number of pages to allocate.
    * @return The first allocated page.
    */
-  Page* AllocatePages(int count);
+  Page *AllocatePages(int count);
 
   /**
    * Allocate a single memory page.
    * @return The allocated page.
    */
-  inline Page* AllocatePage() { return AllocatePages(1); }
+  inline Page *AllocatePage() { return AllocatePages(1); }
 
   /**
    * Return a page back to the system and mark it available.
    * @param page The page to free.
    */
-  void FreePage(Page& page);
+  void FreePage(Page &page);
 
   /**
    * Return the page that corresponds to the specified address back to the
@@ -134,11 +134,11 @@ class PageAllocator {
    * @param address The physical address of the page to retrieve.
    * @return The memory page that corresponds to address.
    */
-  inline Page& GetPage(addressing::paddress address) const {
+  inline Page &GetPage(addressing::paddress address) const {
     return pages_[address / kPageSize];
   }
 
- private:
+private:
   /**
    * Creates a new PageAllocator instance.
    * @param memory_available The amount of physical memory available.
@@ -155,7 +155,7 @@ class PageAllocator {
   /**
    * The complete list of memory pages, both used and free.
    */
-  Page* pages_;
+  Page *pages_;
 
   /**
    * The total number of memory pages contained in pages_.
@@ -173,6 +173,6 @@ class PageAllocator {
   uint32_t last_freed_index_;
 };
 
-}  // namespace paging
+} // namespace paging
 
-#endif  // SRC_ARCH_I586_INCLUDE_MM_PAGE_ALLOCATOR_H_
+#endif // SRC_ARCH_I586_INCLUDE_MM_PAGE_ALLOCATOR_H_

@@ -22,7 +22,6 @@
  *
  */
 
-
 #ifndef SRC_INCLUDE_MM_ALLOCATOR_H_
 #define SRC_INCLUDE_MM_ALLOCATOR_H_
 
@@ -35,37 +34,36 @@ namespace alloc {
  */
 class Allocator {
 public:
-  virtual ~Allocator() { }
+  virtual ~Allocator() {}
 
   /**
    * Allocate a block of memory of a specified size.
    * @param size The size, in bytes, to allocate.
    * @param align True to align the memory region on a page boundary.
    */
-  virtual void* Allocate(size_t size, bool align = false) = 0;
+  virtual void *Allocate(size_t size, bool align = false) = 0;
 
   /**
    * Releases a previously allocated block of memory. The memory must have
    * been allocated using this same allocator.
    * @param ptr A pointer to the block to release.
    */
-  virtual void Free(void* ptr) = 0;
-
+  virtual void Free(void *ptr) = 0;
 };
 
 /**
  * Sets the active allocator that is used for new/delete operators.
  * @param allocator The allocator to make active.
  */
-void SetActiveAllocator(Allocator& allocator);
+void SetActiveAllocator(Allocator &allocator);
 
-}  // namespace alloc
+} // namespace alloc
 
 /// @cond
-inline void *operator new(size_t, void *p)     throw() { return p; }
-inline void *operator new[](size_t, void *p)   throw() { return p; }
-inline void  operator delete  (void *, void *) throw() { };
-inline void  operator delete[](void *, void *) throw() { };
+inline void *operator new(size_t, void *p) throw() { return p; }
+inline void *operator new[](size_t, void *p) throw() { return p; }
+inline void operator delete(void *, void *)throw(){};
+inline void operator delete[](void *, void *) throw(){};
 /// @endcond
 
-#endif  // SRC_INCLUDE_MM_ALLOCATOR_H_
+#endif // SRC_INCLUDE_MM_ALLOCATOR_H_

@@ -22,11 +22,11 @@
  *
  */
 
-
 #ifndef SRC_INCLUDE_MM_KHEAP_H_
 #define SRC_INCLUDE_MM_KHEAP_H_
 
 #include <cstdint>
+
 #include "mm/allocator.h"
 
 namespace alloc {
@@ -35,7 +35,7 @@ namespace alloc {
  * Allocator that manages a heap of memory.
  */
 class KHeap : public Allocator {
- public:
+public:
   /**
    * Creates a new KHeap instance.
    * @param start_address The virtual address of the start of the heap.
@@ -45,16 +45,14 @@ class KHeap : public Allocator {
    * kernel-space.
    * @param readonly Indicates whether the heap is read only.
    */
-  KHeap(void *start_address, void* end_address, void* max_address,
+  KHeap(void *start_address, void *end_address, void *max_address,
         bool supervisor, bool readonly);
 
-  virtual void* Allocate(size_t size, bool align = false);
-  virtual void  Free(void* ptr);
+  virtual void *Allocate(size_t size, bool align = false);
+  virtual void Free(void *ptr);
 
- private:
-  enum class Magic : uint32_t {
-    kValue = 0x123890AB
-  };
+private:
+  enum class Magic : uint32_t { kValue = 0x123890AB };
 
   /**
    * Header information placed at the beginning of every block of allocated
@@ -93,19 +91,19 @@ class KHeap : public Allocator {
   };
 
   class OrderedHeaderArray {
-   public:
+  public:
     explicit OrderedHeaderArray(uint32_t);
-    OrderedHeaderArray(KHeap::Header**, uint32_t);
+    OrderedHeaderArray(KHeap::Header **, uint32_t);
     ~OrderedHeaderArray();
 
-    bool Insert(const KHeap::Header* item);
-    KHeap::Header* operator[](const int index);
+    bool Insert(const KHeap::Header *item);
+    KHeap::Header *operator[](const int index);
     void Remove(int i);
 
     int size() { return size_; }
 
   private:
-    KHeap::Header** array_;
+    KHeap::Header **array_;
     int size_;
     int max_size_;
   };
@@ -122,6 +120,6 @@ class KHeap : public Allocator {
   OrderedHeaderArray index_;
 };
 
-}  // namespace alloc
+} // namespace alloc
 
-#endif  // SRC_INCLUDE_MM_KHEAP_H_
+#endif // SRC_INCLUDE_MM_KHEAP_H_

@@ -22,7 +22,6 @@
  *
  */
 
-
 #ifndef SRC_INCLUDE_SYS_KERNEL_H_
 #define SRC_INCLUDE_SYS_KERNEL_H_
 
@@ -55,4 +54,4 @@ extern void panic(const char *message, const char *file, int line);
  */
 extern void panic_assert(const char *file, int line, const char *desc);
 
-#endif  // SRC_INCLUDE_SYS_KERNEL_H_
+#endif // SRC_INCLUDE_SYS_KERNEL_H_

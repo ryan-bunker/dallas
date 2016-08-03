@@ -55,7 +55,7 @@ struct GDTEntry {
   /**
    * The next 8-bits of base.
    */
-  uint8_t base_middle;  // The next 8 bits of the base.
+  uint8_t base_middle; // The next 8 bits of the base.
 
   /**
    * The CPU sets this field to true when the segment is accessed.
@@ -164,9 +164,9 @@ GDTEntry g_gdt_entries[5];
 GDTRegister g_gdtr;
 
 static void GDTSetGate(int num, uint32_t base, uint32_t limit,
-                         bool read_write_access, bool direction_conforming,
-                         bool is_executable, uint8_t privilege, uint8_t size,
-                         uint8_t granularity) {
+                       bool read_write_access, bool direction_conforming,
+                       bool is_executable, uint8_t privilege, uint8_t size,
+                       uint8_t granularity) {
   g_gdt_entries[num].base_low = (base & 0xFFFF);
   g_gdt_entries[num].base_middle = (base >> 16) & 0xFF;
   g_gdt_entries[num].base_high = (base >> 24) & 0xFF;
@@ -190,14 +190,12 @@ void Initialize() {
   g_gdtr.limit = sizeof(GDTEntry) * 5 - 1;
   g_gdtr.base = addressing::VirtualToPhysical(&g_gdt_entries);
 
-  GDTSetGate(0, 0, 0, false, false, false, 0, 0, 0);          // Null segment
-  GDTSetGate(1, 0, 0xFFFFFFFF, true, false, true, 0, 1, 1);   // Code segment
-  GDTSetGate(2, 0, 0xFFFFFFFF, true, false, false, 0, 1, 1);  // Data segment
-  GDTSetGate(3, 0, 0xFFFFFFFF, true, false, true, 3, 1, 1);   // User mode code
-  GDTSetGate(4, 0, 0xFFFFFFFF, true, false, false, 3, 1, 1);  // User mode data
+  GDTSetGate(0, 0, 0, false, false, false, 0, 0, 0);         // Null segment
+  GDTSetGate(1, 0, 0xFFFFFFFF, true, false, true, 0, 1, 1);  // Code segment
+  GDTSetGate(2, 0, 0xFFFFFFFF, true, false, false, 0, 1, 1); // Data segment
+  GDTSetGate(3, 0, 0xFFFFFFFF, true, false, true, 3, 1, 1);  // User mode code
+  GDTSetGate(4, 0, 0xFFFFFFFF, true, false, false, 3, 1, 1); // User mode data
 
   gdt_flush(reinterpret_cast<uint32_t>(&g_gdtr));
 }
-
 }
-

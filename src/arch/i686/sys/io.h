@@ -22,7 +22,6 @@
  *
  */
 
-
 #ifndef SRC_ARCH_I586_INCLUDE_SYS_IO_H_
 #define SRC_ARCH_I586_INCLUDE_SYS_IO_H_
 
@@ -34,7 +33,7 @@
  * @param value The byte to send.
  */
 inline void outb(uint16_t port, uint8_t value) {
-  asm volatile ("outb %1, %0" : : "dN" (port), "a" (value));
+  asm volatile("outb %1, %0" : : "dN"(port), "a"(value));
 }
 
 /**
@@ -43,9 +42,9 @@ inline void outb(uint16_t port, uint8_t value) {
  * @return The byte that was read from the port.
  */
 inline uint8_t inb(uint16_t port) {
-   uint8_t ret;
-   asm volatile("inb %1, %0" : "=a" (ret) : "dN" (port));
-   return ret;
+  uint8_t ret;
+  asm volatile("inb %1, %0" : "=a"(ret) : "dN"(port));
+  return ret;
 }
 
 /**
@@ -54,30 +53,24 @@ inline uint8_t inb(uint16_t port) {
  * @return The word that was read from the port.
  */
 inline uint16_t inw(uint16_t port) {
-   uint16_t ret;
-   asm volatile ("inw %1, %0" : "=a" (ret) : "dN" (port));
-   return ret;
+  uint16_t ret;
+  asm volatile("inw %1, %0" : "=a"(ret) : "dN"(port));
+  return ret;
 }
 
 /**
  * Wait for the IO port to be ready.
  */
-inline void io_wait() {
-  asm volatile ("outb %%al, $0x80" : : "a" (0));
-}
+inline void io_wait() { asm volatile("outb %%al, $0x80" : : "a"(0)); }
 
 /**
  * Enables interrupts.
  */
-inline void enable_interrupts() {
-  asm volatile ("sti");
-}
+inline void enable_interrupts() { asm volatile("sti"); }
 
 /**
  * Disables interrupts.
  */
-inline void disable_interrupts() {
-  asm volatile ("cli");
-}
+inline void disable_interrupts() { asm volatile("cli"); }
 
-#endif  // SRC_ARCH_I586_INCLUDE_SYS_IO_H_
+#endif // SRC_ARCH_I586_INCLUDE_SYS_IO_H_

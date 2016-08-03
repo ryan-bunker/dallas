@@ -34,7 +34,7 @@ KernelSpaceAllocator::KernelSpaceAllocator(uint32_t place_address)
   current_address_ = place_address;
 }
 
-void* KernelSpaceAllocator::Allocate(size_t size, bool align) {
+void *KernelSpaceAllocator::Allocate(size_t size, bool align) {
   // if the address is not already page-aligned and we're supposed to align it
   if (align && (current_address_ & 0xFFFFF000)) {
     // Align it
@@ -44,11 +44,12 @@ void* KernelSpaceAllocator::Allocate(size_t size, bool align) {
 
   uint32_t tmp = current_address_;
   current_address_ += size;
-  return (void*)tmp;
+  return (void *)tmp;
 }
 
-void KernelSpaceAllocator::Free(void*) {
-  // TODO: force some sort of error here since kernel space allocated memory can't be freed
+void KernelSpaceAllocator::Free(void *) {
+  // TODO: force some sort of error here since kernel space allocated memory
+  // can't be freed
 }
 
-}  // namespace alloc
+} // namespace alloc

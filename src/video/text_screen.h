@@ -22,7 +22,6 @@
  *
  */
 
-
 #ifndef SRC_INCLUDE_VIDEO_TEXT_SCREEN_H_
 #define SRC_INCLUDE_VIDEO_TEXT_SCREEN_H_
 
@@ -34,23 +33,23 @@ namespace screen {
  * Represents a foreground or background color of characters on the screen.
  */
 enum class Color : uint8_t {
-  kDefault = static_cast<uint8_t>(-1),//!< kDefault
-  kBlack = 0,                         //!< kBlack
-  kBlue,                              //!< kBlue
-  kGreen,                             //!< kGreen
-  kCyan,                              //!< kCyan
-  kRed,                               //!< kRed
-  kMagenta,                           //!< kMagenta
-  kBrown,                             //!< kBrown
-  kLightGray,                         //!< kLightGray
-  kDarkGray,                          //!< kDarkGray
-  kLightBlue,                         //!< kLightBlue
-  kLightGreen,                        //!< kLightGreen
-  kLightCyan,                         //!< kLightCyan
-  kLightRed,                          //!< kLightRed
-  kLightMagenta,                      //!< kLightMagenta
-  kYellow,                            //!< kYellow
-  kWhite                              //!< kWhite
+  kDefault = static_cast<uint8_t>(-1), //!< kDefault
+  kBlack = 0,                          //!< kBlack
+  kBlue,                               //!< kBlue
+  kGreen,                              //!< kGreen
+  kCyan,                               //!< kCyan
+  kRed,                                //!< kRed
+  kMagenta,                            //!< kMagenta
+  kBrown,                              //!< kBrown
+  kLightGray,                          //!< kLightGray
+  kDarkGray,                           //!< kDarkGray
+  kLightBlue,                          //!< kLightBlue
+  kLightGreen,                         //!< kLightGreen
+  kLightCyan,                          //!< kLightCyan
+  kLightRed,                           //!< kLightRed
+  kLightMagenta,                       //!< kLightMagenta
+  kYellow,                             //!< kYellow
+  kWhite                               //!< kWhite
 };
 
 /**
@@ -172,6 +171,6 @@ void WriteDec(uint32_t n, Color fore_color, Color back_color = Color::kDefault);
  */
 void WriteDec(uint32_t n);
 
-}  // namespace screen
+} // namespace screen
 
-#endif  // SRC_INCLUDE_VIDEO_TEXT_SCREEN_H_
+#endif // SRC_INCLUDE_VIDEO_TEXT_SCREEN_H_

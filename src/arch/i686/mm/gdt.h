@@ -22,7 +22,6 @@
  *
  */
 
-
 #ifndef SRC_ARCH_I586_INCLUDE_MM_GDT_H_
 #define SRC_ARCH_I586_INCLUDE_MM_GDT_H_
 
@@ -33,6 +32,6 @@ namespace gdt {
  */
 void Initialize();
 
-}  // namespace gdt
+} // namespace gdt
 
-#endif  // SRC_ARCH_I586_INCLUDE_MM_GDT_H_
+#endif // SRC_ARCH_I586_INCLUDE_MM_GDT_H_

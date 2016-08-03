@@ -23,18 +23,18 @@
  */
 
 #include "int/isr.h"
+
 #include "sys/io.h"
 #include "sys/kernel.h"
 
 namespace isr {
 
-InterruptHandler* InterruptHandler::interrupt_handlers_[256];
+InterruptHandler *InterruptHandler::interrupt_handlers_[256];
 
 InterruptHandler::InterruptHandler(Interrupts interrupt_number,
                                    bool register_immediately)
-  : interrupt_number_(interrupt_number),
-    is_registered_(false),
-    next_(nullptr) {
+    : interrupt_number_(interrupt_number), is_registered_(false),
+      next_(nullptr) {
   if (register_immediately)
     RegisterHandler();
 }
@@ -45,7 +45,7 @@ InterruptHandler::~InterruptHandler() {
 }
 
 void InterruptHandler::RegisterHandler() {
-  InterruptHandler* handler =
+  InterruptHandler *handler =
       interrupt_handlers_[static_cast<int>(interrupt_number_)];
   next_ = handler;
   interrupt_handlers_[static_cast<int>(interrupt_number_)] = this;
@@ -54,7 +54,7 @@ void InterruptHandler::RegisterHandler() {
 
 void InterruptHandler::UnregisterHandler() {
   is_registered_ = false;
-  InterruptHandler* handler =
+  InterruptHandler *handler =
       interrupt_handlers_[static_cast<int>(interrupt_number_)];
   if (handler == this) {
     // we are at the head of the list, so make our next_ the head
@@ -62,7 +62,7 @@ void InterruptHandler::UnregisterHandler() {
     return;
   }
 
-  for (InterruptHandler* h = handler; h; h = h->next_) {
+  for (InterruptHandler *h = handler; h; h = h->next_) {
     if (h->next_ != this)
       continue;
 
@@ -85,10 +85,10 @@ void InterruptHandler::EndOfInterrupt(Registers regs) {
 }
 
 bool InterruptHandler::FindAndHandle(Registers regs) {
-  InterruptHandler* handler =
+  InterruptHandler *handler =
       InterruptHandler::interrupt_handlers_[regs.int_num];
   if (!handler)
-    return false;   // no handler was registered
+    return false; // no handler was registered
 
   // run through the handler chain, executing each one in turn
   for (; handler; handler = handler->next_)
@@ -124,7 +124,7 @@ void GlobalIRQHandler_CPP(Registers regs) {
     InterruptHandler::EndOfInterrupt(regs);
 }
 
-}  // namespace isr
+} // namespace isr
 
 /**
  * Called from an assembly defined ISR stub in order to handle individual

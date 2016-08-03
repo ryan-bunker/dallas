@@ -24,7 +24,6 @@
  *
  */
 
-
 #ifndef SRC_ARCH_I586_INCLUDE_INT_IDT_H_
 #define SRC_ARCH_I586_INCLUDE_INT_IDT_H_
 
@@ -35,6 +34,6 @@ namespace idt {
  */
 void Initialize();
 
-}  // namespace idt
+} // namespace idt
 
-#endif  // SRC_ARCH_I586_INCLUDE_INT_IDT_H_
+#endif // SRC_ARCH_I586_INCLUDE_INT_IDT_H_
