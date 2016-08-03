@@ -17,5 +17,6 @@ build/
 html/
 iso/boot/kernel.elf
 
-# SCons cache data
-.sconsign*
+# tup directory
+.tup
+

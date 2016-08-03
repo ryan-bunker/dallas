@@ -1,0 +1,4 @@
+include_rules
+
+: foreach *.s |> !as |> %B.o $(TOP)/<kernel>
+: foreach *.cc |> !cxx |> %B.o $(TOP)/<kernel>

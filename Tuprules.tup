@@ -1,0 +1,16 @@
+TOP = $(TUP_CWD)
+
+AS = @(ARCH)-elf-as
+CXX = @(ARCH)-elf-g++
+LINK = @(ARCH)-elf-ld
+
+ASFLAGS += -gstabs 
+
+CXXFLAGS += -Wall -Wextra -Werror -fno-exceptions -ffreestanding -std=c++11 -fno-rtti -fno-stack-protector
+CXXFLAGS += -I$(TUP_CWD)/src
+CXXFLAGS += -I$(TUP_CWD)/src/arch/@(ARCH)
+
+LINKFLAGS += -lc -L/Users/rbunker/opt/cross/@(ARCH)-elf/lib
+
+!cxx = |> $(CXX) $(CXXFLAGS) -c %f -o %o |> %B.o
+!as = |> $(AS) -gstabs %f -o %o |> %B.o

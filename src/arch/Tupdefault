@@ -1,0 +1,6 @@
+include_rules
+
+ifeq (@(ARCH),$(LOCAL_ARCH))
+    : foreach *.s |> !as |> %B.o $(TOP)/<arch>
+    : foreach *.cc |> !cxx |> %B.o $(TOP)/<arch>
+endif

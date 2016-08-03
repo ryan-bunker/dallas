@@ -1,0 +1,2 @@
+TOP = $(TUP_CWD)
+LOCAL_ARCH = i686
