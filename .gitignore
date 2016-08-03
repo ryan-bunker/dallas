@@ -20,3 +20,5 @@ iso/boot/kernel.elf
 # tup directory
 .tup
 
+# C/C++ extension files for VSCode
+.browse.VC.db*
