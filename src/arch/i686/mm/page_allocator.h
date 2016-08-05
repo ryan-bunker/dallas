@@ -23,6 +23,7 @@
 #ifndef SRC_ARCH_I586_INCLUDE_MM_PAGE_ALLOCATOR_H_
 #define SRC_ARCH_I586_INCLUDE_MM_PAGE_ALLOCATOR_H_
 
+#include <cstddef>
 #include <cstdint>
 
 #include "sys/addressing.h"

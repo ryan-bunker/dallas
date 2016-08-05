@@ -2,7 +2,7 @@
     "configurations": [
         {
             "name": "Mac",
-            "includePath": ["/Users/rbunker/cross/i686-elf/include", "/Users/rbunker/cross/i686-elf/include/c++/4.9.2"]
+            "includePath": ["/Users/rbunker/cross/i686-elf/include", "/Users/rbunker/cross/i686-elf/include/c++/6.1.0"]
         },
         {
             "name": "Linux",

@@ -6,7 +6,9 @@ LINK = @(ARCH)-elf-ld
 
 ASFLAGS += -gstabs 
 
-CXXFLAGS += -Wall -Wextra -Werror -fno-exceptions -ffreestanding -std=c++11 -fno-rtti -fno-stack-protector
+CXXFLAGS += -fno-exceptions -ffreestanding -std=c++11 -fno-rtti -fno-stack-protector -fno-diagnostics-show-caret -ggdb
+CXXFLAGS += -I/Users/rbunker/opt/cross/@(ARCH)-elf/include
+CXXFLAGS += -I/Users/rbunker/opt/cross/@(ARCH)-elf/include/c++/6.1.0
 CXXFLAGS += -I$(TUP_CWD)/src
 CXXFLAGS += -I$(TUP_CWD)/src/arch/@(ARCH)
 
