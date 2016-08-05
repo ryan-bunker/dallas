@@ -1,0 +1,30 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "0.1.0",
+    "osx": {
+        "command": "sh",
+        "args": [
+            "-c"
+        ]
+    },
+    "tasks": [
+        {
+            "taskName": "Build Kernel",
+            "suppressTaskName": true,
+            "isBuildCommand": true,
+            "args": [
+                "tup"
+            ],
+            "showOutput": "always"
+        },
+        {
+            "taskName": "QEMU",
+            "suppressTaskName": true,
+            "args": [
+                "qemu-system-i386 -kernel build/kernel.elf"
+            ],
+            "showOutput": "always"
+        }
+    ]
+}
