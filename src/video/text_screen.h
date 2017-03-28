@@ -155,6 +155,8 @@ void WriteHex(uint32_t n, Color fore_color, Color back_color = Color::kDefault);
  */
 void WriteHex(uint32_t n);
 
+void WriteHexUnpadded(uint32_t n);
+
 /**
  * Writes a 32-bit integer to the screen in decimal format in the specified
  * color.
@@ -170,6 +172,8 @@ void WriteDec(uint32_t n, Color fore_color, Color back_color = Color::kDefault);
  * @param groupDigits Whether to separate the digits into groups of three.
  */
 void WriteDec(uint32_t n);
+
+void Writef(const char *fmt, ...);
 
 } // namespace screen
 

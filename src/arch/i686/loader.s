@@ -10,43 +10,78 @@
 .extern start_dtors
 .extern end_dtors
 
-# Declare constants used for creating a multiboot header.
-.set ALIGN,     1<<0              # align loaded modules on page boundaries
-.set MEMINFO,   1<<1              # provide memory map
-.set FLAGS,     ALIGN | MEMINFO   # this is the Multiboot 'flag' field
-.set MAGIC,     0x1BADB002        # 'magic number' lets bootloader find the header
-.set CHECKSUM,  -(MAGIC + FLAGS)  # checksum of above, to prove we are multiboot
+# # Declare constants used for creating a multiboot header.
+# .set ALIGN,     1<<0              # align loaded modules on page boundaries
+# .set MEMINFO,   1<<1              # provide memory map
+# .set FLAGS,     ALIGN | MEMINFO   # this is the Multiboot 'flag' field
+# .set MAGIC,     0xE85250D6        # 'magic number' lets bootloader find the header
+# .set CHECKSUM,  -(MAGIC + FLAGS)  # checksum of above, to prove we are multiboot
 
-# Declare a header as in the Multiboot Standard. We put this into a special
-# section so we can force the header to be in the start of the final program.
-# You don't need to understand all these details as it is just magic values that
-# is documented in the multiboot standard. The bootloader will search for this
-# magic sequence and recognize us as a multiboot kernel.
+# # Declare a header as in the Multiboot Standard. We put this into a special
+# # section so we can force the header to be in the start of the final program.
+# # You don't need to understand all these details as it is just magic values that
+# # is documented in the multiboot standard. The bootloader will search for this
+# # magic sequence and recognize us as a multiboot kernel.
+# .section .multiboot
+# .align 4
+# .long MAGIC
+# .long FLAGS
+# .long CHECKSUM
 .section .multiboot
-.align 4
-.long MAGIC
-.long FLAGS
-.long CHECKSUM
+.align 8
+header_start:
+.int 0xe85250d6
+.int 0
+.int header_end - header_start
+.int -(0xe85250d6 + 0 + (header_end - header_start))
+
+# .short 1
+# .short 0
+# .int 12    # size
+# .int 9
+
+.short 0, 0
+.int 8
+header_end:
+
+# Tells the assembler to include this data in the '.init' section
+.section .init
 
 # The linker script specifies _start as the entry point to the kernel and the
 # bootloader will jump to this position once the kernel has been loaded. It
 # doesn't make sense to return from this function as the bootloader is gone.
-.section .init
 start:
-  # First things first, we need to load the trick GDT so addressing everything
-  # works correctly. Load a GDT with a base address of 0x40000000 for the
-  # code (0x08) and data (0x10) segments.
-  lgdt trickgdt
-  movw $0x10, %cx
-  movw %cx, %ds
-  movw %cx, %es
-  movw %cx, %fs
-  movw %cx, %gs
-  movw %cx, %ss
+  # The bootloader puts information into EAX and EBX that we don't want to lose,
+  # but the stack isn't ready for us to push things so we'll use ECX for the
+  # following instructions.
 
-  # Now we perform a jump into the higher half kernel to switch into the just
-  # loaded GDT registers.
-  jmp $0x08, $higherhalf
+  # Recursive map the page directory (that means point the last entry
+  #   in the page directory at itself)
+  movl    $(entrypgdir - 0xC0000000), %ecx  # get the physical address of the page directory
+  orl     $0x3, %ecx                        # mark the entry present | writable
+  movl    %ecx, (entrypgdir - 0xBFFFF004)   # write the entry back into the page table
+
+  # Turn on page size extension for 4Mbyte pages
+  movl    %cr4, %ecx
+  orl     $0x10, %ecx
+  movl    %ecx, %cr4
+  # Set page directory
+  movl    $(entrypgdir - 0xC0000000), %ecx
+  movl    %ecx, %cr3
+  # Turn on paging.
+  movl    %cr0, %ecx
+  orl     $0x80010000, %ecx
+  movl    %ecx, %cr0
+
+  # Test value
+  movl    $0xdeadbeef, (0x1234)
+
+  # Jump to main(), and switch to executing at
+  # high addresses. The indirect call is needed because
+  # the assembler produces a PC-relative instruction
+  # for a direct jump.
+  mov $higherhalf, %ecx
+  jmp *%ecx
 
 .section .text
 higherhalf:
@@ -65,6 +100,8 @@ higherhalf:
   # The bootloader put the multiboot magic number in EAX and the address of the
   # multiboot information structure in EBX, so we need to pass those to kmain.
   push %eax
+  addl $0xC0000000,%ebx   # convert the physical address to virtual before passing
+                          # it to the kernel
   push %ebx
 
   # Before we go to the main entry point, we need to call all of our C++
@@ -136,21 +173,23 @@ idt_flush:
   lidt (%eax)
   ret
 
-# Tells the assembler to include this data in the '.init' section
-.section .init
-trickgdt:
-  # Size of the GDT
-  .word gdt_end - gdt
-  # Linear address of GDT
-  .long gdt
+.section .pgdir
+.align 4096
+entrypgdir:
+  # 1024 entries at 32 bits/entry
+  #  3         2         1
+  # 10987654321098765432109876543210
+  # |Page table address|AV|GS0ADWURP
+  .int 0x83   # entry 0x000 (4K size, read/write, present)
+  .fill 767, 4          # 767 entries (767 * 4)
+  # 0xC0000 000
+  # 1100000000 0000000000 000000000000
+  # 0x300      0x0        0x0
+  .int 0x83   # entry 0x300 (4K size, read/write, present)
+  .fill 255, 4          # 255 entries (255 * 4)
 
-gdt:
-  .long 0, 0
-  # Code selector 0x08: base 0x40000000, limit 0xFFFFFFFF, type 0x9A, granularity 0xCF
-  .byte 0xFF, 0xFF, 0, 0, 0, 0x9A, 0xCF, 0x40
-  # Data selector 0x10: base 0x40000000, limit 0xFFFFFFFF, type 0x92, granularity 0xCF
-  .byte 0xFF, 0xFF, 0, 0, 0, 0x92, 0xCF, 0x40
-gdt_end:
+# cga: 0xB8000
+#  
 
 # Currently the stack pointer register (esp) points at anything and using it may
 # cause massive harm. Instead, we'll provide our own stack. We will allocate
@@ -159,3 +198,4 @@ gdt_end:
 .section .bss
 .skip 0x4000
 sys_stack:
+

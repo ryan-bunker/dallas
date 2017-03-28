@@ -24,107 +24,258 @@
  * by the boot loader.
  */
 
+#include <cstddef>
 #include <cstdint>
 
-#include "boot/multiboot.h"
-#include "int/idt.h"
-#include "mm/gdt.h"
-#include "mm/kheap.h"
-#include "mm/page_allocator.h"
+#include "boot/multiboot2.h"
+#include "mm/frame_allocator.h"
 #include "mm/paging.h"
 #include "sys/addressing.h"
-#include "sys/io.h"
+#include "sys/maybe.h"
 #include "video/text_screen.h"
+
+extern const uint32_t __kernel_start, __kernel_data, __kernel_end;
 
 namespace {
 
-unsigned char heap_memory[sizeof(alloc::KHeap)];
-alloc::KHeap *kernel_heap = nullptr;
+// unsigned char heap_memory[sizeof(alloc::KHeap)];
+// alloc::KHeap *kernel_heap = nullptr;
 
-void InitializeKernelHeap() {
-  // set up the heap boundaries (1MiB initial, 2MiB max)
-  // 0xC0400000  <-- 1MiB -->  0xC0500000  <-- 1MiB -->  0xC0600000
-  uint32_t heap_start = static_cast<uint32_t>(0xC0400000);
-  if (heap_start % paging::kPageSize)
-    heap_start += paging::kPageSize - (heap_start % paging::kPageSize);
-  uint32_t heap_end = heap_start + 0x100000;
-  uint32_t max_heap = heap_end + 0x100000;
+// void InitializeKernelHeap() {
+//   // set up the heap boundaries (1MiB initial, 2MiB max)
+//   // 0xC0400000  <-- 1MiB -->  0xC0500000  <-- 1MiB -->  0xC0600000
+//   uint32_t heap_start = static_cast<uint32_t>(0xC0400000);
+//   if (heap_start % paging::kPageSize)
+//     heap_start += paging::kPageSize - (heap_start % paging::kPageSize);
+//   uint32_t heap_end = heap_start + 0x100000;
+//   uint32_t max_heap = heap_end + 0x100000;
 
-  // now map in the necessary pages for the heap
-  paging::Page *page = paging::PageAllocator::instance().AllocatePages(
-      (heap_end - heap_start) / paging::kPageSize);
-  for (uint32_t addr = heap_start; addr < heap_end; addr += paging::kPageSize)
-    paging::PageDirectory::kernel_directory().MapPage(
-        page++, reinterpret_cast<void *>(addr));
+//   // now map in the necessary pages for the heap
+//   paging::Page *page = paging::PageAllocator::instance().AllocatePages(
+//       (heap_end - heap_start) / paging::kPageSize);
+//   for (uint32_t addr = heap_start; addr < heap_end; addr +=
+//   paging::kPageSize)
+//     paging::PageDirectory::kernel_directory().MapPage(
+//         page++, reinterpret_cast<void *>(addr));
 
-  // create the heap instance and tell it the memory to manage
-  kernel_heap = new (static_cast<void *>(heap_memory)) alloc::KHeap(
-      reinterpret_cast<void *>(heap_start), reinterpret_cast<void *>(heap_end),
-      reinterpret_cast<void *>(max_heap), false, false);
+//   // create the heap instance and tell it the memory to manage
+//   kernel_heap = new (static_cast<void *>(heap_memory)) alloc::KHeap(
+//       reinterpret_cast<void *>(heap_start), reinterpret_cast<void
+//       *>(heap_end),
+//       reinterpret_cast<void *>(max_heap), false, false);
 
-  // make the heap our active allocator
-  alloc::SetActiveAllocator(*kernel_heap);
-}
+//   // make the heap our active allocator
+//   alloc::SetActiveAllocator(*kernel_heap);
+// }
 
 /**
  * Main entry point into kernel from loader assembly.
  * @param mbd The multiboot information structure.
  * @param magic Must match kBootloaderMagic to verify that mbd is valid.
  */
-extern "C" void kmain(multiboot::Info *mbd, uint32_t magic) {
-  if (magic != multiboot::kBootloaderMagic) {
+extern "C" void kmain(multiboot2::Info *mbd, uint32_t magic) {
+  screen::Clear();
+  screen::Writef("Dallas\n");
+  screen::Writef("mbd: 0x%p\n", mbd);
+
+  if (magic != multiboot2::kBootloaderMagic) {
     // Something went not according to specs. Print an error
     // message and halt, but do *not* rely on the multiboot
     // data structure.
+    screen::Write("BAD MULTIBOOT!!!", screen::Color::kWhite, screen::Color::kRed);
     return;
   }
 
-  // mbd is currently pointing to physical memory so we need
-  // to adjust it for our current GDT offsets
-  mbd = (multiboot::Info *)addressing::PhysicalToVirtual(
-      reinterpret_cast<addressing::paddress>(mbd));
+  screen::Write("GOOD MULTIBOOT\n\n", screen::Color::kGreen, screen::Color::kBlack);
 
-  // first step is to initialize paging
-  paging::Initialize(mbd->mmap_length,
-                     addressing::PhysicalToVirtual(mbd->mmap_addr));
-  // then we can restore the GDT back to normal and initialize interrupts
-  gdt::Initialize();
-  idt::Initialize();
+  // auto mem_tag = mbd->basic_memory();
+  // if (mem_tag == nullptr)
+  //   screen::WriteLine("-- no basic memory info --");
+  // else
+  //   screen::Writef("mem_lower=%d  mem_upper=%d\n", mem_tag->mem_lower, mem_tag->mem_upper);
+  
+  // auto boot_tag = mbd->bios_bootdevice();
+  // if (boot_tag == nullptr)
+  //   screen::WriteLine("-- no bios bootdevice --");
+  // else
+  //   screen::Writef("biosdev=%d  partition=%d  sub_partition=%d\n", boot_tag->biosdev, boot_tag->partition, boot_tag->sub_partition);
+  
+  // uint32_t kernel_start = 0xFFFFFFFF, kernel_end = 0;
+  // auto elf_tag = mbd->elf_symbols();
+  // if (elf_tag == nullptr)
+  //   screen::WriteLine("-- no elf symbols --");
+  // else {
+  //   screen::Writef("size=%d  num=%d  entsize=%d  shndx=%d\n",
+  //     elf_tag->size, elf_tag->num, elf_tag->entsize, elf_tag->shndx);
+  //   for (int i=1; i<elf_tag->num; i++) {
+  //     screen::Writef("    [%d] %s @ 0x%x, size: 0x%x, flags: 0x%x\n",
+  //       i, elf_tag->section_name(i),
+  //       elf_tag->sections[i].sh_addr, elf_tag->sections[i].sh_size, elf_tag->sections[i].sh_flags);
 
-  // allocate this before we set up the heap
-  int *a = new int;
+  //     if (elf_tag->sections[i].sh_addr < kernel_start)
+  //       kernel_start = elf_tag->sections[i].sh_addr;
+  //     if (elf_tag->sections[i].sh_addr + elf_tag->sections[i].sh_size > kernel_end)
+  //       kernel_end = elf_tag->sections[i].sh_addr + elf_tag->sections[i].sh_size;
+  //   }
 
-  // get the Heap ready
-  InitializeKernelHeap();
+  //   kernel_start = static_cast<uint32_t>(addressing::vaddress(kernel_start).ToPhysical());
+  //   kernel_end = static_cast<uint32_t>(addressing::vaddress(kernel_end).ToPhysical());
 
-  // now that everything is set up we can enable interrupts again
-  enable_interrupts();
+  //   screen::Writef("__kernel_start: 0x%x, __kernel_end: 0x%x\n", &__kernel_start, &__kernel_end);
+  // }
 
-  screen::Clear();
-  screen::WriteLine("Dallas");
+  addressing::vaddress kernel_start(&__kernel_start);
+  addressing::vaddress kernel_end(&__kernel_end);
+  screen::Writef("kernel_start   : 0x%x, kernel_end   : 0x%x\n", kernel_start, kernel_end);
 
-  int *b = new int;
+  auto multiboot_start = static_cast<addressing::vaddress>(mbd);
+  auto multiboot_end = multiboot_start + static_cast<size_t>(mbd->total_size);
+  screen::Writef("multiboot_start: 0x%x, multiboot_end: 0x%x\n", multiboot_start, multiboot_end);
 
-  *a = 1;
-  *b = 2;
+  paging::AreaFrameAllocator allocator(
+    kernel_start.ToPhysical(),
+    kernel_end.ToPhysical(),
+    multiboot_start.ToPhysical(),
+    multiboot_end.ToPhysical());
 
-  screen::Write("0x");
-  screen::WriteHex(reinterpret_cast<uint32_t>(a));
-  screen::Write(" = ");
-  screen::WriteDec(*a);
-  screen::WriteLine(" (allocated from kernel space)");
+  auto mem_map = mbd->memory_map();
+  if (mem_map == nullptr)
+    screen::WriteLine("-- no memory map --");
+  else {
+    //screen::Writef("entry_size=%d  entry_version=%d  %d entries\n", mem_map->entry_size, mem_map->entry_version, mem_map->entries());
+    screen::WriteLine("memory areas:");
+    for (int i=0; i<mem_map->entries(); i++) {
+      auto memEntry = mem_map->entry(i);
+      if (memEntry->type != 1)
+        continue;
+      screen::Writef("    start: 0x%x, length: 0x%x\n", memEntry->base_addr_lo, memEntry->length_lo);
+      allocator.RegisterMemoryArea(static_cast<addressing::paddress>(memEntry->base_addr_lo), memEntry->length_lo);
+    }
+  }
 
-  screen::Write("0x");
-  screen::WriteHex(reinterpret_cast<uint32_t>(b));
-  screen::Write(" = ");
-  screen::WriteDec(*b);
-  screen::WriteLine(" (allocated from the heap)");
+  // for (int i=0; i<2 /*161*/; i++) {
+  //   auto frame = allocator.Allocate();
+  //   maybe_if(frame, [](paging::Frame f) {
+  //     screen::Writef("Allocated frame #%d (starts at 0x%x)\n", f.index(), f.start_address());
+  //   }).otherwise([]() {
+  //     screen::WriteLine("No more frames available!");
+  //   });
+  // }
 
-  screen::WriteLine("Now we're going to page fault at 0x500000...");
+  for (int i=0; ; ++i) {
+    if (!allocator.Allocate()) {
+      screen::Writef("Allocated %d frames\n", i);
+      break;
+    }
+  }
 
-  // this memory is not in the first 4MB or in the kernel's 4MB
-  *reinterpret_cast<int *>(0x500000) = 1234;
+  auto xx = [](uint32_t vaddr) {
+    auto t = paging::translate(vaddr);
+    maybe_if(t, [vaddr](paddress addr) {
+      screen::Writef("v 0x%x == p 0x%x\n", vaddr, addr);
+    }).otherwise([vaddr]() {
+      screen::Writef("v 0x%x == None\n", vaddr);
+    });
+  };
 
+  xx(0);
+  xx(0x1234);
+  xx(0xC0001234);
+  xx(0x400000);
+
+  for (;;)
+    continue;
+
+/*
+  // mbd->mmap_length
+  screen::Writef("Memory map (%d bytes @ 0x%x)\n", mbd->mmap_length,
+                 mbd->mmap_addr);
+  for (uint32_t addr = 0; addr < mbd->mmap_length;) {
+    auto memEntry =
+        reinterpret_cast<multiboot::MemoryMapEntry *>(mbd->mmap_addr + addr);
+
+    screen::Writef("  [%d @ %x]  0x%x %d bytes (type %d)", memEntry->size,
+                   mbd->mmap_addr + addr, uint32_t(memEntry->address),
+                   uint32_t(memEntry->length), uint32_t(memEntry->type));
+
+    if (memEntry->type == multiboot::MemoryMapType::kMemoryAvailable) {
+      screen::Write("  registered");
+      paging::FrameAllocator::I().RegisterMemoryArea(
+          paddress(memEntry->address), size_t(memEntry->length));
+    }
+
+    screen::WriteLine("");
+
+    addr += memEntry->size + 4;
+  }
+
+  screen::Writef("ELF sections (%d entries, %d bytes @ 0x%x)\n", mbd->u.elf_section.num, mbd->u.elf_section.size, mbd->u.elf_section.address);
+
+  screen::Writef("multiboot - start: 0x%p  data: 0x%p  end: 0x%p\n",
+                 &__kernel_start, &__kernel_data, &__kernel_end);
+
+  for (;;)
+    continue;
+*/
+  // Free the 4K frames that exist within the first 4M that we already
+  // mapped, but that aren't being used by kernel code. This is important
+  // because we need some basic memory in order to setup the kernel page
+  // directory next.
+  // addressing::paddress end_of_kernel =
+  // addressing::VirtualToPhysical(const_cast<uint32_t *>(&__kernel_end));
+  // addressing::vaddress vStart(reinterpret_cast<uint32_t>(&__kernel_end));
+  // addressing::vaddress vEnd = addressing::paddress(4 * 1024 *
+  // 1024).ToVirtual();
+  // paging::FreeFrameRange(vStart, vEnd);
+
+  // paging::InitKernelDirectory();
+
+  // Now we want to setup the kernel's page table. This is the page table
+  // that will be used by things that exist solely in the kernel, such
+  // as the process scheduler.
+  // paging::PageDirectory::kernel_directory().Activate();
+
+  /*
+    // first step is to initialize paging
+    paging::Initialize(mbd->mmap_length,
+                       addressing::PhysicalToVirtual(mbd->mmap_addr));
+    // then we can restore the GDT back to normal and initialize interrupts
+    gdt::Initialize();
+    idt::Initialize();
+
+    // allocate this before we set up the heap
+    int *a = new int;
+
+    // get the Heap ready
+    InitializeKernelHeap();
+
+    // now that everything is set up we can enable interrupts again
+    enable_interrupts();
+  */
+
+  /*
+    int *b = new int;
+
+    *a = 1;
+    *b = 2;
+
+    screen::Write("0x");
+    screen::WriteHex(reinterpret_cast<uint32_t>(a));
+    screen::Write(" = ");
+    screen::WriteDec(*a);
+    screen::WriteLine(" (allocated from kernel space)");
+
+    screen::Write("0x");
+    screen::WriteHex(reinterpret_cast<uint32_t>(b));
+    screen::Write(" = ");
+    screen::WriteDec(*b);
+    screen::WriteLine(" (allocated from the heap)");
+
+    screen::WriteLine("Now we're going to page fault at 0x500000...");
+
+    // this memory is not in the first 4MB or in the kernel's 4MB
+    *reinterpret_cast<int *>(0x500000) = 1234;
+  */
   for (;;)
     continue;
 }

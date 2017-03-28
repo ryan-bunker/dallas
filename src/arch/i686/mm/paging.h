@@ -27,253 +27,322 @@
 #ifndef SRC_ARCH_I586_INCLUDE_MM_PAGING_H_
 #define SRC_ARCH_I586_INCLUDE_MM_PAGING_H_
 
+#include <cstddef>
 #include <cstdint>
+#include <experimental/optional>
 
+#include "mm/frame_allocator.h"
 #include "sys/addressing.h"
+
+using namespace addressing;
+using namespace std::experimental;
 
 namespace paging {
 
-struct Page;
+class Page {
+public:
+  static Page ContainingAddress(vaddress address);
+
+  inline vaddress start_address() const { return index_ * kPageSize; }
+
+  inline size_t directory_index() const { return (index_ >> 5) & 0x3FF; }
+  inline size_t table_index() const { return index_ & 0x3FF; }
+
+  inline size_t index() const { return index_; }
+private:
+  size_t index_;
+};
 
 /**
  * Represents a single entry inside of a page table.
  */
-struct PageTableEntry {
-  /**
-   * If true, the page is actually in physical memory at the moment. For
-   * example, when a page is swapped out, it is not in physical memory and
-   * therefore not 'present'. If a page is called, but not present, a page
-   * fault will occur, and the operating system should handle it.
-   */
-  bool present : 1;
-
-  /**
-   * If true, the page is read/write. Otherwise the page is read-only. The WP
-   * bit in CR0 determines if this is only applied to userspace, always giving
-   * the kernel write access (the default) or both userspace and the kernel
-   * (see Intel Manuals 3A 2-20).
-   */
-  bool read_write : 1;
-
-  /**
-   * Controls access to the page based on privilege level. If true, then the
-   * page may be accessed by all. Otherwise, only the supervisor can access it.
-   * If you wish to make a page a user page, you must set the user bit in the
-   * relevant page directory entry as well as the page table entry.
-   */
-  bool user : 1;
-
-  /**
-   * If true, write-through caching is enabled. Otherwise, write-back is
-   * enabled instead.
-   */
-  bool write_through : 1;
-
-  /**
-   * If true, the page will not be cached.
-   */
-  bool cache_disable : 1;
-
-  /**
-   * Used to discover whether a page has been read or written to. If it has,
-   * then accessed will be true. Note that this flag will not be cleared by the
-   * CPU, so that burden falls on the operating system.
-   */
-  bool accessed : 1;
-
-  /**
-   * If true, then the page has been written to. This flag is not updated by the
-   * CPU, and once set will not clear itself.
-   */
-  bool dirty : 1;
-
-  /**
-   * This flag is unused and must always be false.
-   */
-  bool always_false : 1;
-
-  /**
-   * If true, prevents the TLB from updating the address in it's cache if CR3 is
-   * reset. Note, that the page global enable bit in CR4 must be set to enable
-   * this feature.
-   */
-  bool global : 1;
-
-  /**
-   * Unused bits in the entry.
-   */
-  uint32_t unused : 3;
-
-  /**
-   * The upper 20 bits of a 4kb aligned physical address. The address points to
-   * a 4kb block of physical memory that is then mapped to that location in the
-   * page table and directory.
-   */
-  uint32_t frame : 20;
-};
-
-/**
- * Represents a single entry inside a page directory.
- */
-struct PageDirectoryEntry {
-  /**
-   * If true, the page is actually in physical memory at the moment. For
-   * example, when a page is swapped out, it is not in physical memory and
-   * therefore not 'present'. If a page is called, but not present, a page
-   * fault will occur, and the operating system should handle it.
-   */
-  bool present : 1;
-
-  /**
-   * If true, the page is read/write. Otherwise the page is read-only. The WP
-   * bit in CR0 determines if this is only applied to userspace, always giving
-   * the kernel write access (the default) or both userspace and the kernel
-   * (see Intel Manuals 3A 2-20).
-   */
-  bool read_write : 1;
-
-  /**
-   * Controls access to the page based on privilege level. If true, then the
-   * page may be accessed by all. Otherwise, only the supervisor can access it.
-   * If you wish to make a page a user page, you must set the user bit in the
-   * relevant page directory entry as well as the page table entry.
-   */
-  bool user : 1;
-
-  /**
-   * If true, write-through caching is enabled. Otherwise, write-back is
-   * enabled instead.
-   */
-  bool write_through : 1;
-
-  /**
-   * If true, the page will not be cached.
-   */
-  bool cache_disable : 1;
-
-  /**
-   * Used to discover whether a page has been read or written to. If it has,
-   * then accessed will be true. Note that this flag will not be cleared by the
-   * CPU, so that burden falls on the operating system.
-   */
-  bool accessed : 1;
-
-  /**
-   * This flag is unused and must always be false.
-   */
-  bool always_false : 1;
-
-  /**
-   * If true, then pages are 4 MiB in size. Otherwise, they are 4 KiB. Please
-   * note that for 4 MiB pages PSE must be enabled.
-   */
-  bool size_4mb : 1;
-
-  /**
-   * Unused bits in the entry.
-   */
-  uint32_t unused : 4;
-
-  /**
-   * The upper 20 bits of the physical address of the page table that manages
-   * the four megabytes at that point. Please note that it is very important
-   * that this address be 4 KiB aligned. This is needed, due to the fact that
-   * the last bits of the DWORD are overwritten by access bits and such.
-   */
-  uint32_t page_table : 20;
-};
-
-/**
- * Initializes the paging system and enables paging.
- * @param mmap_length The overall length of the memory map provided by the
- * bootloader.
- * @param mmap_addr The virtual address of the first memory map entry.
- */
-void Initialize(uint32_t mmap_length, addressing::vaddress mmap_addr);
-
-/**
- * Represents a memory mapped page directory.
- */
-class PageDirectory {
+class Entry {
 public:
-  /**
-   * Creates a new PageDirectory instance.
-   * @param address The address of the new directory.
-   */
-  explicit PageDirectory(addressing::paddress address = 0);
+  enum class Flags : uint32_t {
+    // G0DACWURP
+    // G - Global
+    // D - Dirty
+    // A - Accessed
+    // C - Cache disabled
+    // W - Write through
+    // U - User/supervisor
+    // R - Read/Write
+    // P - Present
+    Present = 1 << 0,
+    Writable = 1 << 1,
+    UserAccessible = 1 << 2,
+    WriteThrough = 1 << 3,
+    CacheDisabled = 1 << 4,
+    Accessed = 1 << 5,
+    Dirty = 1 << 6,
+    Size = 1 << 7,
+    Global = 1 << 8,
+  };
 
-  /**
-   * Load this directory into the CR3 register, making it the active directory
-   * that the CPU is using.
-   */
-  void Activate();
+  inline bool is_unused() const { return entry_ == 0; }
 
-  /**
-   * Map a specified physical page of memory to the specified virtual address.
-   * @param page The physical page of memory to map.
-   * @param address The virtual address to map \p page to.
-   */
-  void MapPage(Page *page, addressing::vaddress address);
+  inline void set_unused() { entry_ = 0; }
 
-  /**
-   * Gets the memory page that currently contains the specified virtual address.
-   * @param address The virtual address to lookup.
-   * @return The memory page that \p address is currently mapped to.
-   */
-  Page *GetPage(addressing::vaddress address);
+  inline Flags flags() const { return static_cast<Flags>(entry_); }
 
-  /**
-   * Unmaps the memory page mapped to the specified virtual address.
-   * @param address The virtual address to unmap.
-   * @return The page that was mapped to \p address and that is now unmapped.
-   */
-  Page *UnmapPage(addressing::vaddress address);
+  inline bool is(Flags testFlags) const;
 
-  /**
-   * Gets the currently active page directory.
-   * @return The page directory that is currently active.
-   */
-  inline static PageDirectory *current_directory() {
-    return current_directory_;
-  }
+  optional<Frame> pointed_frame();
 
-  /**
-   * Gets the kernel's page directory.
-   * @return The kerne's page directory.
-   */
-  inline static PageDirectory &kernel_directory() { return kernel_directory_; }
+  void set(Frame frame, Flags flags);
 
 private:
-  /**
-   * A pointer to the currently active page directory.
-   */
-  static PageDirectory *current_directory_;
+  uint32_t entry_;
 
-  /**
-   * The kerne's page directory.
-   */
-  static PageDirectory kernel_directory_;
-
-  /**
-   * The physical stored page directory entries making up this page directory.
-   */
-  PageDirectoryEntry tables_physical_[1024] __attribute__((aligned(4096)));
-
-  /**
-   * The physical address of this page directory?
-   */
-  addressing::paddress physical_address_;
-
-  /**
-   * A virtual pointer to tables_physical_. Intended to be used once paging is
-   * initialized, since physical addresses can no longer be accessed.
-   */
-  PageDirectoryEntry *page_directory_entries_;
-
-  PageTableEntry *page_table_entries_;
-
-  friend void Initialize(uint32_t mmap_length, addressing::vaddress mmap_addr);
+  //addressing::paddress const PhysicalAddr();
 };
+
+inline constexpr Entry::Flags operator|(Entry::Flags lhs, Entry::Flags rhs) {
+  return (Entry::Flags)(static_cast<uint32_t>(lhs) |
+                                 static_cast<uint32_t>(rhs));
+}
+
+inline constexpr Entry::Flags operator&(Entry::Flags lhs, Entry::Flags rhs) {
+  return Entry::Flags(static_cast<uint32_t>(lhs) & static_cast<uint32_t>(rhs));
+}
+
+inline bool Entry::is(Flags testFlags) const {
+  return (flags() & testFlags) == testFlags;
+}
+
+class Table {
+public:
+  Entry& operator[](const unsigned int index) { return entries_[index]; }
+  const Entry& operator[](const unsigned int index) const { return entries_[index]; }
+
+  void zero();
+
+  Table* const next_table(unsigned int index) const;
+
+  Table& next_table_create(unsigned int index, IFrameAllocator& allocator);
+
+private:
+  optional<size_t> next_table_address(unsigned int index) const;
+
+  Entry entries_[1024];
+};
+
+extern Table* const Directory;
+
+optional<paddress> translate(vaddress virtual_address);
+
+void map_to(Page page, Frame frame, Entry::Flags flags, IFrameAllocator& allocator);
+
+// class PageDirectoryEntry {
+// public:
+//   enum class Flags : uint32_t {
+//     Present = 1 << 0,
+//     Writable = 1 << 1,
+//     UserAccessible = 1 << 2,
+//     WriteThrough = 1 << 3,
+//     Dirty = 1 << 4,
+//     Accessed = 1 << 5,
+//     PageSize = 1 << 7,
+//     Global = 1 << 8,
+//   };
+
+//   inline bool is_unused() const { return entry_ == 0; }
+
+//   inline void set_unused() { entry_ = 0; }
+
+//   inline Flags flags() { return (Flags)entry_; }
+
+// private:
+//   uint32_t entry_;
+// };
+
+// inline PageDirectoryEntry::Flags operator|(PageDirectoryEntry::Flags lhs,
+//                                            PageDirectoryEntry::Flags rhs) {
+//   return (PageDirectoryEntry::Flags)(static_cast<uint32_t>(lhs) |
+//                                      static_cast<uint32_t>(rhs));
+// }
+
+// inline bool operator&(PageDirectoryEntry::Flags lhs,
+//                       PageDirectoryEntry::Flags rhs) {
+//   return (static_cast<uint32_t>(lhs) & static_cast<uint32_t>(rhs)) != 0;
+// }
+
+// class PageDirectory {
+// public:
+//   static PageDirectory &I() {
+//     return *reinterpret_cast<PageDirectory *>(0xFFC00000);
+//   }
+
+//   PageDirectoryEntry &operator[](const int index) { return entries_[index]; }
+//   const PageDirectoryEntry &operator[](const int index) const {
+//     return entries_[index];
+//   }
+
+//   void zero();
+
+// private:
+//   PageDirectoryEntry entries_[1024];
+// };
+
+// /**
+//  * Represents a single entry inside a page directory.
+//  */
+// struct PageDirectoryEntry {
+//   /**
+//    * If true, the page is actually in physical memory at the moment. For
+//    * example, when a page is swapped out, it is not in physical memory and
+//    * therefore not 'present'. If a page is called, but not present, a page
+//    * fault will occur, and the operating system should handle it.
+//    */
+//   bool present : 1;
+
+//   /**
+//    * If true, the page is read/write. Otherwise the page is read-only. The WP
+//    * bit in CR0 determines if this is only applied to userspace, always
+//    giving
+//    * the kernel write access (the default) or both userspace and the kernel
+//    * (see Intel Manuals 3A 2-20).
+//    */
+//   bool read_write : 1;
+
+//   /**
+//    * Controls access to the page based on privilege level. If true, then the
+//    * page may be accessed by all. Otherwise, only the supervisor can access
+//    it.
+//    * If you wish to make a page a user page, you must set the user bit in the
+//    * relevant page directory entry as well as the page table entry.
+//    */
+//   bool user : 1;
+
+//   /**
+//    * If true, write-through caching is enabled. Otherwise, write-back is
+//    * enabled instead.
+//    */
+//   bool write_through : 1;
+
+//   /**
+//    * If true, the page will not be cached.
+//    */
+//   bool cache_disable : 1;
+
+//   /**
+//    * Used to discover whether a page has been read or written to. If it has,
+//    * then accessed will be true. Note that this flag will not be cleared by
+//    the
+//    * CPU, so that burden falls on the operating system.
+//    */
+//   bool accessed : 1;
+
+//   /**
+//    * This flag is unused and must always be false.
+//    */
+//   bool always_false : 1;
+
+//   /**
+//    * If true, then pages are 4 MiB in size. Otherwise, they are 4 KiB. Please
+//    * note that for 4 MiB pages PSE must be enabled.
+//    */
+//   bool size_4mb : 1;
+
+//   /**
+//    * Unused bits in the entry.
+//    */
+//   uint32_t unused : 4;
+
+//   /**
+//    * The upper 20 bits of the physical address of the page table that manages
+//    * the four megabytes at that point. Please note that it is very important
+//    * that this address be 4 KiB aligned. This is needed, due to the fact that
+//    * the last bits of the DWORD are overwritten by access bits and such.
+//    */
+//   uint32_t page_table : 20;
+// };
+
+// /**
+//  * Initialize's the kernel's paging directory.
+//  */
+// void InitKernelDirectory();
+
+// /**
+//  * Represents a memory mapped page directory.
+//  */
+// class PageDirectory {
+// public:
+//   /**
+//    * Load this directory into the CR3 register, making it the active
+//    directory
+//    * that the CPU is using.
+//    */
+//   void Activate();
+
+//   /**
+//    * Gets the memory page that currently contains the specified virtual
+//    address.
+//    * @param address The virtual address to lookup.
+//    * @return The memory page that \p address is currently mapped to.
+//    */
+//   Page *GetPage(addressing::vaddress address);
+
+//   /**
+//    * Unmaps the memory page mapped to the specified virtual address.
+//    * @param address The virtual address to unmap.
+//    * @return The page that was mapped to \p address and that is now unmapped.
+//    */
+//   Page *UnmapPage(addressing::vaddress address);
+
+//   /**
+//    * Gets the currently active page directory.
+//    * @return The page directory that is currently active.
+//    */
+//   inline static PageDirectory *current_directory() {
+//     return current_directory_;
+//   }
+
+//   /**
+//    * Gets the kernel's page directory.
+//    * @return The kerne's page directory.
+//    */
+//   inline static PageDirectory &kernel_directory() { return
+//   *kernel_directory_; }
+
+// private:
+//   void MapPages(AddressPage pgaddr, addressing::paddress pa, size_t size,
+//                 int perm);
+
+//   /**
+//    * Map a specified physical address to the specified virtual address.
+//    * @param physAddress The physical address of memory to map.
+//    * @param virtAddress The virtual address to map \p physAddress to.
+//    */
+//   void MapPage(addressing::paddress physAddress,
+//                addressing::vaddress virtAddress);
+
+//   /**
+//    * Returns the address of the page table entry in this page directory that
+//    * corresponds to the virtual address a.
+//    * @param a The virtual address to lookup.
+//    * @param allocate If true, allocate any required page table pages.
+//    * @return The address of the Entry that corresponds to the given
+//    * virtual address.
+//    */
+//   Entry *WalkPage(const addressing::vaddress a, bool allocate);
+
+//   /**
+//    * A pointer to the currently active page directory.
+//    */
+//   static PageDirectory *current_directory_;
+
+//   /**
+//    * The kerne's page directory.
+//    */
+//   static PageDirectory *kernel_directory_;
+
+//   /**
+//    * The physical stored page directory entries making up this page
+//    directory.
+//    */
+//   PageDirectoryEntry tables_physical_[1024];
+// };
 
 } // namespace paging
 

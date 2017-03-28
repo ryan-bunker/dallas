@@ -1,5 +1,5 @@
 /**
- * @file gdt.h
+ * @file addressing.cc
  *
  * @section LICENSE
  *
@@ -22,16 +22,15 @@
  *
  */
 
-#ifndef SRC_ARCH_I586_INCLUDE_MM_GDT_H_
-#define SRC_ARCH_I586_INCLUDE_MM_GDT_H_
+#include "sys/addressing.h"
 
-namespace gdt {
+namespace addressing {
 
-/**
- * Initializes the global descriptor table.
- */
-void Initialize();
+AddressVirtual AddressPhysical::ToVirtual() {
+  return AddressVirtual(address_ + GetVirtualPhysicalOffset());
+}
 
-} // namespace gdt
-
-#endif // SRC_ARCH_I586_INCLUDE_MM_GDT_H_
+AddressPhysical AddressVirtual::ToPhysical() {
+  return AddressPhysical(address_ - GetVirtualPhysicalOffset());
+}
+}

@@ -22,7 +22,9 @@
  *
  */
 
+#include "sys/addressing.h"
 #include "sys/io.h"
+#include "sys/kernel.h"
 #include "video/text_screen.h"
 
 namespace screen {
@@ -53,7 +55,7 @@ struct ScreenChar {
 /**
  * The active screen buffer.
  */
-ScreenChar *const screen_buffer = reinterpret_cast<ScreenChar *>(0xC00B8000);
+ScreenChar *const screen_buffer = reinterpret_cast<ScreenChar *>(0xB8000);
 /**
  * The cursor's current x (column) position.
  */
@@ -104,7 +106,7 @@ inline uint8_t GetColor(Color fore_color = Color::kDefault,
  * 2 and 36 inclusive.
  * @return result
  */
-char *itoa(uint32_t value, char *result, int base) {
+char *itoa(uint32_t value, char *result, int base, int length) {
   // check that the base if valid
   if (base < 2 || base > 36) {
     *result = '\0';
@@ -122,11 +124,21 @@ char *itoa(uint32_t value, char *result, int base) {
     *ptr++ = alphabet[35 + (tmp_value - value * base)];
   } while (value);
 
+  char *end = ptr;
   *ptr-- = '\0';
+  int pad = length - (end - result);
+
   while (ptr1 < ptr) {
     tmp_char = *ptr;
     *ptr-- = *ptr1;
     *ptr1++ = tmp_char;
+  }
+
+  if (length > 0 && pad > 0) {
+    for (ptr = end; ptr >= result; --ptr)
+      *(ptr + pad) = *ptr;
+    for (ptr = result; ptr < result + pad; ++ptr)
+      *ptr = '0';
   }
 
   return result;
@@ -274,19 +286,64 @@ void WriteHex(uint32_t n, Color fore_color, Color back_color) {
   char hex[9];
   // TODO(ryan-bunker): sprintf(hex, "%08lx", n);when sbrk syscall is
   // implemented
-  itoa(n, hex, 16);
+  itoa(n, hex, 16, 8);
   Write(hex, fore_color, back_color);
+}
+
+void WriteHexUnpadded(uint32_t n) {
+  char hex[9];
+  itoa(n, hex, 16, -1);
+  Write(hex, Color::kDefault, Color::kDefault);
 }
 
 void WriteHex(uint32_t n) { WriteHex(n, Color::kDefault, Color::kDefault); }
 
 void WriteDec(uint32_t n, Color fore_color, Color back_color) {
-  char dec[20];
+  char dec[11];
   // TODO(ryan-bunker): sprintf(dec, "%ld", n); when sbrk syscall is implemented
-  itoa(n, dec, 10);
+  itoa(n, dec, 10, -1);
   Write(dec, fore_color, back_color);
 }
 
 void WriteDec(uint32_t n) { WriteDec(n, Color::kDefault, Color::kDefault); }
+
+void Writef(const char *fmt, ...) {
+  if (fmt == 0)
+    PANIC("null fmt");
+
+  auto argp = reinterpret_cast<uint32_t *>(&fmt + 1);
+  for (const char *c = fmt; *c != 0; c++) {
+    if (*c != '%') {
+      PutChar(*c);
+      continue;
+    }
+    if (*(++c) == 0)
+      break;
+    switch (*c) {
+    case 'd':
+      WriteDec(*argp++);
+      break;
+    case 'x':
+    case 'p':
+      WriteHex(*argp++);
+      break;
+    case 's': {
+      auto s = reinterpret_cast<const char *>(*argp++);
+      if (!s)
+        s = "(null)";
+      Write(s);
+      break;
+    }
+    case '%':
+      PutChar('%');
+      break;
+    default:
+      // Print unknown % sequence to draw attention.
+      PutChar('%');
+      PutChar(*c);
+      break;
+    }
+  }
+}
 
 } // namespace screen

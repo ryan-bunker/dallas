@@ -10,15 +10,16 @@ SECTIONS{
 
   .init :
   {
+    *(.multiboot)
     *(.init)
   }
   
   . += _phys_virt_offset;
+  __kernel_start = .;
   
   .text : AT(ADDR(.text) - _phys_virt_offset)
   {
-    *(.multiboot)
-    *(.text)
+    *(.text .text.*)
     *(.gnu.linkonce.t*)
   }
   
@@ -36,8 +37,12 @@ SECTIONS{
         *(.gnu.linkonce.r*)
     }
   
+  . = ALIGN(4096);
+  __kernel_data = .;
+
   .data ALIGN (4096) : AT(ADDR(.data) - _phys_virt_offset)
   {
+    *(.pgdir)
     *(.data)
     *(.gnu.linkonce.d*)
   }
