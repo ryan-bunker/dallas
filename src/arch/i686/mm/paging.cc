@@ -52,7 +52,7 @@ namespace paging {
 
 const uint32_t kTableAddressMask = 0xfffff000;
 
-Table* const Directory = reinterpret_cast<Table*>(0xfffff000);
+PageDirectory& Directory = *(reinterpret_cast<PageDirectory*>(0xfffff000));
 
 Page Page::ContainingAddress(vaddress address) {
   Page pg;
@@ -70,16 +70,16 @@ optional<Frame> Entry::pointed_frame() {
 
 void Entry::set(Frame frame, Flags flags) {
   ASSERT(frame.start_address().IsPageAligned());
+  // screen::Writef("-- set( frame %d, flags %x ) (entry @ 0x%p)\n", frame.index(), flags, &entry_);
   entry_ = static_cast<uint32_t>(frame.start_address()) | static_cast<uint32_t>(flags);
 }
 
 void Table::zero() {
-  for (auto e : entries_) {
-    e.set_unused();
-  }
+  for (int i=0; i<1024; ++i)
+    entries_[i].set_unused();
 }
 
-optional<size_t> Table::next_table_address(unsigned int index) const {
+optional<size_t> PageDirectory::page_table_address(unsigned int index) const {
   ASSERT(index < 1024);
   // screen::Writef("-- next_table_address( %d )\n", index);
   if (entries_[index].is(Entry::Flags::Present) && !entries_[index].is(Entry::Flags::Size)) {
@@ -91,29 +91,35 @@ optional<size_t> Table::next_table_address(unsigned int index) const {
   return {};
 }
 
-Table* const Table::next_table(unsigned int index) const {
-  // screen::Writef("-- next_table( %d )\n", index);
-  auto addr = next_table_address(index);
-  if (addr)
-    // screen::Writef("   address: 0x%x\n", address);
-    return reinterpret_cast<Table* const>(*addr);
+PageTable* const PageDirectory::page_table(unsigned int index) const {
+  // screen::Writef("-- page_table( %d )\n", index);
+  auto addr = page_table_address(index);
+  if (addr) {
+    // screen::Writef("   address: 0x%x\n", *addr);
+    return reinterpret_cast<PageTable* const>(*addr);
+  }
+  // screen::WriteLine("   not mapped");
   return {};
 }
 
-Table& Table::next_table_create(unsigned int index, IFrameAllocator& allocator) {
-  auto nxtTab = next_table(index);
-  if (nxtTab)
-    return *nxtTab;
-  auto frame = allocator.Allocate().expect("no frames available");
+PageTable* const PageDirectory::page_table_create(unsigned int index, IFrameAllocator& allocator) {
+  // screen::Writef("-- page_table_create( %d )\n", index);
+  auto nxtTab = page_table(index);
+  if (nxtTab) {
+    // screen::Writef("   page table %d already exists\n", index);
+    return nxtTab;
+  }
+  auto frame = *allocator.Allocate();
+  // screen::Writef("   using frame %d as page table\n", frame.index());
   entries_[index].set(frame, Entry::Flags::Present | Entry::Flags::Writable);
-  auto table = next_table(index);
+  auto table = page_table(index);
   table->zero();
-  return *table;
+  return table;
 }
 
-optional<Frame> translate_page(Page page) {
+optional<Frame> ActivePageDirectory::translate_page(Page page) const {
   // screen::Writef("-- translate_page( page #%d (addr=0x%x) )\n", page.index(), page.start_address());
-  auto pt = Directory->next_table(page.directory_index());
+  auto pt = directory_->page_table(page.directory_index());
   if (!pt)
     return {};
   auto entry = (*pt)[page.table_index()];
@@ -121,23 +127,25 @@ optional<Frame> translate_page(Page page) {
   return entry.pointed_frame();
 }
 
-optional<paddress> translate(vaddress virtual_address) {
+optional<paddress> ActivePageDirectory::translate(vaddress virtual_address) const {
   auto offset = static_cast<size_t>(virtual_address % kPageSize);
   auto pg = Page::ContainingAddress(virtual_address);
   // screen::Writef("-- translate( 0x%x )\n", virtual_address);
   // screen::Writef("   offset: 0x%x\n", offset);
+  // screen::Writef("   page: 0x%x (dir: %d, tab: %d)\n", pg.index(), pg.directory_index(), pg.table_index());
   auto frame = translate_page(pg);
   if (frame)
     return frame->start_address() / kPageSize + offset;
 
-  auto entry = (*Directory)[pg.directory_index()];
-  if (entry.is(Entry::Flags::Present)) {
+  // either directory entry isn't present, directory entry is huge, or page table entry isn't present
+
+  auto entry = (*directory_)[pg.directory_index()];
+  // screen::Writef("   entry %d -> %x\n", pg.directory_index(), *(reinterpret_cast<uint32_t*>(&entry)));
+  if (entry.is(Entry::Flags::Present | Entry::Flags::Size)) {
     frame = entry.pointed_frame();
-    if (!frame)
-      return {};
     auto offset = static_cast<size_t>(virtual_address) & 0x3FFFFF;
     // screen::Writef("   huge page offset: 0x%x\n", offset);
-    // screen::Writef("   huge page frame #%d @ 0x%x\n", f.index(), f.index() * (kPageSize * 1024));
+    // screen::Writef("   huge page frame #%d @ 0x%x\n", frame->index(), frame->index() * (kPageSize * 1024));
     return paddress(frame->index() * (kPageSize * 1024) + offset);
   }
 
@@ -145,10 +153,82 @@ optional<paddress> translate(vaddress virtual_address) {
   return {};
 }
 
-void map_to(Page page, Frame frame, Entry::Flags flags, IFrameAllocator& allocator) {
-  auto pt = Directory->next_table_create(page.directory_index(), allocator);
-  ASSERT(pt[page.table_index()].is_unused());
-  pt[page.table_index()].set(frame, flags | Entry::Flags::Present);
+void ActivePageDirectory::map_to(Page page, Frame frame, Entry::Flags flags, IFrameAllocator& allocator) {
+  auto pt = directory_->page_table_create(page.directory_index(), allocator);
+  ASSERT((*pt)[page.table_index()].is_unused());
+  // screen::Writef("   pt: %p, index: %d\n", pt, page.table_index());
+  (*pt)[page.table_index()].set(frame, flags | Entry::Flags::Present);
+}
+
+void ActivePageDirectory::map(Page page, Entry::Flags flags, IFrameAllocator& allocator) {
+  auto frame = *allocator.Allocate();
+  map_to(page, frame, flags, allocator);
+}
+
+void ActivePageDirectory::identity_map(Frame frame, Entry::Flags flags, IFrameAllocator& allocator) {
+  // frames represent physical memory, but pages represent virtual. In this case we're identity mapping
+  // so we want them to be the same. Unfortunately that means jumping through some hoops to change types.
+  auto page = Page::ContainingAddress(static_cast<vaddress>(static_cast<uint32_t>(frame.start_address())));
+  map_to(page, frame, flags, allocator);
+}
+
+void ActivePageDirectory::unmap(Page page, IFrameAllocator& allocator) {
+  ASSERT(translate(page.start_address()));
+
+  // screen::Writef("-- unmap( page %d [dir: %d, tbl: %d] )\n", page.index(), page.directory_index(), page.table_index());
+  auto pt = directory_->page_table(page.directory_index());
+  auto frame = (*pt)[page.table_index()].pointed_frame();
+  // screen::Writef("   mapped frame %d (starts at 0x%x)\n", frame->index(), frame->start_address());
+  // screen::Writef("   pt: %p\n", pt);
+  (*pt)[page.table_index()].set_unused();
+  void *m = static_cast<void*>(page.start_address());
+  __asm__ volatile ( "invlpg (%0)" : : "b"(m) : "memory" );
+  //allocator.Free(*frame);
+}
+
+void test_paging(IFrameAllocator& allocator) {
+  ActivePageDirectory page_dir;
+
+  auto translate = [&page_dir](const char *expected, uint32_t vaddr) {
+    screen::Writef("%s = ", expected);
+    auto t = page_dir.translate(vaddr);
+    if (t)
+      screen::Writef("Some(%d)\n", *t);
+    else
+      screen::WriteLine("None");
+  };
+
+  // address 0 is mapped
+  translate("Some", 0);
+  // second page table entry
+  translate("Some", 4096);
+  // first byte of second page
+  translate("None", 4 * 1024 * 1024);
+  // last mapped byte
+  translate("Some", 4 * 1024 * 1024 - 1);
+
+  screen::WriteLine("");
+  auto addr = 2 * 4 * 1024 * 1024;
+  auto page = Page::ContainingAddress(addr);
+  auto frame = *allocator.Allocate();
+  translate("None", addr);
+  screen::Writef("    map to %d\n", frame.index());
+  page_dir.map_to(page, frame, Entry::Flags::None, allocator);
+  translate("Some", addr);
+  auto next_frame = allocator.Allocate();
+  if (next_frame)
+    screen::Writef("next free frame: Some(%d)\n", next_frame->index());
+  else
+    screen::WriteLine("next free frame: None");
+
+  auto p = reinterpret_cast<uint32_t*>(static_cast<size_t>(Page::ContainingAddress(addr).start_address()));
+  screen::Writef("  before unmap: value @ 0x%p == 0x%x\n", p, *p);
+
+  page_dir.unmap(Page::ContainingAddress(addr), allocator);
+  translate("None", addr);
+
+  // the following line will cause a page fault since we just unmapped this address
+  // screen::Writef("  after unmap: value @ 0x%p == 0x%x\n", p, *p);
 }
 
 // void PageDirectory::zero() {

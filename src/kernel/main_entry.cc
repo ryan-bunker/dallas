@@ -31,7 +31,6 @@
 #include "mm/frame_allocator.h"
 #include "mm/paging.h"
 #include "sys/addressing.h"
-#include "sys/maybe.h"
 #include "video/text_screen.h"
 
 extern const uint32_t __kernel_start, __kernel_data, __kernel_end;
@@ -153,35 +152,7 @@ extern "C" void kmain(multiboot2::Info *mbd, uint32_t magic) {
     }
   }
 
-  // for (int i=0; i<2 /*161*/; i++) {
-  //   auto frame = allocator.Allocate();
-  //   maybe_if(frame, [](paging::Frame f) {
-  //     screen::Writef("Allocated frame #%d (starts at 0x%x)\n", f.index(), f.start_address());
-  //   }).otherwise([]() {
-  //     screen::WriteLine("No more frames available!");
-  //   });
-  // }
-
-  for (int i=0; ; ++i) {
-    if (!allocator.Allocate()) {
-      screen::Writef("Allocated %d frames\n", i);
-      break;
-    }
-  }
-
-  auto xx = [](uint32_t vaddr) {
-    auto t = paging::translate(vaddr);
-    maybe_if(t, [vaddr](paddress addr) {
-      screen::Writef("v 0x%x == p 0x%x\n", vaddr, addr);
-    }).otherwise([vaddr]() {
-      screen::Writef("v 0x%x == None\n", vaddr);
-    });
-  };
-
-  xx(0);
-  xx(0x1234);
-  xx(0xC0001234);
-  xx(0x400000);
+  paging::test_paging(allocator);
 
   for (;;)
     continue;

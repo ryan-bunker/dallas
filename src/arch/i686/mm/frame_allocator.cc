@@ -51,12 +51,14 @@ void AreaFrameAllocator::RegisterMemoryArea(paddress start, size_t size) {
     ChooseNextArea();
 }
 
-Maybe<Frame> AreaFrameAllocator::Allocate() {
+optional<Frame> AreaFrameAllocator::Allocate() {
   // screen::WriteLine("-- Allocate()...");
   // screen::Writef("      current_area_.is_set() = %d, areas_count_ = %d, next_free_frame_ = %d\n",
   //   current_area_.is_set() ? 1 : 0, areas_count_, next_free_frame_.index());
-  return maybe_if(current_area_, [&](MemoryArea area) {
-    // make a copy of next_free_frame_ that we can return
+  if (current_area_) {
+    MemoryArea& area = *current_area_;
+
+        // make a copy of next_free_frame_ that we can return
     Frame frame = next_free_frame_;
 
     auto current_area_last_frame = Frame::ContainingAddress(area.address + area.size - 1);
@@ -81,16 +83,18 @@ Maybe<Frame> AreaFrameAllocator::Allocate() {
       // frame is unused, increment next_free_frame_ and return it
       // screen::WriteLine("      frame is available");
       ++next_free_frame_;
-      return Maybe<Frame>(frame);
+      return frame;
     }
     // frame was not valid, try again with the updated next_free_frame_
     // screen::WriteLine("      frame was not valid, retrying");
     return Allocate();
-  });
+  } else {
+    return {};
+  }
 }
 
 void AreaFrameAllocator::ChooseNextArea() {
-  current_area_ = Maybe<MemoryArea>::None;
+  current_area_ = {};
   // screen::WriteLine("-- ChooseNextArea()...");
   // screen::Writef("      next_free_frame_ = %d\n", next_free_frame_.index());
   // screen::Writef("      areas_count_ = %d\n", areas_count_);
@@ -101,25 +105,25 @@ void AreaFrameAllocator::ChooseNextArea() {
     if (Frame::ContainingAddress(address) < next_free_frame_)
       continue;
 
-    maybe_if(current_area_, [&](MemoryArea area) {
+    if (current_area_) {
       // screen::Writef("      current_area_ = {address: %x, size: %d}\n", area.address, area.size);
-      if (areas_[i].address < area.address) {
+      if (areas_[i].address < current_area_->address) {
         // screen::Writef("      areas_[%d] is smaller, setting current_area_\n", i);
         current_area_ = areas_[i];
       }
-    }).otherwise([&]() {
+    } else {
       // screen::Writef("      current_area_ = None, setting current_area_\n");
       current_area_ = areas_[i];
-    });
+    }
   }
 
-  maybe_if(current_area_, [&](const MemoryArea& area) {
-    auto start_frame = Frame::ContainingAddress(area.address);
+  if (current_area_) {
+    auto start_frame = Frame::ContainingAddress(current_area_->address);
     if (next_free_frame_ < start_frame) {
       // screen::Writef("      advancing next_free_frame_ to %d\n", start_frame.index());
       next_free_frame_ = start_frame;
     }
-  });
+  }
 }
 
 void AreaFrameAllocator::Free(Frame f) {

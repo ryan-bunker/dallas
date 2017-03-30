@@ -30,6 +30,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <experimental/optional>
+#include <memory>
 
 #include "mm/frame_allocator.h"
 #include "sys/addressing.h"
@@ -45,7 +46,7 @@ public:
 
   inline vaddress start_address() const { return index_ * kPageSize; }
 
-  inline size_t directory_index() const { return (index_ >> 5) & 0x3FF; }
+  inline size_t directory_index() const { return (index_ >> 10) & 0x3FF; }
   inline size_t table_index() const { return index_ & 0x3FF; }
 
   inline size_t index() const { return index_; }
@@ -68,6 +69,7 @@ public:
     // U - User/supervisor
     // R - Read/Write
     // P - Present
+    None = 0,
     Present = 1 << 0,
     Writable = 1 << 1,
     UserAccessible = 1 << 2,
@@ -117,21 +119,48 @@ public:
 
   void zero();
 
-  Table* const next_table(unsigned int index) const;
-
-  Table& next_table_create(unsigned int index, IFrameAllocator& allocator);
-
-private:
-  optional<size_t> next_table_address(unsigned int index) const;
-
+protected:
   Entry entries_[1024];
 };
 
-extern Table* const Directory;
+class PageTable : public Table {
+};
 
-optional<paddress> translate(vaddress virtual_address);
+class PageDirectory : public Table {
+public:
+  PageTable* const page_table(unsigned int index) const;
 
-void map_to(Page page, Frame frame, Entry::Flags flags, IFrameAllocator& allocator);
+  PageTable* const page_table_create(unsigned int index, IFrameAllocator& allocator);
+
+private:
+  optional<size_t> page_table_address(unsigned int index) const;
+};
+
+class ActivePageDirectory {
+public:
+  ActivePageDirectory() : directory_(reinterpret_cast<PageDirectory*>(0xfffff000)) {}
+
+  optional<paddress> translate(vaddress virtual_address) const;
+
+  void map_to(Page page, Frame frame, Entry::Flags flags, IFrameAllocator& allocator);
+
+  void map(Page page, Entry::Flags flags, IFrameAllocator& allocator);
+
+  void identity_map(Frame frame, Entry::Flags flags, IFrameAllocator& allocator);
+
+  void unmap(Page page, IFrameAllocator& allocator);
+
+private:
+  inline PageDirectory& directory() const { return *directory_; }
+
+  optional<Frame> translate_page(Page page) const;
+
+  std::unique_ptr<PageDirectory> directory_;
+};
+
+extern PageDirectory& Directory;
+
+void test_paging(IFrameAllocator& allocator);
 
 // class PageDirectoryEntry {
 // public:

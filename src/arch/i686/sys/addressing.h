@@ -95,7 +95,7 @@ public:
   AddressVirtual ToVirtual();
 
   // TODO: use page alignment constant here instead of literal
-  inline bool IsPageAligned() const { return address_ & ~0xFFF == 0; }
+  inline bool IsPageAligned() const { return address_ % 0x1000 == 0; }
 
 private:
   uint32_t address_;
@@ -129,6 +129,7 @@ public:
   }
 
   inline explicit operator size_t() const { return address_; }
+  inline explicit operator void*() const { return reinterpret_cast<void*>(address_); }
 
   AddressPhysical ToPhysical();
 

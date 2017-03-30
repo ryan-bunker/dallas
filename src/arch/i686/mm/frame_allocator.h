@@ -24,11 +24,12 @@
 #define SRC_ARCH_I586_INCLUDE_MM_FRAME_ALLOCATOR_H_
 
 #include <cstddef>
+#include <experimental/optional>
 
 #include "sys/addressing.h"
-#include "sys/maybe.h"
 
 using namespace addressing;
+using std::experimental::optional;
 
 namespace paging {
 
@@ -77,17 +78,17 @@ private:
 
 class IFrameAllocator {
 public:
-  virtual Maybe<Frame> Allocate() = 0;
+  virtual optional<Frame> Allocate() = 0;
   virtual void Free(Frame f) = 0;
 };
 
-class AreaFrameAllocator : IFrameAllocator {
+class AreaFrameAllocator : public IFrameAllocator {
 public:
   AreaFrameAllocator(paddress kernelStart, paddress kernelEnd, paddress multibootStart, paddress multibootEnd);
 
   void RegisterMemoryArea(paddress start, size_t size);
 
-  Maybe<Frame> Allocate();
+  optional<Frame> Allocate();
 
   void Free(Frame f);
 
@@ -105,7 +106,7 @@ private:
   Frame kernel_end_;
   Frame multiboot_start_;
   Frame multiboot_end_;
-  Maybe<MemoryArea> current_area_;
+  optional<MemoryArea> current_area_;
   int areas_count_;
   MemoryArea areas_[32];
 };
